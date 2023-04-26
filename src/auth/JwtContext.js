@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useReducer, useCallback } from 'react';
 // utils
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GOOGLE_CLIENT_ID } from '../config';
 import axios from '../utils/axios';
 //
 import { isValidToken, setSession } from './utils';
@@ -68,13 +70,17 @@ export function AuthProvider({ children }) {
   const initialize = useCallback(async () => {
     try {
       const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
 
-      if (accessToken && isValidToken(accessToken)) {
-        setSession(accessToken);
+      if (token && accessToken && isValidToken(accessToken)) {
+        setSession(token, accessToken);
 
-        const response = await axios.get('/api/account/my-account');
+        const response = await axios.post('/api/user', {
+          credential: accessToken,
+        });
 
-        const { user } = response.data;
+        const { userId } = response.data;
+        const user = await getUser(userId);
 
         dispatch({
           type: 'INITIAL',
@@ -108,15 +114,25 @@ export function AuthProvider({ children }) {
     initialize();
   }, [initialize]);
 
-  // LOGIN
-  const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', {
-      email,
-      password,
-    });
-    const { accessToken, user } = response.data;
+  // GET USER
+  const getUser = async (userId) => {
+    const response = await axios.get(`/api/user/${userId}`);
 
-    setSession(accessToken);
+    return response.data;
+  };
+
+  // LOGIN
+  const loginWithCredential = async (credential) => {
+    const response = await axios.post('/api/user', {
+      credential,
+    });
+
+    const { userId } = response.data;
+    const user = await getUser(userId);
+    const { token } = user;
+    console.log(user);
+
+    setSession(token, credential);
 
     dispatch({
       type: 'LOGIN',
@@ -155,16 +171,18 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        ...state,
-        method: 'jwt',
-        login,
-        logout,
-        register,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <AuthContext.Provider
+        value={{
+          ...state,
+          method: 'jwt',
+          loginWithCredential,
+          logout,
+          register,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    </GoogleOAuthProvider>
   );
 }

@@ -2,8 +2,6 @@
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
-// locales
-import ThemeLocalization from './locales';
 // components
 import SnackbarProvider from './components/snackbar';
 import { ThemeSettings } from './components/settings';
@@ -16,11 +14,9 @@ export default function App() {
     <MotionLazyContainer>
       <ThemeProvider>
         <ThemeSettings>
-          <ThemeLocalization>
-            <SnackbarProvider>
-              <Router />
-            </SnackbarProvider>
-          </ThemeLocalization>
+          <SnackbarProvider>
+            <Router />
+          </SnackbarProvider>
         </ThemeSettings>
       </ThemeProvider>
     </MotionLazyContainer>

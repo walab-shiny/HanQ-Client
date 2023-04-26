@@ -5,8 +5,7 @@ import { useAuthContext } from '../../auth/useAuthContext';
 // layouts
 import LoginLayout from '../../layouts/login';
 //
-import AuthLoginForm from './AuthLoginForm';
-import AuthWithSocial from './AuthWithSocial';
+import AuthWithGoogle from './AuthWithGoogle';
 
 // ----------------------------------------------------------------------
 
@@ -14,15 +13,11 @@ export default function Login() {
   const { method } = useAuthContext();
 
   return (
-    <LoginLayout>
+    <LoginLayout title="HanQ - 원타임 큐알코드를 활용하는 출입관리 서비스 플랫폼">
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Sign in to Minimal</Typography>
+        <Typography variant="h4">Sign in to HanQ</Typography>
 
-        <Stack direction="row" spacing={0.5}>
-          <Typography variant="body2">New user?</Typography>
-
-          <Link variant="subtitle2">Create an account</Link>
-        </Stack>
+        <Link variant="subtitle2">HanQ 사용법 알아보기</Link>
 
         <Tooltip title={method} placement="left">
           <Box
@@ -34,13 +29,12 @@ export default function Login() {
         </Tooltip>
       </Stack>
 
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
+      <Alert severity="info" sx={{ whiteSpace: 'pre-wrap', mb: 3 }}>
+        학생 서비스를 사용하고 싶으시면{'\n'}
+        <strong>handong.ac.kr</strong>계정으로 로그인해 주세요.
       </Alert>
 
-      <AuthLoginForm />
-
-      <AuthWithSocial />
+      <AuthWithGoogle />
     </LoginLayout>
   );
 }
