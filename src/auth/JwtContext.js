@@ -130,7 +130,6 @@ export function AuthProvider({ children }) {
     const { userId } = response.data;
     const user = await getUser(userId);
     const { token } = user;
-    console.log(user);
 
     setSession(token, credential);
 
@@ -143,16 +142,28 @@ export function AuthProvider({ children }) {
   };
 
   // REGISTER
-  const register = async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/account/register', {
-      email,
-      password,
-      firstName,
-      lastName,
+  const studentRegister = async (userId, studentNum, departmentId) => {
+    const response = await axios.post(`/api/user/student`, {
+      userId,
+      studentNum,
+      departmentId,
     });
-    const { accessToken, user } = response.data;
+    const user = response.data;
 
-    localStorage.setItem('accessToken', accessToken);
+    dispatch({
+      type: 'REGISTER',
+      payload: {
+        user,
+      },
+    });
+  };
+
+  const otherRegister = async (userId, affiliation) => {
+    const response = await axios.post(`/api/user/other`, {
+      userId,
+      affiliation,
+    });
+    const user = response.data;
 
     dispatch({
       type: 'REGISTER',
@@ -178,7 +189,8 @@ export function AuthProvider({ children }) {
           method: 'jwt',
           loginWithCredential,
           logout,
-          register,
+          studentRegister,
+          otherRegister,
         }}
       >
         {children}

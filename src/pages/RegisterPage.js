@@ -1,18 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import Login from '../sections/auth/Login';
-// import Login from '../../sections/auth/LoginAuth0';
+import Register from '../sections/auth/Register';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title>로그인 | HanQ</title>
+        <title>가입하기 | HanQ</title>
       </Helmet>
 
-      <Login />
+      <Register />
     </>
   );
 }

@@ -23,15 +23,15 @@ export default function NavAccount() {
 
   return (
     <StyledRoot>
-      <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} />
+      <CustomAvatar src={user?.picture} alt={user?.name} name={user?.name} />
 
       <Box sx={{ ml: 2, minWidth: 0 }}>
         <Typography variant="subtitle2" noWrap>
-          {user?.displayName}
+          {user?.name}
         </Typography>
 
         <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-          {user?.role}
+          {user?.isStudent ? user?.studentNum : user?.affiliation}
         </Typography>
       </Box>
     </StyledRoot>

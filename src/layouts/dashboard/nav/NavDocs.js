@@ -2,15 +2,11 @@
 import { Stack, Button, Typography, Box } from '@mui/material';
 // hooks
 import { useAuthContext } from '../../../auth/useAuthContext';
-// locales
-import { useLocales } from '../../../locales';
 
 // ----------------------------------------------------------------------
 
 export default function NavDocs() {
   const { user } = useAuthContext();
-
-  const { translate } = useLocales();
 
   return (
     <Stack
@@ -28,15 +24,15 @@ export default function NavDocs() {
 
       <div>
         <Typography gutterBottom variant="subtitle1">
-          {translate('docs.hi')}, {user?.displayName}
+          {user?.name}님 반갑습니다. 👋
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
-          {translate('docs.description')}
+          도움이 필요하십니까?{'\n'}아래 설명서를 읽어보세요.
         </Typography>
       </div>
 
-      <Button variant="contained">{translate('docs.documentation')}</Button>
+      <Button variant="contained">설명 문서</Button>
     </Stack>
   );
 }

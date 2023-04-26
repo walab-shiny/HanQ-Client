@@ -5,6 +5,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import LoadingScreen from '../components/loading-screen';
 //
 import Login from '../pages/LoginPage';
+import Register from '../pages/RegisterPage';
 import { useAuthContext } from './useAuthContext';
 
 // ----------------------------------------------------------------------
@@ -14,7 +15,7 @@ AuthGuard.propTypes = {
 };
 
 export default function AuthGuard({ children }) {
-  const { isAuthenticated, isInitialized } = useAuthContext();
+  const { isAuthenticated, isInitialized, user } = useAuthContext();
 
   const { pathname } = useLocation();
 
@@ -29,6 +30,10 @@ export default function AuthGuard({ children }) {
       setRequestedLocation(pathname);
     }
     return <Login />;
+  }
+
+  if (!user.isRegistered) {
+    return <Register />;
   }
 
   if (requestedLocation && pathname !== requestedLocation) {

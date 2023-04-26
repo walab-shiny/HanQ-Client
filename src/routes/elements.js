@@ -15,11 +15,9 @@ const Loadable = (Component) => (props) =>
 
 export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
 
-export const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
-export const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
-export const PageThree = Loadable(lazy(() => import('../pages/PageThree')));
-export const PageFour = Loadable(lazy(() => import('../pages/PageFour')));
-export const PageFive = Loadable(lazy(() => import('../pages/PageFive')));
-export const PageSix = Loadable(lazy(() => import('../pages/PageSix')));
+export const EventListPage = Loadable(lazy(() => import('../pages/EventListPage')));
+export const ListPage = Loadable(lazy(() => import('../pages/ListPage')));
+export const InvoiceListPage = Loadable(lazy(() => import('../pages/InvoiceListPage')));
+export const HostPage = Loadable(lazy(() => import('../pages/HostPage')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Toolbar, Box, Link } from '@mui/material';
+import { AppBar, Toolbar, Box } from '@mui/material';
 // config
 import { HEADER } from '../../config';
 // utils
@@ -40,10 +40,6 @@ export default function Header({ isOffset }) {
         }}
       >
         <Logo />
-
-        <Link variant="subtitle2" color="inherit">
-          Need Help?
-        </Link>
       </Toolbar>
 
       {isOffset && <Shadow />}

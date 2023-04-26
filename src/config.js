@@ -58,3 +58,15 @@ export const ICON = {
   NAV_ITEM_HORIZONTAL: 22,
   NAV_ITEM_MINI: 22,
 };
+
+export const DEPARTMENT_LIST = [
+  '전산전자공학부',
+  '콘텐츠융합디자인학부',
+  '생명과학부',
+  '공간환경시스템공학부',
+  '기계제어공학부',
+  '법학부',
+  '경영경제학부',
+  'ICT창업학부',
+  '커뮤니케이션학부',
+];

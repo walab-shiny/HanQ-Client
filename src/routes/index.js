@@ -8,7 +8,7 @@ import DashboardLayout from '../layouts/dashboard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
 //
-import { Page404, PageOne, PageTwo, PageSix, PageFour, PageFive, LoginPage, PageThree } from './elements';
+import { Page404, LoginPage, ListPage, EventListPage, HostPage, InvoiceListPage } from './elements';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ export default function Router() {
       ],
     },
     {
-      path: '/dashboard',
+      path: '/hanq',
       element: (
         <AuthGuard>
           <DashboardLayout />
@@ -37,18 +37,10 @@ export default function Router() {
       ),
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-        { path: 'one', element: <PageOne /> },
-        { path: 'two', element: <PageTwo /> },
-        { path: 'three', element: <PageThree /> },
-        {
-          path: 'user',
-          children: [
-            { element: <Navigate to="/dashboard/user/four" replace />, index: true },
-            { path: 'four', element: <PageFour /> },
-            { path: 'five', element: <PageFive /> },
-            { path: 'six', element: <PageSix /> },
-          ],
-        },
+        { path: 'all', element: <EventListPage /> },
+        { path: 'list', element: <ListPage /> },
+        { path: 'user', element: <InvoiceListPage /> },
+        { path: 'host', element: <HostPage /> },
       ],
     },
     {

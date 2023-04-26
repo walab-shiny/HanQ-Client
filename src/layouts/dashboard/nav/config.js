@@ -8,40 +8,29 @@ import SvgColor from '../../../components/svg-color';
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 
 const ICONS = {
+  menuItem: icon('ic_menu_item'),
+  calendar: icon('ic_calendar'),
   user: icon('ic_user'),
-  ecommerce: icon('ic_ecommerce'),
-  analytics: icon('ic_analytics'),
-  dashboard: icon('ic_dashboard'),
+  label: icon('ic_label'),
 };
 
 const navConfig = [
-  // GENERAL
+  // 일반
   // ----------------------------------------------------------------------
   {
-    subheader: 'general v4.0.0',
+    subheader: '일반',
     items: [
-      { title: 'One', path: PATH_DASHBOARD.one, icon: ICONS.dashboard },
-      { title: 'Two', path: PATH_DASHBOARD.two, icon: ICONS.ecommerce },
-      { title: 'Three', path: PATH_DASHBOARD.three, icon: ICONS.analytics },
+      { title: '모든 이벤트 목록 조회', path: PATH_DASHBOARD.all, icon: ICONS.menuItem },
+      { title: '참여 이벤트 목록 조회', path: PATH_DASHBOARD.list, icon: ICONS.calendar },
+      { title: '프로필 설정', path: PATH_DASHBOARD.user, icon: ICONS.user },
     ],
   },
 
-  // MANAGEMENT
+  // 관리
   // ----------------------------------------------------------------------
   {
-    subheader: 'management',
-    items: [
-      {
-        title: 'user',
-        path: PATH_DASHBOARD.user.root,
-        icon: ICONS.user,
-        children: [
-          { title: 'Four', path: PATH_DASHBOARD.user.four },
-          { title: 'Five', path: PATH_DASHBOARD.user.five },
-          { title: 'Six', path: PATH_DASHBOARD.user.six },
-        ],
-      },
-    ],
+    subheader: '관리',
+    items: [{ title: '이벤트 주최 관리', path: PATH_DASHBOARD.host, icon: ICONS.label }],
   },
 ];
 

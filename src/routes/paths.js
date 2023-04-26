@@ -4,7 +4,7 @@ function path(root, sublink) {
   return `${root}${sublink}`;
 }
 
-const ROOTS_DASHBOARD = '/dashboard';
+const ROOTS_DASHBOARD = '/hanq';
 
 // ----------------------------------------------------------------------
 
@@ -14,13 +14,8 @@ export const PATH_AUTH = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
-  one: path(ROOTS_DASHBOARD, '/one'),
-  two: path(ROOTS_DASHBOARD, '/two'),
-  three: path(ROOTS_DASHBOARD, '/three'),
-  user: {
-    root: path(ROOTS_DASHBOARD, '/user'),
-    four: path(ROOTS_DASHBOARD, '/user/four'),
-    five: path(ROOTS_DASHBOARD, '/user/five'),
-    six: path(ROOTS_DASHBOARD, '/user/six'),
-  },
+  all: path(ROOTS_DASHBOARD, '/all'),
+  list: path(ROOTS_DASHBOARD, '/list'),
+  user: path(ROOTS_DASHBOARD, '/user'),
+  host: path(ROOTS_DASHBOARD, '/host'),
 };

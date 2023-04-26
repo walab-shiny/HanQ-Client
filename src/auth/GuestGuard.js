@@ -15,7 +15,7 @@ export default function GuestGuard({ children }) {
   const { isAuthenticated, isInitialized } = useAuthContext();
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/hanq" />;
   }
 
   if (!isInitialized) {

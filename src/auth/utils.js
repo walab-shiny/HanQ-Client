@@ -48,7 +48,7 @@ export const tokenExpired = (exp) => {
   clearTimeout(expiredTimer);
 
   expiredTimer = setTimeout(() => {
-    alert('Token expired');
+    alert('세션이 만료되었습니다.');
 
     localStorage.removeItem('accessToken');
 
