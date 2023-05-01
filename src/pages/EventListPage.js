@@ -21,17 +21,6 @@ import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenter
 
 const getTagNameList = (tagList) => tagList.map((tag) => tag.name);
 
-// ----------------------------------------------------------------------
-
-const _carouselData = [...Array(5)].map((_, index) => ({
-  id: _mock.id(index),
-  title: _mock.text.title(index),
-  image: _mock.image.cover(index),
-  description: _mock.text.description(index),
-}));
-
-// ----------------------------------------------------------------------
-
 export default function EventList() {
   const theme = useTheme();
 
@@ -39,7 +28,7 @@ export default function EventList() {
 
   const { themeStretch } = useSettingsContext();
 
-  const [tableData, setTableData] = useState([]);
+  const [eventData, setEventData] = useState([]);
 
   const [tagNameList, setTagNameList] = useState([]);
 
@@ -48,7 +37,7 @@ export default function EventList() {
       const eventList = await getEventList();
       const tagList = await getTagList();
       const tagNameList = getTagNameList(tagList);
-      setTableData(eventList);
+      setEventData(eventList);
       setTagNameList(tagNameList);
     };
     fetchData();
@@ -72,7 +61,7 @@ export default function EventList() {
                 title="전체 이벤트 수"
                 total={100}
                 percent={100}
-                price={sumBy(tableData, 'totalPrice')}
+                // price={sumBy(tableData, 'totalPrice')}
                 icon="ic:round-receipt"
                 color={theme.palette.info.main}
               />
@@ -111,7 +100,7 @@ export default function EventList() {
             <Typography variant="h4" mb={4}>
               TODAY
             </Typography>
-            <CarouselCenterMode data={_carouselData} />
+            <CarouselCenterMode data={eventData} />
           </CardContent>
         </Card>
       </Container>
@@ -122,7 +111,7 @@ export default function EventList() {
             <Typography variant="h4" mb={4}>
               HOT 🔥
             </Typography>
-            <CarouselCenterMode data={_carouselData} />
+            <CarouselCenterMode data={eventData} />
           </CardContent>
         </Card>
       </Container>

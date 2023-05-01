@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useRef } from 'react';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
-import { Box, Paper, Link, CardContent } from '@mui/material';
+import { Box, Paper, Link, CardContent, Container } from '@mui/material';
 // utils
 import { bgGradient } from '../../../../utils/cssStyles';
 // components
@@ -52,22 +52,36 @@ export default function CarouselCenterMode({ data }) {
   };
 
   return (
-    <Box
-      sx={{
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-    >
-      <CarouselArrows filled icon="noto:rightwards-hand" onNext={handleNext} onPrevious={handlePrev}>
-        <Carousel ref={carouselRef} {...carouselSettings}>
-          {data.map((item) => (
-            <Box key={item.id} sx={{ px: 1 }}>
-              <CarouselItem item={item} />
-            </Box>
-          ))}
-        </Carousel>
-      </CarouselArrows>
-    </Box>
+    <>
+      {data.length < 3 ? (
+        <Box>
+          <Carousel ref={carouselRef} {...carouselSettings} slidesToShow={data.length}>
+            {data.map((item) => (
+              <Box key={item.id} sx={{ px: 1, maxWidth: 300 }}>
+                <CarouselItem item={item} />
+              </Box>
+            ))}
+          </Carousel>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
+          <CarouselArrows filled icon="noto:rightwards-hand" onNext={handleNext} onPrevious={handlePrev}>
+            <Carousel ref={carouselRef} {...carouselSettings}>
+              {data.map((item) => (
+                <Box key={item.id} sx={{ px: 1 }}>
+                  <CarouselItem item={item} />
+                </Box>
+              ))}
+            </Carousel>
+          </CarouselArrows>
+        </Box>
+      )}
+    </>
   );
 }
 
@@ -80,7 +94,7 @@ CarouselItem.propTypes = {
 function CarouselItem({ item }) {
   const theme = useTheme();
 
-  const { image, title } = item;
+  const { image, name } = item;
 
   return (
     <>
@@ -91,7 +105,7 @@ function CarouselItem({ item }) {
           position: 'relative',
         }}
       >
-        <Image alt={title} src={image} ratio="3/4" />
+        <Image alt={name} src={image} ratio="3/4" />
         <CardContent
           sx={{
             bottom: 0,
@@ -108,7 +122,7 @@ function CarouselItem({ item }) {
           }}
         >
           <TextMaxLine variant="h4" paragraph>
-            {title}
+            {name}
           </TextMaxLine>
 
           <Link
