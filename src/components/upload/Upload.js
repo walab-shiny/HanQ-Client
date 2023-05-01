@@ -141,13 +141,13 @@ export default function Upload({
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
             {onRemoveAll && (
               <Button color="inherit" variant="outlined" size="small" onClick={onRemoveAll}>
-                Remove all
+                모두 지우기
               </Button>
             )}
 
             {onUpload && (
               <Button size="small" variant="contained" onClick={onUpload}>
-                Upload files
+                파일 업로드
               </Button>
             )}
           </Stack>
@@ -189,11 +189,11 @@ function Placeholder({ sx, ...other }) {
 
       <Box sx={{ p: 3 }}>
         <Typography gutterBottom variant="h5">
-          Drop or Select file
+          이미지 첨부하기
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Drop files here or click
+          파일을 여기로 드래그하거나
           <Typography
             variant="body2"
             component="span"
@@ -203,9 +203,9 @@ function Placeholder({ sx, ...other }) {
               textDecoration: 'underline',
             }}
           >
-            browse
+            클릭하여
           </Typography>
-          thorough your machine
+          기기에서 파일을 선택하세요.
         </Typography>
       </Box>
     </Stack>

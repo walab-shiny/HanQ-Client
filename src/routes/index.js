@@ -8,7 +8,7 @@ import DashboardLayout from '../layouts/dashboard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
 //
-import { Page404, LoginPage, ListPage, EventListPage, HostPage, InvoiceListPage, UserEditPage } from './elements';
+import { Page404, LoginPage, ListPage, EventListPage, HostPage, UserEditPage, NewEventPage } from './elements';
 
 // ----------------------------------------------------------------------
 
@@ -43,9 +43,9 @@ export default function Router() {
         {
           path: 'host',
           children: [
-            { element: <HostPage />, index: true },
+            { element: <Navigate to="/hanq/host/list" replace />, index: true },
             { path: 'list', element: <HostPage /> },
-            { path: 'new', element: <InvoiceListPage /> },
+            { path: 'new', element: <NewEventPage /> },
           ],
         },
       ],

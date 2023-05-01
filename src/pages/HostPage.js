@@ -37,7 +37,7 @@ import {
   TablePaginationCustom,
 } from '../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../sections/event/list';
+import { UserTableToolbar, UserTableRow } from '../sections/@dashboard/event/list';
 
 // ----------------------------------------------------------------------
 

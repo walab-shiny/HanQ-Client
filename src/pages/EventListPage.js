@@ -2,8 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 // @mui
 import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
 // components
 import Scrollbar from '../components/scrollbar';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
@@ -19,7 +17,7 @@ import {
   TablePaginationCustom,
 } from '../components/table';
 // sections
-import { EventViewTableRow, EventViewTableToolbar } from '../sections/event/list';
+import { EventViewTableRow, EventViewTableToolbar } from '../sections/@dashboard/event/list';
 import { getEventList } from '../apis/event.ts';
 import { getTagList } from '../apis/tag';
 
@@ -126,11 +124,11 @@ export default function EventList() {
   return (
     <>
       <Helmet>
-        <title>모든 이벤트 목록 조회 | HanQ</title>
+        <title>공개 이벤트 목록 조회 | HanQ</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs heading="모든 이벤트 목록 조회" links={[]} />
+        <CustomBreadcrumbs heading="공개 이벤트 목록 조회" links={[]} />
 
         <Card>
           <Tabs

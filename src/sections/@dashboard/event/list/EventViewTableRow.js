@@ -3,10 +3,10 @@ import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { TableRow, TableCell, Typography, Button } from '@mui/material';
 // components
-import Label from '../../../components/label';
-import Iconify from '../../../components/iconify';
-import { fDateString } from '../../../utils/formatTime';
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import Label from '../../../../components/label';
+import Iconify from '../../../../components/iconify';
+import { fDateString } from '../../../../utils/formatTime';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
