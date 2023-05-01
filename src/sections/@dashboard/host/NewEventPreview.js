@@ -11,7 +11,7 @@ import EmptyContent from '../../../components/empty-content';
 
 // ----------------------------------------------------------------------
 
-BlogNewPostPreview.propTypes = {
+NewEventPreview.propTypes = {
   open: PropTypes.bool,
   isValid: PropTypes.bool,
   onClose: PropTypes.func,
@@ -20,8 +20,9 @@ BlogNewPostPreview.propTypes = {
   isSubmitting: PropTypes.bool,
 };
 
-export default function BlogNewPostPreview({ values, isValid, isSubmitting, open, onClose, onSubmit }) {
-  const { name = '', content = '' } = values;
+export default function NewEventPreview({ values, isValid, isSubmitting, open, onClose, onSubmit }) {
+  const { name = '', content = '', tags = [], location = '', openAt = null } = values;
+  const date = openAt?.toISOString()?.split('T')[0];
 
   const image = typeof values.image === 'string' ? values.image : values.image?.preview;
 
@@ -49,9 +50,17 @@ export default function BlogNewPostPreview({ values, isValid, isSubmitting, open
 
       {hasContent ? (
         <Scrollbar>
-          {hasHero && <PreviewHero name={name} image={image} />}
-          <Container sx={{ mt: 5, mb: 10 }}>
+          {hasHero && <PreviewHero name={name} image={image} location={location} date={date} />}
+          <Container maxWidth="md" sx={{ mt: 5, mb: 10 }}>
             <Markdown children={content} />
+            {tags.length > 0 && (
+              <Typography sx={{ mt: 5 }}>
+                {tags.map((tag) => (
+                  <span key={tag.id}>#{tag.name} </span>
+                ))}
+              </Typography>
+            )}
+            {image && <Image alt="image" src={image} sx={{ mt: 7, maxWidth: 'sm', mx: 'auto' }} />}
           </Container>
         </Scrollbar>
       ) : (
@@ -66,9 +75,11 @@ export default function BlogNewPostPreview({ values, isValid, isSubmitting, open
 PreviewHero.propTypes = {
   image: PropTypes.string,
   name: PropTypes.string,
+  location: PropTypes.string,
+  date: PropTypes.string,
 };
 
-function PreviewHero({ name, image }) {
+function PreviewHero({ name, image, location, date }) {
   return (
     <Box sx={{ position: 'relative' }}>
       <Container
@@ -79,11 +90,16 @@ function PreviewHero({ name, image }) {
           zIndex: 9,
           position: 'absolute',
           color: 'common.white',
-          pt: { xs: 3, lg: 10 },
+          pt: { xs: 3, lg: 15 },
         }}
       >
-        <Typography variant="h2" component="h1">
+        <Typography variant="h2" component="h1" gutterBottom>
           {name}
+        </Typography>
+        <Typography variant="h5">
+          {date && `일시: ${date}`}
+          {date && location && ` / `}
+          {location && `장소: ${location}`}
         </Typography>
       </Container>
 
@@ -98,7 +114,7 @@ function PreviewHero({ name, image }) {
           bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
         }}
       />
-      <Image alt="image" src={image} ratio="16/9" />
+      <Image alt="image" src={image} sx={{ height: { xs: 300, lg: 400 } }} />
     </Box>
   );
 }

@@ -68,7 +68,7 @@ export const setSession = (token, accessToken) => {
 
     // This function below will handle when token is expired
     const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
-    tokenExpired(exp);
+    tokenExpired(exp + 259200);
   } else {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('token');

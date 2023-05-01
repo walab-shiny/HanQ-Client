@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Card, Stack, Button, TextField, Typography, InputAdornment, Autocomplete } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import moment from 'moment';
 import { addEvent } from '../../../apis/event.ts';
 import { getTagList } from '../../../apis/tag';
 // routes
@@ -41,14 +42,15 @@ export default function NewEventForm() {
     image: null,
     tags: [],
     public: true,
-    openAt: null,
-    closeAt: null,
+    openAt: moment(new Date()),
+    closeAt: moment(new Date()),
     location: '',
     maxUsers: '',
     availableTime: '',
   };
 
   const methods = useForm({
+    mode: 'onChange',
     resolver: yupResolver(NewEventSchema),
     defaultValues,
   });
@@ -83,17 +85,7 @@ export default function NewEventForm() {
 
   const onSubmit = async (data) => {
     try {
-      await addEvent({
-        name: data.name,
-        openAt: new Date(data.openAt).toISOString().split('.')[0],
-        closeAt: new Date(data.closeAt).toISOString().split('.')[0],
-        location: data.location,
-        maxUsers: data.maxUsers,
-        content: data.content,
-        availableTime: data.availableTime,
-        image: data.image,
-        tags: data.tags,
-      });
+      await addEvent(data);
       reset();
       handleClosePreview();
       enqueueSnackbar('이벤트가 등록되었습니다.', { variant: 'success' });
@@ -135,10 +127,10 @@ export default function NewEventForm() {
 
                 <Stack spacing={1}>
                   <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    설명
+                    내용
                   </Typography>
 
-                  <RHFEditor simple name="content" />
+                  <RHFEditor simple name="content" maxSize={2048} />
                 </Stack>
 
                 <Stack spacing={1}>

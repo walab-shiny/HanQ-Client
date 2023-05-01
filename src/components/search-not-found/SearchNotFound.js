@@ -19,13 +19,13 @@ export default function SearchNotFound({ query, sx, ...other }) {
       {...other}
     >
       <Typography variant="h6" paragraph>
-        Not found
+        검색결과가 없습니다.
       </Typography>
 
       <Typography variant="body2">
-        No results found for &nbsp;
-        <strong>&quot;{query}&quot;</strong>.
-        <br /> Try checking for typos or using complete words.
+        <strong>&quot;{query}&quot;</strong>에 대한 검색결과가 없습니다.
+        <br />
+        모든 단어의 철자가 정확한지 확인하세요.
       </Typography>
     </Paper>
   ) : (
