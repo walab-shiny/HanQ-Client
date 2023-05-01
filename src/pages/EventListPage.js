@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
+import sumBy from 'lodash/sumBy';
 // @mui
-import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer } from '@mui/material';
+import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer, Stack, useTheme } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../routes/paths';
 // components
@@ -20,6 +21,7 @@ import {
 } from '../components/table';
 // sections
 import { EventViewTableRow, EventViewTableToolbar } from '../sections/event/list';
+import { InvoiceAnalytic } from '../sections/@dashboard/invoice/list';
 import { getEventList } from '../apis/event.ts';
 import { getTagList } from '../apis/tag';
 
@@ -42,6 +44,8 @@ const getTagNameList = (tagList) => tagList.map((tag) => tag.name);
 // ----------------------------------------------------------------------
 
 export default function EventList() {
+  const theme = useTheme();
+
   const {
     page,
     order,
@@ -129,8 +133,58 @@ export default function EventList() {
         <title>모든 이벤트 목록 조회 | HanQ</title>
       </Helmet>
 
+      <Card sx={{ mb: 5 }}>
+        <Scrollbar>
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
+            sx={{ py: 2 }}
+          >
+            <InvoiceAnalytic
+              title="전체 이벤트 수"
+              total={100}
+              percent={100}
+              price={sumBy(tableData, 'totalPrice')}
+              icon="ic:round-receipt"
+              color={theme.palette.info.main}
+            />
+
+            {/* <InvoiceAnalytic
+              title="오늘 제출된 소감문 수"
+              total={getLengthByStatus('paid')}
+              icon="eva:checkmark-circle-2-fill"
+              color={theme.palette.text.secondary}
+            /> */}
+
+            <InvoiceAnalytic
+              title="이벤트 참석자 수"
+              percent={100}
+              total={100}
+              icon="eva:clock-fill"
+              color={theme.palette.warning.main}
+            />
+
+            <InvoiceAnalytic
+              title="어제 접속자 수"
+              percent={100}
+              total={100}
+              icon="eva:bell-fill"
+              color={theme.palette.error.main}
+            />
+
+            <InvoiceAnalytic
+              title="오늘 접속자 수"
+              percent={100}
+              total={100}
+              icon="eva:file-fill"
+              color={theme.palette.success.main}
+            />
+          </Stack>
+        </Scrollbar>
+      </Card>
+
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs heading="모든 이벤트 목록 조회" links={[]} />
+        <CustomBreadcrumbs heading="TODAY" links={[]} />
 
         <Card>
           <Tabs
