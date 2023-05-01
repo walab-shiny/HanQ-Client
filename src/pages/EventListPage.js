@@ -28,9 +28,8 @@ const TABLE_HEAD = [
   { id: '주최기관', label: '주최기관', align: 'left' },
   { id: '제목', label: '제목', align: 'left' },
   { id: '시작일시', label: '시작일시', align: 'left' },
-  { id: '종료일시', label: '종료일시', align: 'left' },
   { id: '장소', label: '장소', align: 'left' },
-  { id: '참여인원수', label: '참여인원수', align: 'left' },
+  { id: '최대 인원수', label: '최대 인원수', align: 'left' },
   { id: '상태', label: '상태', align: 'left' },
   { id: '' },
 ];

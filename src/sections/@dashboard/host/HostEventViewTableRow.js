@@ -2,18 +2,18 @@ import PropTypes from 'prop-types';
 // @mui
 import { TableRow, TableCell, Typography } from '@mui/material';
 // components
-import Label from '../../../../components/label';
-import { fDateString } from '../../../../utils/formatTime';
-import { EventView } from '../../host';
+import Label from '../../../components/label';
+import { fDateString } from '../../../utils/formatTime';
+import { EventView, QRScan } from '.';
 
 // ----------------------------------------------------------------------
 
-EventViewTableRow.propTypes = {
+HostEventViewTableRow.propTypes = {
   row: PropTypes.object,
   index: PropTypes.number,
 };
 
-export default function EventViewTableRow({ row, index }) {
+export default function HostEventViewTableRow({ row, index }) {
   const { hostId, name, openAt, location, maxUsers, closed } = row;
 
   return (
@@ -43,6 +43,10 @@ export default function EventViewTableRow({ row, index }) {
 
         <TableCell>
           <EventView values={row} />
+        </TableCell>
+
+        <TableCell>
+          <QRScan event={row} />
         </TableCell>
       </TableRow>
     </>

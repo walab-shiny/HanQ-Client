@@ -19,7 +19,6 @@ export const formats = [
   'font',
   'formula',
   'header',
-  'image',
   'indent',
   'italic',
   'link',
