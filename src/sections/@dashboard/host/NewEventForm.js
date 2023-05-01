@@ -50,6 +50,7 @@ export default function NewEventForm() {
   };
 
   const methods = useForm({
+    mode: 'onChange',
     resolver: yupResolver(NewEventSchema),
     defaultValues,
   });
@@ -126,10 +127,10 @@ export default function NewEventForm() {
 
                 <Stack spacing={1}>
                   <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    설명
+                    내용
                   </Typography>
 
-                  <RHFEditor simple name="content" />
+                  <RHFEditor simple name="content" maxSize={2048} />
                 </Stack>
 
                 <Stack spacing={1}>

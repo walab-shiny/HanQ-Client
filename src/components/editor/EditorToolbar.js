@@ -48,7 +48,7 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
                 {heading}
               </option>
             ))}
-            <option value="">Normal</option>
+            <option value="">본문</option>
           </select>
         </div>
 
@@ -59,12 +59,10 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
           <button type="button" className="ql-strike" />
         </div>
 
-        {!isSimple && (
-          <div className="ql-formats">
-            <select className="ql-color" />
-            <select className="ql-background" />
-          </div>
-        )}
+        <div className="ql-formats">
+          <select className="ql-color" />
+          <select className="ql-background" />
+        </div>
 
         <div className="ql-formats">
           <button type="button" className="ql-list" value="ordered" />
@@ -80,12 +78,10 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
           </div>
         )}
 
-        {!isSimple && (
-          <div className="ql-formats">
-            <button type="button" className="ql-code-block" />
-            <button type="button" className="ql-blockquote" />
-          </div>
-        )}
+        <div className="ql-formats">
+          <button type="button" className="ql-code-block" />
+          <button type="button" className="ql-blockquote" />
+        </div>
 
         <div className="ql-formats">
           <button type="button" className="ql-direction" value="rtl" />
@@ -94,7 +90,7 @@ export default function EditorToolbar({ id, isSimple, ...other }) {
 
         <div className="ql-formats">
           <button type="button" className="ql-link" />
-          <button type="button" className="ql-image" />
+          {!isSimple && <button type="button" className="ql-image" />}
           <button type="button" className="ql-video" />
         </div>
 
