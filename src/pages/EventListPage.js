@@ -2,9 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import sumBy from 'lodash/sumBy';
 // @mui
-import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer, Stack, useTheme } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
+import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer } from '@mui/material';
 // components
 import Scrollbar from '../components/scrollbar';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
@@ -20,7 +18,7 @@ import {
   TablePaginationCustom,
 } from '../components/table';
 // sections
-import { EventViewTableRow, EventViewTableToolbar } from '../sections/event/list';
+import { EventViewTableRow, EventViewTableToolbar } from '../sections/@dashboard/event/list';
 import { InvoiceAnalytic } from '../sections/@dashboard/invoice/list';
 import { getEventList } from '../apis/event.ts';
 import { getTagList } from '../apis/tag';
@@ -130,7 +128,7 @@ export default function EventList() {
   return (
     <>
       <Helmet>
-        <title>모든 이벤트 목록 조회 | HanQ</title>
+        <title>공개 이벤트 목록 조회 | HanQ</title>
       </Helmet>
 
       <Card sx={{ mb: 5 }}>

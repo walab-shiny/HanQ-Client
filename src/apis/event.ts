@@ -17,8 +17,17 @@ export const getEvent = async (id: number) => {
 };
 
 export const addEvent = async (data: IEvent) => {
-  const reqData = { ...data, tags: data.tags.map((tag) => tag.id) };
-  const response = await axios.post('/api/event', reqData);
+  const response = await axios.post('/api/event', {
+    name: data.name,
+    openAt: data.openAt,
+    closeAt: data.closeAt,
+    location: data.location,
+    maxUsers: data.maxUsers,
+    content: data.content,
+    availableTime: data.availableTime,
+    image: data.image,
+    tags: data.tags.map((tag) => tag.id),
+  });
   return response;
 };
 

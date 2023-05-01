@@ -20,7 +20,7 @@ const navConfig = [
   {
     subheader: '일반',
     items: [
-      { title: '모든 이벤트 목록 조회', path: PATH_DASHBOARD.all, icon: ICONS.menuItem },
+      { title: '공개 이벤트 목록 조회', path: PATH_DASHBOARD.all, icon: ICONS.menuItem },
       { title: '참여 이벤트 목록 조회', path: PATH_DASHBOARD.list, icon: ICONS.calendar },
       { title: '프로필 설정', path: PATH_DASHBOARD.user, icon: ICONS.user },
     ],
@@ -41,7 +41,7 @@ const navConfig = [
             path: PATH_DASHBOARD.host.list,
           },
           {
-            title: '이벤트 생성',
+            title: '이벤트 등록',
             path: PATH_DASHBOARD.host.new,
           },
         ],
