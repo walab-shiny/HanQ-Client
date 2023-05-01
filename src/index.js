@@ -11,9 +11,9 @@ import 'simplebar/src/simplebar.css';
 // editor
 import 'react-quill/dist/quill.snow.css';
 
-// // slick-carousel
-// import 'slick-carousel/slick/slick.css';
-// import 'slick-carousel/slick/slick-theme.css';
+// slick-carousel
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 // lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';

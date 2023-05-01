@@ -2,10 +2,26 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import sumBy from 'lodash/sumBy';
 // @mui
-import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer, useTheme, Stack } from '@mui/material';
+import {
+  Tab,
+  Tabs,
+  Card,
+  Table,
+  Divider,
+  TableBody,
+  Container,
+  TableContainer,
+  useTheme,
+  Stack,
+  CardHeader,
+  CardContent,
+  Typography,
+} from '@mui/material';
+// _mock
+import _mock from '../_mock/_mock';
 // components
 import Scrollbar from '../components/scrollbar';
-import CustomBreadcrumbs from '../components/custom-breadcrumbs';
+
 import Label from '../components/label';
 import { useSettingsContext } from '../components/settings';
 import {
@@ -22,6 +38,7 @@ import { EventViewTableRow, EventViewTableToolbar } from '../sections/@dashboard
 import { InvoiceAnalytic } from '../sections/@dashboard/invoice/list';
 import { getEventList } from '../apis/event.ts';
 import { getTagList } from '../apis/tag';
+import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenterMode';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +55,15 @@ const TABLE_HEAD = [
 ];
 
 const getTagNameList = (tagList) => tagList.map((tag) => tag.name);
+
+// ----------------------------------------------------------------------
+
+const _carouselData = [...Array(5)].map((_, index) => ({
+  id: _mock.id(index),
+  title: _mock.text.title(index),
+  image: _mock.image.cover(index),
+  description: _mock.text.description(index),
+}));
 
 // ----------------------------------------------------------------------
 
@@ -131,125 +157,70 @@ export default function EventList() {
         <title>공개 이벤트 목록 조회 | HanQ</title>
       </Helmet>
 
-      <Card sx={{ mb: 5 }}>
-        <Scrollbar>
-          <Stack
-            direction="row"
-            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
-            sx={{ py: 2 }}
-          >
-            <InvoiceAnalytic
-              title="전체 이벤트 수"
-              total={100}
-              percent={100}
-              price={sumBy(tableData, 'totalPrice')}
-              icon="ic:round-receipt"
-              color={theme.palette.info.main}
-            />
+      <Container maxWidth={themeStretch ? false : 'lg'}>
+        <Card sx={{ mb: 5 }}>
+          <Scrollbar>
+            <Stack
+              direction="row"
+              divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
+              sx={{ py: 2 }}
+            >
+              <InvoiceAnalytic
+                title="전체 이벤트 수"
+                total={100}
+                percent={100}
+                price={sumBy(tableData, 'totalPrice')}
+                icon="ic:round-receipt"
+                color={theme.palette.info.main}
+              />
 
-            {/* <InvoiceAnalytic
-              title="오늘 제출된 소감문 수"
-              total={getLengthByStatus('paid')}
-              icon="eva:checkmark-circle-2-fill"
-              color={theme.palette.text.secondary}
-            /> */}
+              <InvoiceAnalytic
+                title="이벤트 참석자 수"
+                percent={100}
+                total={100}
+                icon="eva:clock-fill"
+                color={theme.palette.warning.main}
+              />
 
-            <InvoiceAnalytic
-              title="이벤트 참석자 수"
-              percent={100}
-              total={100}
-              icon="eva:clock-fill"
-              color={theme.palette.warning.main}
-            />
+              <InvoiceAnalytic
+                title="어제 접속자 수"
+                percent={100}
+                total={100}
+                icon="eva:bell-fill"
+                color={theme.palette.error.main}
+              />
 
-            <InvoiceAnalytic
-              title="어제 접속자 수"
-              percent={100}
-              total={100}
-              icon="eva:bell-fill"
-              color={theme.palette.error.main}
-            />
-
-            <InvoiceAnalytic
-              title="오늘 접속자 수"
-              percent={100}
-              total={100}
-              icon="eva:file-fill"
-              color={theme.palette.success.main}
-            />
-          </Stack>
-        </Scrollbar>
-      </Card>
+              <InvoiceAnalytic
+                title="오늘 접속자 수"
+                percent={100}
+                total={100}
+                icon="eva:file-fill"
+                color={theme.palette.success.main}
+              />
+            </Stack>
+          </Scrollbar>
+        </Card>
+      </Container>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs heading="TODAY" links={[]} />
+        <Card sx={{ mb: 5 }}>
+          <CardContent>
+            <Typography variant="h4" mb={4}>
+              TODAY
+            </Typography>
+            <CarouselCenterMode data={_carouselData} />
+          </CardContent>
+        </Card>
+      </Container>
 
+      <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {TABS.map((tab) => (
-              <Tab
-                key={tab.value}
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label color={tab.color} sx={{ mr: 1 }}>
-                    {tab.count}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-
-          <Divider />
-
-          <EventViewTableToolbar
-            isFiltered={isFiltered}
-            filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={['전체', ...tagNameList]}
-            onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
-            onResetFilter={handleResetFilter}
-          />
-
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  onSort={onSort}
-                />
-
-                <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                    <EventViewTableRow key={row.id} row={row} index={index} />
-                  ))}
-
-                  <TableEmptyRows emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
-
-                  <TableNoData isNotFound={isNotFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-          />
+          <CardContent>
+            <Typography variant="h4" mb={4}>
+              HOT 🔥
+            </Typography>
+            <CarouselCenterMode data={_carouselData} />
+          </CardContent>
         </Card>
       </Container>
     </>
