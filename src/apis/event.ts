@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import uuid from 'react-uuid';
+import moment from 'moment';
 import { IEvent } from '../types/event.ts';
 import axios from '../utils/axios';
 
@@ -17,21 +18,22 @@ export const getEvent = async (id: number) => {
 };
 
 export const addEvent = async (data: IEvent) => {
+  const image = data.image ? await uploadImage(data.image) : null;
   const response = await axios.post('/api/event', {
     name: data.name,
-    openAt: data.openAt,
-    closeAt: data.closeAt,
+    openAt: moment(new Date(data.openAt)).format('YYYY-MM-DDTHH:mm:ss'),
+    closeAt: moment(new Date(data.closeAt)).format('YYYY-MM-DDTHH:mm:ss'),
     location: data.location,
     maxUsers: data.maxUsers,
     content: data.content,
     availableTime: data.availableTime,
-    image: data.image,
+    image,
     tags: data.tags.map((tag) => tag.id),
   });
   return response;
 };
 
-export const addEventWithFile = async (data: IEvent, file: File) => {
+export const uploadImage = async (file: File) => {
   AWS.config.update({
     accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
     secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
@@ -50,17 +52,9 @@ export const addEventWithFile = async (data: IEvent, file: File) => {
     ContentType: 'image/jpeg',
   };
 
-  return uploadBucket
-    .putObject(params as any)
-    .on('success', async () => {
-      const image = `${process.env.REACT_APP_S3_STORAGE}/${imageRef}`;
-      const reqData = { ...data, image, tags: data.tags.map((tag) => tag.id) };
-      const response = await axios.post('/api/event', reqData);
-      return response;
-    })
-    .send((err) => {
-      if (err) console.log(err);
-    });
+  const { Location } = await uploadBucket.upload(params).promise();
+
+  return Location;
 };
 
 export const closeEvent = async (id: number) => {
