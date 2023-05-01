@@ -10,6 +10,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // components
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { SettingsProvider } from './components/settings';
 import ScrollToTop from './components/scroll-to-top';
 
@@ -31,10 +33,12 @@ root.render(
   <AuthProvider>
     <HelmetProvider>
       <SettingsProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <App />
-        </BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <App />
+          </BrowserRouter>
+        </LocalizationProvider>
       </SettingsProvider>
     </HelmetProvider>
   </AuthProvider>

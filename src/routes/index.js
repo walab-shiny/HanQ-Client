@@ -8,7 +8,7 @@ import DashboardLayout from '../layouts/dashboard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
 //
-import { Page404, LoginPage, ListPage, EventListPage, HostPage, InvoiceListPage } from './elements';
+import { Page404, LoginPage, ListPage, EventListPage, HostPage, InvoiceListPage, UserEditPage } from './elements';
 
 // ----------------------------------------------------------------------
 
@@ -39,8 +39,15 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'all', element: <EventListPage /> },
         { path: 'list', element: <ListPage /> },
-        { path: 'user', element: <InvoiceListPage /> },
-        { path: 'host', element: <HostPage /> },
+        { path: 'user', element: <UserEditPage /> },
+        {
+          path: 'host',
+          children: [
+            { element: <HostPage />, index: true },
+            { path: 'list', element: <HostPage /> },
+            { path: 'new', element: <InvoiceListPage /> },
+          ],
+        },
       ],
     },
     {

@@ -30,7 +30,23 @@ const navConfig = [
   // ----------------------------------------------------------------------
   {
     subheader: '관리',
-    items: [{ title: '이벤트 주최 관리', path: PATH_DASHBOARD.host, icon: ICONS.label }],
+    items: [
+      {
+        title: '이벤트 주최 관리',
+        path: PATH_DASHBOARD.host.root,
+        icon: ICONS.label,
+        children: [
+          {
+            title: '이벤트 목록',
+            path: PATH_DASHBOARD.host.list,
+          },
+          {
+            title: '이벤트 생성',
+            path: PATH_DASHBOARD.host.new,
+          },
+        ],
+      },
+    ],
   },
 ];
 

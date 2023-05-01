@@ -2,6 +2,12 @@ import { format, getTime, formatDistanceToNow } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
+export function fDateString(dateString) {
+  const date = dateString?.split('T')[0];
+  const time = dateString?.split('T')[1];
+  return `${date?.split('-')[1]}월 ${date?.split('-')[2]}일 ${time}`;
+}
+
 export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy';
 
