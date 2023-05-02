@@ -11,9 +11,10 @@ import ScanOverlay from './QRScanOverlay';
 
 QRScan.propTypes = {
   event: PropTypes.object,
+  disabled: PropTypes.bool,
 };
 
-export default function QRScan({ event }) {
+export default function QRScan({ event, disabled }) {
   const { enqueueSnackbar } = useSnackbar();
   const [resultText, setResultText] = useState('');
   const [open, setOpen] = useState(false);
@@ -43,11 +44,12 @@ export default function QRScan({ event }) {
     if (resultText && resultText !== '') {
       handleOnResult(resultText);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultText]);
 
   return (
     <>
-      <Button size="small" variant="contained" color="success" onClick={handleOpen}>
+      <Button size="small" variant="contained" color="success" onClick={handleOpen} disabled={disabled}>
         QR 스캔
       </Button>
       <Dialog open={open} onClose={handleClose} fullScreen>

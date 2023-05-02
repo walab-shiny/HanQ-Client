@@ -4,17 +4,34 @@ import { TableRow, TableCell, Typography } from '@mui/material';
 // components
 import Label from '../../../components/label';
 import { fDateString } from '../../../utils/formatTime';
-import { EventView, QRScan } from '.';
+import { CloseEventModal, EventView, QRScan } from '.';
 
 // ----------------------------------------------------------------------
 
 HostEventViewTableRow.propTypes = {
   row: PropTypes.object,
   index: PropTypes.number,
+  fetchData: PropTypes.func,
 };
 
-export default function HostEventViewTableRow({ row, index }) {
-  const { hostId, name, openAt, location, maxUsers, closed } = row;
+export default function HostEventViewTableRow({ row, index, fetchData }) {
+  const { hostId, name, openAt, location, status } = row;
+
+  const getLabelColor = (statue) => {
+    switch (statue) {
+      case '진행 전':
+        return 'success';
+      case '진행 중':
+        return 'warning';
+      case '종료됨':
+        return 'error';
+      default:
+        return 'success';
+    }
+  };
+
+  const labelColor = getLabelColor(status);
+  const active = row.status === '진행 중';
 
   return (
     <>
@@ -33,11 +50,9 @@ export default function HostEventViewTableRow({ row, index }) {
 
         <TableCell>{location}</TableCell>
 
-        <TableCell>{maxUsers}</TableCell>
-
-        <TableCell align="left">
-          <Label variant="soft" color={closed ? 'error' : 'success'} sx={{ textTransform: 'capitalize' }}>
-            {closed ? '종료됨' : '진행 중'}
+        <TableCell align="center">
+          <Label variant="soft" color={labelColor} sx={{ textTransform: 'capitalize' }}>
+            {status}
           </Label>
         </TableCell>
 
@@ -46,7 +61,11 @@ export default function HostEventViewTableRow({ row, index }) {
         </TableCell>
 
         <TableCell>
-          <QRScan event={row} />
+          <QRScan event={row} disabled={!active} />
+        </TableCell>
+
+        <TableCell>
+          <CloseEventModal event={row} fetchData={fetchData} />
         </TableCell>
       </TableRow>
     </>

@@ -33,10 +33,10 @@ const TABLE_HEAD = [
   { id: '제목', label: '제목', align: 'left' },
   { id: '시작일시', label: '시작일시', align: 'left' },
   { id: '장소', label: '장소', align: 'left' },
-  { id: '최대 인원수', label: '최대 인원수', align: 'left' },
-  { id: '상태', label: '상태', align: 'left' },
+  { id: '상태', label: '상태', align: 'center' },
   { id: '상세보기' },
   { id: 'QR' },
+  { id: '삭제' },
 ];
 
 // ----------------------------------------------------------------------
@@ -111,13 +111,14 @@ export default function HostPage() {
     setFilterStatus('전체');
   };
 
+  const fetchData = async () => {
+    const eventList = await getEventList();
+    const tagList = await getTagList();
+    setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 중' })));
+    setTagList(tagList);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const eventList = await getEventList();
-      const tagList = await getTagList();
-      setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 전' })));
-      setTagList(tagList);
-    };
     fetchData();
   }, []);
 
@@ -191,7 +192,7 @@ export default function HostPage() {
 
                 <TableBody>
                   {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                    <HostEventViewTableRow key={row.id} row={row} index={index} />
+                    <HostEventViewTableRow key={row.id} row={row} index={index} fetchData={fetchData} />
                   ))}
 
                   <TableEmptyRows emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />

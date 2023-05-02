@@ -14,7 +14,7 @@ EventViewTableRow.propTypes = {
 };
 
 export default function EventViewTableRow({ row, index }) {
-  const { hostId, name, openAt, location, maxUsers, status } = row;
+  const { hostId, name, openAt, location, status } = row;
 
   const getLabelColor = (statue) => {
     switch (statue) {
@@ -48,9 +48,7 @@ export default function EventViewTableRow({ row, index }) {
 
         <TableCell>{location}</TableCell>
 
-        <TableCell>{maxUsers}</TableCell>
-
-        <TableCell align="left">
+        <TableCell align="center">
           <Label variant="soft" color={labelColor} sx={{ textTransform: 'capitalize' }}>
             {status}
           </Label>

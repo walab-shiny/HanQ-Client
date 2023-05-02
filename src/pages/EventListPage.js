@@ -29,8 +29,7 @@ const TABLE_HEAD = [
   { id: '제목', label: '제목', align: 'left' },
   { id: '시작일시', label: '시작일시', align: 'left' },
   { id: '장소', label: '장소', align: 'left' },
-  { id: '최대 인원수', label: '최대 인원수', align: 'left' },
-  { id: '상태', label: '상태', align: 'left' },
+  { id: '상태', label: '상태', align: 'center' },
   { id: '' },
 ];
 
@@ -110,7 +109,7 @@ export default function EventList() {
     const fetchData = async () => {
       const eventList = await getEventList();
       const tagList = await getTagList();
-      setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 전' })));
+      setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 중' })));
       setTagList(tagList);
     };
     fetchData();
