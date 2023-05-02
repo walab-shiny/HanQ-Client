@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Paper, Link, CardContent, Container } from '@mui/material';
@@ -10,6 +10,7 @@ import Image from '../../../../components/image';
 import Iconify from '../../../../components/iconify';
 import TextMaxLine from '../../../../components/text-max-line';
 import Carousel, { CarouselArrows } from '../../../../components/carousel';
+import EventInfoDialog from './EventInfoDialog';
 
 // ----------------------------------------------------------------------
 
@@ -92,9 +93,19 @@ CarouselItem.propTypes = {
 };
 
 function CarouselItem({ item }) {
+  const [open, setOpen] = useState(false);
+
   const theme = useTheme();
 
   const { image, name } = item;
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <>
@@ -135,12 +146,14 @@ function CarouselItem({ item }) {
               transition: (theme) => theme.transitions.create('opacity'),
               '&:hover': { opacity: 1 },
             }}
+            onClick={handleOpen}
           >
             More
             <Iconify icon="eva:arrow-forward-fill" width={16} sx={{ ml: 1 }} />
           </Link>
         </CardContent>
       </Paper>
+      <EventInfoDialog open={open} handleClose={handleClose} item={item} />
     </>
   );
 }
