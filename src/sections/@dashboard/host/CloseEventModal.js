@@ -40,10 +40,12 @@ export default function CloseEventModal({ event, fetchData }) {
 
   return (
     <>
-      <Tooltip title="이벤트 종료">
-        <IconButton onClick={handleOpen} disabled={isClosed}>
-          <Iconify icon="eva:close-circle-outline" />
-        </IconButton>
+      <Tooltip title={isClosed ? '이벤트가 종료되었습니다.' : '이벤트 종료'}>
+        <span>
+          <IconButton onClick={handleOpen} disabled={isClosed}>
+            <Iconify icon="eva:close-circle-outline" />
+          </IconButton>
+        </span>
       </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>이벤트 종료</DialogTitle>

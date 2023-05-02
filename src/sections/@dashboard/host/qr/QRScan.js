@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { QrReader } from 'react-qr-reader';
-import { Box, Button, Dialog, IconButton, Typography } from '@mui/material';
+import { Box, Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-// import CloseIcon from '@mui/icons-material/Close';
 import Iconify from '../../../../components/iconify';
 import { sendQrRequest } from '../../../../apis/qr';
 // components
@@ -49,9 +48,13 @@ export default function QRScan({ event, disabled }) {
 
   return (
     <>
-      <Button size="small" variant="contained" color="success" onClick={handleOpen} disabled={disabled}>
-        QR 스캔
-      </Button>
+      <Tooltip title={disabled ? '이벤트가 진행 중이 아닙니다.' : '출석 QR 스캔하기'}>
+        <span>
+          <Button size="small" variant="contained" color="success" onClick={handleOpen} disabled={disabled}>
+            QR 스캔
+          </Button>
+        </span>
+      </Tooltip>
       <Dialog open={open} onClose={handleClose} fullScreen>
         <IconButton
           onClick={() => window.location.reload()}
