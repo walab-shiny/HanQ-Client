@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Stack, InputAdornment, TextField, MenuItem, Button } from '@mui/material';
+import { Stack, InputAdornment, TextField, Button, Autocomplete } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
 
@@ -9,20 +9,20 @@ import Iconify from '../../../../components/iconify';
 EventViewTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
-  filterRole: PropTypes.string,
+  filterTag: PropTypes.arrayOf(PropTypes.object),
   onFilterName: PropTypes.func,
-  onFilterRole: PropTypes.func,
+  onFilterTag: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  tagList: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default function EventViewTableToolbar({
   isFiltered,
   filterName,
-  filterRole,
-  optionsRole,
+  filterTag,
+  tagList,
   onFilterName,
-  onFilterRole,
+  onFilterTag,
   onResetFilter,
 }) {
   return (
@@ -35,44 +35,17 @@ export default function EventViewTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        select
-        label="태그"
-        value={filterRole}
-        onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: {
-                maxHeight: 260,
-              },
-            },
-          },
+      <Autocomplete
+        value={filterTag}
+        onChange={(event, newValue) => {
+          onFilterTag(newValue);
         }}
-        sx={{
-          maxWidth: { sm: 240 },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-              '&:first-of-type': { mt: 0 },
-              '&:last-of-type': { mb: 0 },
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
+        multiple
+        options={tagList}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => <TextField {...params} label="태그" />}
+        sx={{ width: 1, maxWidth: { sm: 360 } }}
+      />
 
       <TextField
         fullWidth
@@ -95,7 +68,7 @@ export default function EventViewTableToolbar({
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          삭제
+          지우기
         </Button>
       )}
     </Stack>

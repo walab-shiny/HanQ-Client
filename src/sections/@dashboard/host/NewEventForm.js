@@ -163,7 +163,7 @@ export default function NewEventForm() {
                   multiple
                   options={tags}
                   getOptionLabel={(option) => option.name}
-                  renderInput={(params) => <TextField {...params} placeholder="관련 태그를 입력하세요." />}
+                  renderInput={(params) => <TextField {...params} label="태그" />}
                 />
 
                 <Controller

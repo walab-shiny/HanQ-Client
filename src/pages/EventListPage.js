@@ -34,8 +34,6 @@ const TABLE_HEAD = [
   { id: '' },
 ];
 
-const getTagNameList = (tagList) => tagList.map((tag) => tag.name);
-
 // ----------------------------------------------------------------------
 
 export default function EventList() {
@@ -55,11 +53,11 @@ export default function EventList() {
 
   const [tableData, setTableData] = useState([]);
 
-  const [tagNameList, setTagNameList] = useState([]);
+  const [tagList, setTagList] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
-  const [filterRole, setFilterRole] = useState('전체');
+  const [filterTag, setFilterTag] = useState([]);
 
   const [filterStatus, setFilterStatus] = useState('전체');
 
@@ -67,25 +65,24 @@ export default function EventList() {
     inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterName,
-    filterRole,
+    filterTag,
     filterStatus,
   });
 
-  const isFiltered = filterName !== '' || filterRole !== '전체' || filterStatus !== '전체';
+  const isFiltered = filterName !== '' || filterTag.length > 0 || filterStatus !== '전체';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
+    (!dataFiltered.length && !!filterTag) ||
     (!dataFiltered.length && !!filterStatus);
 
-  const getLengthByStatus = (status) => tableData.filter((item) => item.close === status).length;
+  const getLengthByStatus = (status) => tableData.filter((item) => item.status === status).length;
 
   const TABS = [
     { value: '전체', label: '전체', color: 'info', count: tableData.length },
-    { value: '진행 전', label: '진행 전', color: 'success', count: getLengthByStatus('paid') },
-    { value: '진행 중', label: '진행 중', color: 'warning', count: getLengthByStatus('unpaid') },
-    { value: '종료됨', label: '종료됨', color: 'error', count: getLengthByStatus('overdue') },
-    { value: 'draft', label: 'Draft', color: 'default', count: getLengthByStatus('draft') },
+    { value: '진행 전', label: '진행 전', color: 'success', count: getLengthByStatus('진행 전') },
+    { value: '진행 중', label: '진행 중', color: 'warning', count: getLengthByStatus('진행 중') },
+    { value: '종료됨', label: '종료됨', color: 'error', count: getLengthByStatus('종료됨') },
   ];
 
   const handleFilterStatus = (event, newValue) => {
@@ -98,14 +95,14 @@ export default function EventList() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
+  const handleFilterTag = (value) => {
     setPage(0);
-    setFilterRole(event.target.value);
+    setFilterTag(value);
   };
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('전체');
+    setFilterTag([]);
     setFilterStatus('전체');
   };
 
@@ -113,9 +110,8 @@ export default function EventList() {
     const fetchData = async () => {
       const eventList = await getEventList();
       const tagList = await getTagList();
-      const tagNameList = getTagNameList(tagList);
-      setTableData(eventList);
-      setTagNameList(tagNameList);
+      setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 전' })));
+      setTagList(tagList);
     };
     fetchData();
   }, []);
@@ -157,10 +153,10 @@ export default function EventList() {
           <EventViewTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={['전체', ...tagNameList]}
+            filterTag={filterTag}
+            tagList={tagList}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
+            onFilterTag={handleFilterTag}
             onResetFilter={handleResetFilter}
           />
 
@@ -203,7 +199,7 @@ export default function EventList() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName, filterStatus, filterTag }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -222,10 +218,15 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     inputData = inputData.filter((event) => event.status === filterStatus);
   }
 
-  if (filterRole !== '전체') {
+  if (filterTag.length > 0) {
     inputData = inputData.filter((event) => {
-      const tagNameList = getTagNameList(event.tags);
-      return tagNameList.includes(filterRole);
+      let flag = true;
+      filterTag.forEach((tag) => {
+        if (event.tags.filter((item) => item.name === tag.name).length === 0) {
+          flag = false;
+        }
+      });
+      return flag;
     });
   }
 

@@ -14,7 +14,22 @@ EventViewTableRow.propTypes = {
 };
 
 export default function EventViewTableRow({ row, index }) {
-  const { hostId, name, openAt, location, maxUsers, closed } = row;
+  const { hostId, name, openAt, location, maxUsers, status } = row;
+
+  const getLabelColor = (statue) => {
+    switch (statue) {
+      case '진행 전':
+        return 'success';
+      case '진행 중':
+        return 'warning';
+      case '종료됨':
+        return 'error';
+      default:
+        return 'success';
+    }
+  };
+
+  const labelColor = getLabelColor(status);
 
   return (
     <>
@@ -36,8 +51,8 @@ export default function EventViewTableRow({ row, index }) {
         <TableCell>{maxUsers}</TableCell>
 
         <TableCell align="left">
-          <Label variant="soft" color={closed ? 'error' : 'success'} sx={{ textTransform: 'capitalize' }}>
-            {closed ? '종료됨' : '진행 중'}
+          <Label variant="soft" color={labelColor} sx={{ textTransform: 'capitalize' }}>
+            {status}
           </Label>
         </TableCell>
 
