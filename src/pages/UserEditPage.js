@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
 // @mui
 import { Container } from '@mui/material';
 // routes

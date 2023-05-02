@@ -1,30 +1,12 @@
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
-import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import {
-  Tab,
-  Tabs,
-  Card,
-  Table,
-  Button,
-  Tooltip,
-  Divider,
-  TableBody,
-  Container,
-  IconButton,
-  TableContainer,
-} from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
-// _mock_
-import { _userList } from '../_mock/arrays';
+import { Tab, Tabs, Card, Table, Divider, TableBody, Container, TableContainer, Button } from '@mui/material';
 // components
-import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
-import ConfirmDialog from '../components/confirm-dialog';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
+import Label from '../components/label';
 import { useSettingsContext } from '../components/settings';
 import {
   useTable,
@@ -33,73 +15,58 @@ import {
   TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from '../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../sections/@dashboard/event/list';
+import { EventViewTableToolbar } from '../sections/@dashboard/event/list';
+import { getEventList } from '../apis/event.ts';
+import { getTagList } from '../apis/tag';
+import { HostEventViewTableRow } from '../sections/@dashboard/host';
+import Iconify from '../components/iconify';
+import { PATH_DASHBOARD } from '../routes/paths';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
-
-const ROLE_OPTIONS = [
-  'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
-];
-
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
-  { id: '' },
+  { id: '순번', label: '순번', align: 'left' },
+  { id: '주최기관', label: '주최기관', align: 'left' },
+  { id: '제목', label: '제목', align: 'left' },
+  { id: '시작일시', label: '시작일시', align: 'left' },
+  { id: '장소', label: '장소', align: 'left' },
+  { id: '최대 인원수', label: '최대 인원수', align: 'left' },
+  { id: '상태', label: '상태', align: 'left' },
+  { id: '상세보기' },
+  { id: 'QR' },
 ];
+
+const getTagNameList = (tagList) => tagList.map((tag) => tag.name);
 
 // ----------------------------------------------------------------------
 
 export default function HostPage() {
   const {
-    dense,
     page,
     order,
     orderBy,
     rowsPerPage,
     setPage,
     //
-    selected,
-    setSelected,
-    onSelectRow,
-    onSelectAllRows,
-    //
     onSort,
-    onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
 
-  const navigate = useNavigate();
+  const [tableData, setTableData] = useState([]);
 
-  const [tableData, setTableData] = useState(_userList);
-
-  const [openConfirm, setOpenConfirm] = useState(false);
+  const [tagNameList, setTagNameList] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
-  const [filterRole, setFilterRole] = useState('all');
+  const [filterRole, setFilterRole] = useState('전체');
 
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('전체');
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -109,24 +76,21 @@ export default function HostPage() {
     filterStatus,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-  const denseHeight = dense ? 52 : 72;
-
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
+  const isFiltered = filterName !== '' || filterRole !== '전체' || filterStatus !== '전체';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
     (!dataFiltered.length && !!filterRole) ||
     (!dataFiltered.length && !!filterStatus);
 
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
+  const getLengthByStatus = (status) => tableData.filter((item) => item.close === status).length;
 
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
+  const TABS = [
+    { value: '전체', label: '전체', color: 'info', count: tableData.length },
+    { value: '진행 전', label: '진행 전', color: 'success', count: getLengthByStatus('paid') },
+    { value: '진행 중', label: '진행 중', color: 'warning', count: getLengthByStatus('unpaid') },
+    { value: '종료됨', label: '종료됨', color: 'error', count: getLengthByStatus('overdue') },
+  ];
 
   const handleFilterStatus = (event, newValue) => {
     setPage(0);
@@ -143,67 +107,41 @@ export default function HostPage() {
     setFilterRole(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = (selected) => {
-    const deleteRows = tableData.filter((row) => !selected.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selected.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selected.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selected.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selected.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
-
-  const handleEditRow = (id) => {
-    navigate(PATH_DASHBOARD.user.edit(paramCase(id)));
-  };
-
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
+    setFilterRole('전체');
+    setFilterStatus('전체');
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const eventList = await getEventList();
+      const tagList = await getTagList();
+      const tagNameList = getTagNameList(tagList);
+      setTableData(eventList);
+      setTagNameList(tagNameList);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
       <Helmet>
-        <title> User: List | Minimal UI</title>
+        <title>주최 이벤트 목록 조회 | HanQ</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="User List"
-          links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List' },
-          ]}
+          heading="주최 이벤트 목록 조회"
+          links={[]}
           action={
             <Button
-              to={PATH_DASHBOARD.user.new}
+              to={PATH_DASHBOARD.host.new}
               component={RouterLink}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
             >
-              New User
+              새로운 이벤트
             </Button>
           }
         />
@@ -217,73 +155,49 @@ export default function HostPage() {
               bgcolor: 'background.neutral',
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
+            {TABS.map((tab) => (
+              <Tab
+                key={tab.value}
+                value={tab.value}
+                label={tab.label}
+                icon={
+                  <Label color={tab.color} sx={{ mr: 1 }}>
+                    {tab.count}
+                  </Label>
+                }
+              />
             ))}
           </Tabs>
 
           <Divider />
 
-          <UserTableToolbar
+          <EventViewTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
+            optionsRole={['전체', ...tagNameList]}
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={dense}
-              numSelected={selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={handleOpenConfirm}>
-                    <Iconify icon="eva:trash-2-outline" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
             <Scrollbar>
-              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <Table sx={{ minWidth: 800 }}>
                 <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={tableData.length}
-                  numSelected={selected.length}
                   onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
-                  }
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={selected.includes(row.id)}
-                      onSelectRow={() => onSelectRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
-                      onEditRow={() => handleEditRow(row.name)}
-                    />
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                    <HostEventViewTableRow key={row.id} row={row} index={index} />
                   ))}
 
-                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
+                  <TableEmptyRows emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
@@ -297,35 +211,9 @@ export default function HostPage() {
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
             onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
           />
         </Card>
       </Container>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }
@@ -344,15 +232,18 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData.filter((event) => event.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
+  if (filterStatus !== '전체') {
+    inputData = inputData.filter((event) => event.status === filterStatus);
   }
 
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
+  if (filterRole !== '전체') {
+    inputData = inputData.filter((event) => {
+      const tagNameList = getTagNameList(event.tags);
+      return tagNameList.includes(filterRole);
+    });
   }
 
   return inputData;
