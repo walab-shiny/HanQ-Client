@@ -33,13 +33,11 @@ const TABLE_HEAD = [
   { id: '제목', label: '제목', align: 'left' },
   { id: '시작일시', label: '시작일시', align: 'left' },
   { id: '장소', label: '장소', align: 'left' },
-  { id: '최대 인원수', label: '최대 인원수', align: 'left' },
-  { id: '상태', label: '상태', align: 'left' },
+  { id: '상태', label: '상태', align: 'center' },
   { id: '상세보기' },
   { id: 'QR' },
+  { id: '삭제' },
 ];
-
-const getTagNameList = (tagList) => tagList.map((tag) => tag.name);
 
 // ----------------------------------------------------------------------
 
@@ -60,11 +58,11 @@ export default function HostPage() {
 
   const [tableData, setTableData] = useState([]);
 
-  const [tagNameList, setTagNameList] = useState([]);
+  const [tagList, setTagList] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
-  const [filterRole, setFilterRole] = useState('전체');
+  const [filterTag, setFilterTag] = useState([]);
 
   const [filterStatus, setFilterStatus] = useState('전체');
 
@@ -72,24 +70,24 @@ export default function HostPage() {
     inputData: tableData,
     comparator: getComparator(order, orderBy),
     filterName,
-    filterRole,
+    filterTag,
     filterStatus,
   });
 
-  const isFiltered = filterName !== '' || filterRole !== '전체' || filterStatus !== '전체';
+  const isFiltered = filterName !== '' || filterTag.length > 0 || filterStatus !== '전체';
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
+    (!dataFiltered.length && !!filterTag) ||
     (!dataFiltered.length && !!filterStatus);
 
-  const getLengthByStatus = (status) => tableData.filter((item) => item.close === status).length;
+  const getLengthByStatus = (status) => tableData.filter((item) => item.status === status).length;
 
   const TABS = [
     { value: '전체', label: '전체', color: 'info', count: tableData.length },
-    { value: '진행 전', label: '진행 전', color: 'success', count: getLengthByStatus('paid') },
-    { value: '진행 중', label: '진행 중', color: 'warning', count: getLengthByStatus('unpaid') },
-    { value: '종료됨', label: '종료됨', color: 'error', count: getLengthByStatus('overdue') },
+    { value: '진행 전', label: '진행 전', color: 'success', count: getLengthByStatus('진행 전') },
+    { value: '진행 중', label: '진행 중', color: 'warning', count: getLengthByStatus('진행 중') },
+    { value: '종료됨', label: '종료됨', color: 'error', count: getLengthByStatus('종료됨') },
   ];
 
   const handleFilterStatus = (event, newValue) => {
@@ -102,25 +100,25 @@ export default function HostPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
+  const handleFilterTag = (value) => {
     setPage(0);
-    setFilterRole(event.target.value);
+    setFilterTag(value);
   };
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('전체');
+    setFilterTag([]);
     setFilterStatus('전체');
   };
 
+  const fetchData = async () => {
+    const eventList = await getEventList();
+    const tagList = await getTagList();
+    setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 중' })));
+    setTagList(tagList);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const eventList = await getEventList();
-      const tagList = await getTagList();
-      const tagNameList = getTagNameList(tagList);
-      setTableData(eventList);
-      setTagNameList(tagNameList);
-    };
     fetchData();
   }, []);
 
@@ -174,10 +172,10 @@ export default function HostPage() {
           <EventViewTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={['전체', ...tagNameList]}
+            filterTag={filterTag}
+            tagList={tagList}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
+            onFilterTag={handleFilterTag}
             onResetFilter={handleResetFilter}
           />
 
@@ -194,7 +192,7 @@ export default function HostPage() {
 
                 <TableBody>
                   {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                    <HostEventViewTableRow key={row.id} row={row} index={index} />
+                    <HostEventViewTableRow key={row.id} row={row} index={index} fetchData={fetchData} />
                   ))}
 
                   <TableEmptyRows emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
@@ -220,7 +218,7 @@ export default function HostPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName, filterStatus, filterTag }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -239,10 +237,15 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
     inputData = inputData.filter((event) => event.status === filterStatus);
   }
 
-  if (filterRole !== '전체') {
+  if (filterTag.length > 0) {
     inputData = inputData.filter((event) => {
-      const tagNameList = getTagNameList(event.tags);
-      return tagNameList.includes(filterRole);
+      let flag = true;
+      filterTag.forEach((tag) => {
+        if (event.tags.filter((item) => item.name === tag.name).length === 0) {
+          flag = false;
+        }
+      });
+      return flag;
     });
   }
 

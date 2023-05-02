@@ -1,8 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { Container } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
 // components
 import { useSettingsContext } from '../components/settings';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
@@ -23,20 +21,7 @@ export default function UserEditPage() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Edit user"
-          links={[
-            {
-              name: 'Dashboard',
-              href: PATH_DASHBOARD.root,
-            },
-            {
-              name: 'User',
-              href: PATH_DASHBOARD.user.list,
-            },
-            { name: user?.name },
-          ]}
-        />
+        <CustomBreadcrumbs heading="프로필 설정" links={[]} />
 
         <UserNewEditForm isEdit currentUser={user} />
       </Container>
