@@ -136,7 +136,7 @@ function CarouselItem({ item }) {
               '&:hover': { opacity: 1 },
             }}
           >
-            learn More
+            More
             <Iconify icon="eva:arrow-forward-fill" width={16} sx={{ ml: 1 }} />
           </Link>
         </CardContent>
