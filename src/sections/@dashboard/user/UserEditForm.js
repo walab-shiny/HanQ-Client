@@ -48,15 +48,15 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
+      department: currentUser?.department || '',
       address: currentUser?.address || '',
-      country: currentUser?.country || '',
+      studentNum: currentUser?.studentNum || '',
       state: currentUser?.state || '',
-      city: currentUser?.city || '',
+      hostUntil: currentUser?.hostUntil || '주최자 권한이 없습니다',
       zipCode: currentUser?.zipCode || '',
       avatarUrl: currentUser?.picture,
       isVerified: currentUser?.isVerified || true,
-      status: '주최자',
+      status: (currentUser?.isHost && '주최자') || '사용자',
       company: currentUser?.company || '',
       role: currentUser?.role || '',
     }),
@@ -214,8 +214,10 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
             >
               <RHFTextField name="name" label="Full Name" />
               <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
+              <RHFTextField name="department" label="Department" />
 
+              <RHFTextField name="studentNum" label="Student Number" />
+              <RHFTextField name="hostUntil" label="권한 마감 기한" />
               <RHFSelect name="country" label="Country" placeholder="Country">
                 <option value="" />
                 {countries.map((option) => (
@@ -225,8 +227,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 ))}
               </RHFSelect>
 
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
               <RHFTextField name="address" label="Address" />
               <RHFTextField name="zipCode" label="Zip/Code" />
               <RHFTextField name="company" label="Company" />
