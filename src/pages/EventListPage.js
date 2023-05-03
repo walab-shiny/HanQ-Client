@@ -5,8 +5,10 @@ import { Card, Container, CardContent, Typography } from '@mui/material';
 import { useSettingsContext } from '../components/settings';
 // sections
 import { Analytics } from '../sections/@dashboard/event/list';
-import { getEventList } from '../apis/event.ts';
 import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenterMode';
+import CustomBreadcrumbs from '../components/custom-breadcrumbs/CustomBreadcrumbs';
+// apis
+import { getEventList } from '../apis/event.ts';
 
 // ----------------------------------------------------------------------
 
@@ -30,13 +32,14 @@ export default function EventList() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs heading="공개 이벤트 목록 조회" links={[{ name: 'TODAY' }, { name: 'HOT' }]} />
         <Analytics />
       </Container>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card sx={{ mb: 5 }}>
           <CardContent>
-            <Typography variant="h4" mb={4}>
+            <Typography variant="h4" mb={4} className="today">
               TODAY
             </Typography>
             <CarouselCenterMode data={eventData} />
@@ -47,7 +50,7 @@ export default function EventList() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card>
           <CardContent>
-            <Typography variant="h4" mb={4}>
+            <Typography variant="h4" mb={4} className="hot">
               HOT 🔥
             </Typography>
             <CarouselCenterMode data={eventData} />
