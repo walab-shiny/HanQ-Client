@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Button, Container, Typography, DialogActions, Dialog, Divider } from '@mui/material';
+import { Box, Button, Container, Typography, DialogActions, Dialog, Divider, Tooltip, IconButton } from '@mui/material';
 // components
 import Image from '../../../components/image';
 import Markdown from '../../../components/markdown';
@@ -37,15 +37,13 @@ export default function NewEventView({ values }) {
 
   return (
     <>
-      <Button
-        variant="contained"
-        color="info"
-        size="small"
-        startIcon={<Iconify icon="ic:round-content-paste-search" />}
-        onClick={handleOpen}
-      >
-        상세보기
-      </Button>
+      <Tooltip title="이벤트 상세보기">
+        <span>
+          <IconButton onClick={handleOpen}>
+            <Iconify icon="eva:expand-outline" />
+          </IconButton>
+        </span>
+      </Tooltip>
 
       <Dialog fullScreen open={open} onClose={handleClose}>
         <DialogActions sx={{ py: 2, px: 3 }}>

@@ -18,7 +18,9 @@ export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
 export const EventListPage = Loadable(lazy(() => import('../pages/EventListPage')));
 export const ListPage = Loadable(lazy(() => import('../pages/ListPage')));
 export const UserEditPage = Loadable(lazy(() => import('../pages/UserEditPage')));
+
 export const HostPage = Loadable(lazy(() => import('../pages/HostPage')));
 export const NewEventPage = Loadable(lazy(() => import('../pages/NewEventPage')));
+export const RequestHostPage = Loadable(lazy(() => import('../pages/RequestHostPage')));
 
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));

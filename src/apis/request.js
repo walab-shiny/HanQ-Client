@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from '../utils/axios';
 
-export const requestHostAuth = async (userId: number, content: string) => {
+export const requestHost = async (userId, content) => {
   const response = await axios.post('/api/host', {
     userId,
     content,

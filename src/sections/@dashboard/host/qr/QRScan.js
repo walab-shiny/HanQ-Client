@@ -51,7 +51,7 @@ export default function QRScan({ event, disabled }) {
       <Tooltip title={disabled ? '이벤트가 진행 중이 아닙니다.' : '출석 QR 스캔하기'}>
         <span>
           <Button size="small" variant="contained" color="success" onClick={handleOpen} disabled={disabled}>
-            QR 스캔
+            QR
           </Button>
         </span>
       </Tooltip>

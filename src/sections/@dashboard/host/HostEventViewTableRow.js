@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { TableRow, TableCell, Typography } from '@mui/material';
+import { TableRow, TableCell, Typography, Chip, ListItem } from '@mui/material';
 // components
 import Label from '../../../components/label';
 import { fDateString } from '../../../utils/formatTime';
@@ -15,7 +15,7 @@ HostEventViewTableRow.propTypes = {
 };
 
 export default function HostEventViewTableRow({ row, index, fetchData }) {
-  const { hostId, name, openAt, location, status } = row;
+  const { tags, name, openAt, location, status } = row;
 
   const getLabelColor = (statue) => {
     switch (statue) {
@@ -42,7 +42,13 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
           </Typography>
         </TableCell>
 
-        <TableCell>{hostId}</TableCell>
+        <TableCell>
+          {tags.map((tag) => (
+            <ListItem key={tag.id} dense>
+              <Chip label={tag.name} size="small" />
+            </ListItem>
+          ))}
+        </TableCell>
 
         <TableCell>{name}</TableCell>
 
@@ -61,11 +67,11 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
         </TableCell>
 
         <TableCell>
-          <QRScan event={row} disabled={!active} />
+          <CloseEventModal event={row} fetchData={fetchData} />
         </TableCell>
 
         <TableCell>
-          <CloseEventModal event={row} fetchData={fetchData} />
+          <QRScan event={row} disabled={!active} />
         </TableCell>
       </TableRow>
     </>

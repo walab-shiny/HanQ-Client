@@ -33,7 +33,7 @@ export default function RoleBasedGuard({ hasContent, roles, children }) {
         </m.div>
 
         <m.div variants={varBounce().in}>
-          <Typography sx={{ color: 'text.secondary' }}>이 페이지에 액세스할 수 있는 권한이 없습니다</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>이 페이지에 액세스할 수 있는 권한이 없습니다.</Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>

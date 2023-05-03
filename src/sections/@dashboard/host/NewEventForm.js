@@ -22,6 +22,7 @@ import NewEventPreview from './NewEventPreview';
 // ----------------------------------------------------------------------
 
 export default function NewEventForm() {
+  const today = moment().startOf('day');
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -42,8 +43,8 @@ export default function NewEventForm() {
     image: null,
     tags: [],
     public: true,
-    openAt: moment(new Date()),
-    closeAt: moment(new Date()),
+    openAt: today,
+    closeAt: today,
     location: '',
     maxUsers: '',
     availableTime: '',
@@ -176,6 +177,7 @@ export default function NewEventForm() {
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue);
+                        setValue('closeAt', newValue.clone().add(1, 'hours'));
                       }}
                       renderInput={(params) => (
                         <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
