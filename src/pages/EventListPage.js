@@ -9,6 +9,7 @@ import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenter
 import CustomBreadcrumbs from '../components/custom-breadcrumbs/CustomBreadcrumbs';
 // apis
 import { getEventList } from '../apis/event.ts';
+import EmptyContent from '../components/empty-content/EmptyContent';
 
 // ----------------------------------------------------------------------
 
@@ -38,9 +39,13 @@ export default function EventList() {
         <Card sx={{ mb: 5 }}>
           <CardContent>
             <Typography variant="h4" mb={4} className="today">
-              TODAY
+              INTEREST 🤔
             </Typography>
-            <CarouselCenterMode data={eventData} />
+            {eventData ? (
+              <EmptyContent title={'오늘 열리는 이벤트가 없습니다'} />
+            ) : (
+              <CarouselCenterMode data={eventData} />
+            )}
           </CardContent>
         </Card>
 
