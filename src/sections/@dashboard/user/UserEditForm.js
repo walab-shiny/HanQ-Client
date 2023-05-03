@@ -212,12 +212,12 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="department" label="Department" />
+              <RHFTextField name="name" label="Full Name" disabled />
+              <RHFTextField name="email" label="Email Address" disabled />
+              <RHFTextField name="department" label="Department" disabled />
 
-              <RHFTextField name="studentNum" label="Student Number" />
-              <RHFTextField name="hostUntil" label="권한 마감 기한" />
+              <RHFTextField name="studentNum" label="Student Number" disabled />
+              <RHFTextField name="hostUntil" label="권한 마감 기한" disabled />
               <RHFSelect name="country" label="Country" placeholder="Country">
                 <option value="" />
                 {countries.map((option) => (
