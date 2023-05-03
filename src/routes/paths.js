@@ -21,5 +21,6 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/host'),
     list: path(ROOTS_DASHBOARD, '/host/list'),
     new: path(ROOTS_DASHBOARD, '/host/new'),
+    request: path(ROOTS_DASHBOARD, '/host/request'),
   },
 };

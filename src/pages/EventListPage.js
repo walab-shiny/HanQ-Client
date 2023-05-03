@@ -34,9 +34,7 @@ export default function EventList() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs heading="공개 이벤트 목록 조회" links={[{ name: 'TODAY' }, { name: 'HOT' }]} />
         <Analytics />
-      </Container>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card sx={{ mb: 5 }}>
           <CardContent>
             <Typography variant="h4" mb={4} className="today">
@@ -45,9 +43,7 @@ export default function EventList() {
             <CarouselCenterMode data={eventData} />
           </CardContent>
         </Card>
-      </Container>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card>
           <CardContent>
             <Typography variant="h4" mb={4} className="hot">

@@ -2,14 +2,9 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 // @mui
 import { Card, CardContent, Container, Typography } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
-// _mock_
-import { _userList } from '../_mock/arrays';
 // components
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
-import { useTable } from '../components/table';
 // apis
 import { getEventList } from '../apis/event.ts';
 // sections
@@ -31,7 +26,7 @@ export default function ListPage() {
   return (
     <>
       <Helmet>
-        <title> 참여 이벤트 목록 조회 | HanQ</title>
+        <title>참여 이벤트 목록 조회 | HanQ</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -39,9 +34,7 @@ export default function ListPage() {
           heading="참여 이벤트 목록 조회"
           links={[{ name: '소감문 제출 진행 중' }, { name: '소감문 제출 완료' }, { name: '소감문 미제출' }]}
         />
-      </Container>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card sx={{ mb: 5 }}>
           <CardContent>
             <Typography variant="h4" mb={4}>
@@ -50,9 +43,7 @@ export default function ListPage() {
             <CarouselCenterMode data={eventData} />
           </CardContent>
         </Card>
-      </Container>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card sx={{ mb: 5 }}>
           <CardContent>
             <Typography variant="h4" mb={4}>
@@ -61,9 +52,7 @@ export default function ListPage() {
             <CarouselCenterMode data={eventData} />
           </CardContent>
         </Card>
-      </Container>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
         <Card sx={{ mb: 5 }}>
           <CardContent>
             <Typography variant="h4" mb={4}>

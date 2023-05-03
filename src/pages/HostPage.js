@@ -24,6 +24,7 @@ import { getTagList } from '../apis/tag';
 import { HostEventViewTableRow } from '../sections/@dashboard/host';
 import Iconify from '../components/iconify';
 import { PATH_DASHBOARD } from '../routes/paths';
+import RoleBasedGuard from '../auth/RoleBasedGuard';
 
 // ----------------------------------------------------------------------
 
@@ -129,88 +130,90 @@ export default function HostPage() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="주최 이벤트 목록 조회"
-          links={[]}
-          action={
-            <Button
-              to={PATH_DASHBOARD.host.new}
-              component={RouterLink}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
+        <RoleBasedGuard hasContent roles={['host']}>
+          <CustomBreadcrumbs
+            heading="주최 이벤트 목록 조회"
+            links={[]}
+            action={
+              <Button
+                to={PATH_DASHBOARD.host.new}
+                component={RouterLink}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+              >
+                새로운 이벤트
+              </Button>
+            }
+          />
+
+          <Card>
+            <Tabs
+              value={filterStatus}
+              onChange={handleFilterStatus}
+              sx={{
+                px: 2,
+                bgcolor: 'background.neutral',
+              }}
             >
-              새로운 이벤트
-            </Button>
-          }
-        />
-
-        <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {TABS.map((tab) => (
-              <Tab
-                key={tab.value}
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label color={tab.color} sx={{ mr: 1 }}>
-                    {tab.count}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-
-          <Divider />
-
-          <EventViewTableToolbar
-            isFiltered={isFiltered}
-            filterName={filterName}
-            filterTag={filterTag}
-            tagList={tagList}
-            onFilterName={handleFilterName}
-            onFilterTag={handleFilterTag}
-            onResetFilter={handleResetFilter}
-          />
-
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  onSort={onSort}
+              {TABS.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  value={tab.value}
+                  label={tab.label}
+                  icon={
+                    <Label color={tab.color} sx={{ mr: 1 }}>
+                      {tab.count}
+                    </Label>
+                  }
                 />
+              ))}
+            </Tabs>
 
-                <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
-                    <HostEventViewTableRow key={row.id} row={row} index={index} fetchData={fetchData} />
-                  ))}
+            <Divider />
 
-                  <TableEmptyRows emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
+            <EventViewTableToolbar
+              isFiltered={isFiltered}
+              filterName={filterName}
+              filterTag={filterTag}
+              tagList={tagList}
+              onFilterName={handleFilterName}
+              onFilterTag={handleFilterTag}
+              onResetFilter={handleResetFilter}
+            />
 
-                  <TableNoData isNotFound={isNotFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <Scrollbar>
+                <Table sx={{ minWidth: 800 }}>
+                  <TableHeadCustom
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={tableData.length}
+                    onSort={onSort}
+                  />
 
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-          />
-        </Card>
+                  <TableBody>
+                    {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                      <HostEventViewTableRow key={row.id} row={row} index={index} fetchData={fetchData} />
+                    ))}
+
+                    <TableEmptyRows emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
+
+                    <TableNoData isNotFound={isNotFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+
+            <TablePaginationCustom
+              count={dataFiltered.length}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              onPageChange={onChangePage}
+              onRowsPerPageChange={onChangeRowsPerPage}
+            />
+          </Card>
+        </RoleBasedGuard>
       </Container>
     </>
   );

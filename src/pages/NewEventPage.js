@@ -6,6 +6,7 @@ import { useSettingsContext } from '../components/settings';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 // sections
 import { NewEventForm } from '../sections/@dashboard/host';
+import RoleBasedGuard from '../auth/RoleBasedGuard';
 
 // ----------------------------------------------------------------------
 
@@ -19,9 +20,11 @@ export default function NewEventPage() {
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs heading="새 이벤트 등록하기" links={[]} />
+        <RoleBasedGuard hasContent roles={['host']}>
+          <CustomBreadcrumbs heading="새 이벤트 등록하기" links={[]} />
 
-        <NewEventForm />
+          <NewEventForm />
+        </RoleBasedGuard>
       </Container>
     </>
   );

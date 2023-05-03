@@ -12,9 +12,10 @@ import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
-import navConfig from './config';
+import { navConfigHost, navConfigUser } from './config';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,8 @@ NavVertical.propTypes = {
 };
 
 export default function NavVertical({ openNav, onCloseNav }) {
+  const { user } = useAuthContext();
+  const navConfig = user.isHost ? navConfigHost : navConfigUser;
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive('up', 'lg');

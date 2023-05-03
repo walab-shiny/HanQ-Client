@@ -8,11 +8,15 @@ import { hideScrollbarX } from '../../../utils/cssStyles';
 import Logo from '../../../components/logo';
 import { NavSectionMini } from '../../../components/nav-section';
 //
-import navConfig from './config';
+import { navConfigHost, navConfigUser } from './config';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function NavMini() {
+  const { user } = useAuthContext();
+  const navConfig = user.isHost ? navConfigHost : navConfigUser;
+
   return (
     <Box
       component="nav"

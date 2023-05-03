@@ -14,7 +14,8 @@ import Iconify from '../../../components/iconify';
 import { IconButtonAnimate } from '../../../components/animate';
 import SearchNotFound from '../../../components/search-not-found';
 //
-import NavConfig from '../nav/config';
+import { navConfigHost, navConfigUser } from '../nav/config';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -81,6 +82,8 @@ const StyledPopper = styled((props) => <Popper {...props} />)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 function Searchbar() {
+  const { user } = useAuthContext();
+  const NavConfig = user.isHost ? navConfigHost : navConfigUser;
   const navigate = useNavigate();
 
   const { pathname } = useLocation();

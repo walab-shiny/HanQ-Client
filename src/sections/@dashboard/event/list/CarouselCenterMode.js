@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
-import { Box, Paper, Link, CardContent, Container } from '@mui/material';
+import { Box, Paper, Link, CardContent } from '@mui/material';
 // utils
 import { bgGradient } from '../../../../utils/cssStyles';
 // components
@@ -148,7 +148,7 @@ function CarouselItem({ item }) {
             }}
             onClick={handleOpen}
           >
-            More
+            자세히 보기
             <Iconify icon="eva:arrow-forward-fill" width={16} sx={{ ml: 1 }} />
           </Link>
         </CardContent>

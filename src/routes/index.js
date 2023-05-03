@@ -46,6 +46,7 @@ export default function Router() {
             { element: <Navigate to="/hanq/host/list" replace />, index: true },
             { path: 'list', element: <HostPage /> },
             { path: 'new', element: <NewEventPage /> },
+            { path: 'request', element: <UserEditPage /> },
           ],
         },
       ],

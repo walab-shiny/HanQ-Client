@@ -21,20 +21,19 @@ export default function RoleBasedGuard({ hasContent, roles, children }) {
   // Logic here to get current user role
   const { user } = useAuthContext();
 
-  // const currentRole = 'user';
-  const currentRole = user?.role; // admin;
+  const currentRole = user.isHost ? 'host' : 'user';
 
   if (typeof roles !== 'undefined' && !roles.includes(currentRole)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textAlign: 'center' }}>
         <m.div variants={varBounce().in}>
           <Typography variant="h3" paragraph>
-            Permission Denied
+            권한이 없습니다.
           </Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>
-          <Typography sx={{ color: 'text.secondary' }}>You do not have permission to access this page</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>이 페이지에 액세스할 수 있는 권한이 없습니다</Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>
