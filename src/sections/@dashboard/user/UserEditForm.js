@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -287,7 +287,9 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                     <>
                       <Steps steps={STEPS} activeStep={0} />
                       <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                        <Button variant="contained">권한 신청</Button>
+                        <Link to={'/hanq/host/request'}>
+                          <Button variant="contained">권한 신청</Button>
+                        </Link>
                       </Stack>
                     </>
                   )}
