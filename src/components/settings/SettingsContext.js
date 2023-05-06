@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { createContext, useEffect, useContext, useMemo, useCallback } from 'react';
 // hooks
 import useLocalStorage from '../../hooks/useLocalStorage';
+// utils
+import localStorageAvailable from '../../utils/localStorageAvailable';
 //
 import { defaultSettings } from './config';
 import { defaultPreset, getPresets, presetsOption } from './presets';
@@ -18,6 +20,7 @@ const initialState = {
   onChangeDirection: () => {},
   onChangeDirectionByLang: () => {},
   // Layout
+  onToggleLayout: () => {},
   onChangeLayout: () => {},
   // Contrast
   onToggleContrast: () => {},
@@ -53,7 +56,9 @@ SettingsProvider.propTypes = {
 export function SettingsProvider({ children }) {
   const [settings, setSettings] = useLocalStorage('settings', defaultSettings);
 
-  const langStorage = typeof window !== 'undefined' ? localStorage.getItem('i18nextLng') : '';
+  const storageAvailable = localStorageAvailable();
+
+  const langStorage = storageAvailable ? localStorage.getItem('i18nextLng') : '';
 
   const isArabic = langStorage === 'ar';
 
@@ -101,6 +106,11 @@ export function SettingsProvider({ children }) {
   );
 
   // Layout
+  const onToggleLayout = useCallback(() => {
+    const themeLayout = settings.themeLayout === 'vertical' ? 'mini' : 'vertical';
+    setSettings({ ...settings, themeLayout });
+  }, [setSettings, settings]);
+
   const onChangeLayout = useCallback(
     (event) => {
       const themeLayout = event.target.value;
@@ -143,7 +153,7 @@ export function SettingsProvider({ children }) {
     setSettings(defaultSettings);
   }, [setSettings]);
 
-  const value = useMemo(
+  const memoizedValue = useMemo(
     () => ({
       ...settings,
       // Mode
@@ -154,6 +164,7 @@ export function SettingsProvider({ children }) {
       onChangeDirection,
       onChangeDirectionByLang,
       // Layout
+      onToggleLayout,
       onChangeLayout,
       // Contrast
       onChangeContrast,
@@ -177,6 +188,7 @@ export function SettingsProvider({ children }) {
       onChangeDirection,
       onChangeDirectionByLang,
       // Layout
+      onToggleLayout,
       onChangeLayout,
       onChangeContrast,
       // Contrast
@@ -190,5 +202,5 @@ export function SettingsProvider({ children }) {
     ]
   );
 
-  return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
+  return <SettingsContext.Provider value={memoizedValue}>{children}</SettingsContext.Provider>;
 }

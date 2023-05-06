@@ -10,6 +10,7 @@ import { NavSectionMini } from '../../../components/nav-section';
 //
 import { navConfigHost, navConfigUser } from './config';
 import { useAuthContext } from '../../../auth/useAuthContext';
+import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,13 @@ export default function NavMini() {
         width: { lg: NAV.W_DASHBOARD_MINI },
       }}
     >
+      <NavToggleButton
+        sx={{
+          top: 22,
+          left: NAV.W_DASHBOARD_MINI - 12,
+        }}
+      />
+
       <Stack
         sx={{
           pb: 2,
