@@ -32,7 +32,7 @@ const TABLE_HEAD = [
   { id: '순번', label: '순번', align: 'left' },
   { id: '태그', label: '태그', align: 'left' },
   { id: '제목', label: '제목', align: 'left' },
-  { id: '시작일시', label: '시작일시', align: 'left' },
+  { id: '일시', label: '일시', align: 'left' },
   { id: '장소', label: '장소', align: 'left' },
   { id: '상태', label: '상태', align: 'center' },
   { id: '상세보기' },
@@ -115,7 +115,7 @@ export default function HostPage() {
   const fetchData = async () => {
     const eventList = await getEventList();
     const tagList = await getTagList();
-    setTableData(eventList.map((event) => ({ ...event, status: event.closed ? '종료됨' : '진행 중' })));
+    setTableData(eventList);
     setTagList(tagList);
   };
 

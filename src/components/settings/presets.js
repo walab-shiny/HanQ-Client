@@ -77,7 +77,7 @@ export const presetsOption = presets.map((color) => ({
 
 export function getPresets(key) {
   return {
-    default: defaultPreset,
+    default: bluePreset,
     cyan: cyanPreset,
     purple: purplePreset,
     blue: bluePreset,

@@ -4,14 +4,27 @@ import moment from 'moment';
 import { IEvent } from '../types/event.ts';
 import axios from '../utils/axios';
 
+const getStatus = (event) => {
+  if (event.closed) {
+    return '종료됨';
+  }
+  if (moment(new Date(event.openAt)) > moment()) {
+    return '진행 전';
+  }
+  if (moment(new Date(event.closeAt)) < moment()) {
+    return '종료됨';
+  }
+  return '진행 중';
+};
+
 export const getEventListAll = async () => {
   const response = await axios.get('/api/event/list/all');
-  return response.data as IEvent[];
+  return response.data.map((event) => ({ ...event, status: getStatus(event) }));
 };
 
 export const getEventList = async () => {
   const response = await axios.get('/api/event/list');
-  return response.data as IEvent[];
+  return response.data.map((event) => ({ ...event, status: getStatus(event) }));
 };
 
 export const getEvent = async (id: number) => {

@@ -24,7 +24,7 @@ import { useAuthContext } from '../../../auth/useAuthContext';
 
 export default function NewEventForm() {
   const { user } = useAuthContext();
-  const today = moment().startOf('day');
+  const today = moment().set({ hour: 9, minute: 0, second: 0, millisecond: 0 });
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -48,7 +48,7 @@ export default function NewEventForm() {
     isPublic: true,
     tags: [],
     openAt: today,
-    closeAt: today,
+    closeAt: today.clone().add(1, 'hours'),
     availableTime: 0,
     maxUsers: 0,
   };
@@ -88,6 +88,14 @@ export default function NewEventForm() {
   };
 
   const onSubmit = async (data) => {
+    if (values.closeAt.isBefore(moment())) {
+      enqueueSnackbar('종료일시가 현재보다 빠릅니다.', { variant: 'error' });
+      return;
+    }
+    if (values.openAt.isAfter(values.closeAt)) {
+      enqueueSnackbar('종료일시가 시작일시보다 빠릅니다.', { variant: 'error' });
+      return;
+    }
     try {
       await addEvent(data);
       reset();
@@ -151,14 +159,12 @@ export default function NewEventForm() {
           <Grid item xs={12} md={4}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
-                <div>
-                  <RHFSwitch
-                    name="isPublic"
-                    label="공개 여부"
-                    labelPlacement="start"
-                    sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-                  />
-                </div>
+                <RHFSwitch
+                  name="isPublic"
+                  label="공개 여부"
+                  labelPlacement="start"
+                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                />
 
                 <Autocomplete
                   onChange={(event, newValue) => {
@@ -210,11 +216,17 @@ export default function NewEventForm() {
                 <RHFTextField
                   type="number"
                   name="availableTime"
-                  label="QR 태깅 가능 시간 (분)"
+                  label="QR 태깅 가능 시간(분)"
                   InputProps={{
                     endAdornment: <InputAdornment position="end">분</InputAdornment>,
                   }}
-                  // helperText="이벤트 시작 후 해당 시간까지 QR 태깅이 가능합니다."
+                  helperText={
+                    <>
+                      이벤트 시작 전 15분부터, 이벤트 시작 후
+                      <br />
+                      입력한 시간(분)까지 QR 태깅이 가능합니다.
+                    </>
+                  }
                 />
 
                 <RHFTextField
@@ -243,6 +255,7 @@ export default function NewEventForm() {
         </Grid>
 
         <NewEventPreview
+          affiliation={user.affiliation}
           values={values}
           open={openPreview}
           isValid={isValid}

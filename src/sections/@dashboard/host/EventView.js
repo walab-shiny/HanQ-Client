@@ -19,8 +19,18 @@ NewEventView.propTypes = {
 
 export default function NewEventView({ values }) {
   const [open, setOpen] = useState(false);
-  const { name = '', content = '', tags = [], location = '', openAt = null } = values;
-  const date = fDateString(openAt);
+  const {
+    name = '',
+    affiliation = '',
+    content = '',
+    tags = [],
+    location = '',
+    openAt = null,
+    closeAt = null,
+    isPublic = false,
+    availableTime = 0,
+  } = values;
+  const date = `${fDateString(openAt)} ~ ${fDateString(closeAt)}`;
 
   const image = typeof values.image === 'string' ? values.image : values.image?.preview;
 
@@ -45,7 +55,7 @@ export default function NewEventView({ values }) {
         </span>
       </Tooltip>
 
-      <Dialog fullScreen open={open} onClose={handleClose}>
+      <Dialog fullScreen open={open} onClose={handleClose} sx={{ p: 3 }}>
         <DialogActions sx={{ py: 2, px: 3 }}>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {name}
@@ -60,8 +70,31 @@ export default function NewEventView({ values }) {
 
         {hasContent ? (
           <Scrollbar>
-            {hasHero && <PreviewHero name={name} image={image} location={location} date={date} />}
+            {hasHero && (
+              <PreviewHero
+                name={name}
+                image={image}
+                location={location}
+                date={date}
+                affiliation={affiliation}
+                isPublic={isPublic}
+                availableTime={availableTime}
+              />
+            )}
             <Container maxWidth="md" sx={{ mt: 5, mb: 10 }}>
+              <Box sx={{ mb: 5 }}>
+                <Typography variant="h6" gutterBottom>
+                  {availableTime
+                    ? `*이벤트 시작 전 15분 부터 QR 태깅이 가능하며 이벤트 시작 ${availableTime}분 후 QR 태깅 마감됩니다.*`
+                    : '*이벤트 시작 전 15분 부터 QR 태깅이 가능합니다.*'}
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  일시: {date}
+                </Typography>
+                <Typography variant="h6">
+                  공개여부: {isPublic ? '공개' : '비공개'} / 장소: {location}
+                </Typography>
+              </Box>
               <Markdown children={content} />
               {tags.length > 0 && (
                 <Typography sx={{ mt: 5 }}>
@@ -86,11 +119,10 @@ export default function NewEventView({ values }) {
 PreviewHero.propTypes = {
   image: PropTypes.string,
   name: PropTypes.string,
-  location: PropTypes.string,
-  date: PropTypes.string,
+  affiliation: PropTypes.string,
 };
 
-function PreviewHero({ name, image, location, date }) {
+function PreviewHero({ name, image, affiliation }) {
   return (
     <Box sx={{ position: 'relative' }}>
       <Container
@@ -107,11 +139,7 @@ function PreviewHero({ name, image, location, date }) {
         <Typography variant="h2" component="h1" gutterBottom>
           {name}
         </Typography>
-        <Typography variant="h5">
-          {date && `일시: ${date}`}
-          {date && location && ` / `}
-          {location && `장소: ${location}`}
-        </Typography>
+        <Typography variant="h4">주관기관: {affiliation}</Typography>
       </Container>
 
       <Box
