@@ -8,6 +8,11 @@ export function fDateString(dateString) {
   return `${date} ${time}`;
 }
 
+export function fTimeString(dateString) {
+  const time = dateString?.split('T')[1];
+  return time;
+}
+
 export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy';
 
