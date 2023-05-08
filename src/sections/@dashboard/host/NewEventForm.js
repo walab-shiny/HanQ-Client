@@ -18,10 +18,12 @@ import { useSnackbar } from '../../../components/snackbar';
 import FormProvider, { RHFSwitch, RHFEditor, RHFUpload, RHFTextField } from '../../../components/hook-form';
 //
 import NewEventPreview from './NewEventPreview';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 export default function NewEventForm() {
+  const { user } = useAuthContext();
   const today = moment().startOf('day');
   const navigate = useNavigate();
 
@@ -32,22 +34,23 @@ export default function NewEventForm() {
   const NewEventSchema = Yup.object().shape({
     name: Yup.string().required('이벤트명은 필수 항목입니다.'),
     location: Yup.string().required('장소는 필수 항목입니다.'),
+    content: Yup.string().required('내용은 필수 항목입니다.'),
+    image: Yup.mixed().nullable(true),
     openAt: Yup.string().required('시작일시는 필수 항목입니다.').nullable(true),
     closeAt: Yup.string().required('종료일시는 필수 항목입니다.').nullable(true),
-    image: Yup.mixed().nullable(true),
   });
 
   const defaultValues = {
     name: '',
+    location: '',
     content: '',
     image: null,
+    isPublic: true,
     tags: [],
-    public: true,
     openAt: today,
     closeAt: today,
-    location: '',
-    maxUsers: '',
-    availableTime: '',
+    availableTime: 0,
+    maxUsers: 0,
   };
 
   const methods = useForm({
@@ -150,10 +153,10 @@ export default function NewEventForm() {
               <Stack spacing={3}>
                 <div>
                   <RHFSwitch
-                    name="public"
+                    name="isPublic"
                     label="공개 여부"
                     labelPlacement="start"
-                    sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
+                    sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
                   />
                 </div>
 
@@ -206,12 +209,24 @@ export default function NewEventForm() {
 
                 <RHFTextField
                   type="number"
+                  name="availableTime"
+                  label="QR 태깅 가능 시간 (분)"
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">분</InputAdornment>,
+                  }}
+                  // helperText="이벤트 시작 후 해당 시간까지 QR 태깅이 가능합니다."
+                />
+
+                <RHFTextField
+                  type="number"
                   name="maxUsers"
                   label="최대 인원수"
                   InputProps={{
                     endAdornment: <InputAdornment position="end">명</InputAdornment>,
                   }}
                 />
+
+                <TextField value={user.affiliation} label="주관기관" disabled />
               </Stack>
             </Card>
 

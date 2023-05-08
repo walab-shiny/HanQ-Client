@@ -4,6 +4,11 @@ import moment from 'moment';
 import { IEvent } from '../types/event.ts';
 import axios from '../utils/axios';
 
+export const getEventListAll = async () => {
+  const response = await axios.get('/api/event/list/all');
+  return response.data as IEvent[];
+};
+
 export const getEventList = async () => {
   const response = await axios.get('/api/event/list');
   return response.data as IEvent[];
@@ -29,6 +34,7 @@ export const addEvent = async (data: IEvent) => {
     availableTime: data.availableTime,
     image,
     tags: data.tags.map((tag) => tag.id),
+    isPublic: data.isPublic,
   });
   return response;
 };

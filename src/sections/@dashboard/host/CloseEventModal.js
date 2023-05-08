@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSnackbar } from 'notistack';
 import {
   Button,
   Dialog,
@@ -11,6 +10,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import { useSnackbar } from '../../../components/snackbar';
 import Iconify from '../../../components/iconify';
 import { closeEvent } from '../../../apis/event.ts';
 

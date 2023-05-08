@@ -1,12 +1,29 @@
 import PropTypes from 'prop-types';
 import { QrReader } from 'react-qr-reader';
-import { Box, Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  Dialog,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import Iconify from '../../../../components/iconify';
 import { sendQrRequest } from '../../../../apis/qr';
 // components
 import { useSnackbar } from '../../../../components/snackbar';
+import Logo from '../../../../components/logo';
 import ScanOverlay from './QRScanOverlay';
+import { getParticipantList } from '../../../../apis/participant.ts';
+import { maskingName } from '../../../../utils/formatName';
 
 QRScan.propTypes = {
   event: PropTypes.object,
@@ -32,12 +49,25 @@ export default function QRScan({ event, disabled }) {
           variant: 'warning',
         });
       }
+      fetchData();
     } else {
       enqueueSnackbar(`오류가 발생했습니다.`, {
         variant: 'error',
       });
     }
   };
+
+  const [userList, setUserList] = useState([]);
+
+  const fetchData = async () => {
+    const userList = await getParticipantList(event.id);
+    setUserList(userList);
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (resultText && resultText !== '') {
@@ -56,6 +86,14 @@ export default function QRScan({ event, disabled }) {
         </span>
       </Tooltip>
       <Dialog open={open} onClose={handleClose} fullScreen>
+        <Logo
+          sx={{
+            zIndex: 9,
+            position: 'absolute',
+            mt: { xs: 1.5, md: 5 },
+            ml: { xs: 2, md: 5 },
+          }}
+        />
         <IconButton
           onClick={() => window.location.reload()}
           sx={{
@@ -66,6 +104,40 @@ export default function QRScan({ event, disabled }) {
         >
           <Iconify icon="eva:close-outline" />
         </IconButton>
+        <Card
+          component={TableContainer}
+          sx={{
+            position: 'absolute',
+            right: 40,
+            top: '70%',
+            width: 240,
+          }}
+        >
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">학번</TableCell>
+                <TableCell align="center">이름</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {userList.length > 0 ? (
+                userList.reverse().map((user, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="center">{user.studentNum}</TableCell>
+                    <TableCell align="center">{maskingName(user.name)}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell align="center" colSpan={2}>
+                    출석자가 없습니다.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </Card>
         <Box
           sx={{
             height: 1,
