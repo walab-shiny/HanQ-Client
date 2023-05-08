@@ -6,6 +6,7 @@ import { useAuthContext } from '../../auth/useAuthContext';
 import LoginLayout from '../../layouts/login';
 //
 import AuthWithGoogle from './AuthWithGoogle';
+import EventTextField from './EventTextField';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +18,9 @@ export default function Login() {
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
         <Typography variant="h4">Sign in to HanQ</Typography>
 
-        <Link variant="subtitle2">HanQ 사용법 알아보기</Link>
+        <Link variant="subtitle2">이벤트 출석 QR 스캔 페이지 이동</Link>
+
+        <EventTextField />
 
         <Tooltip title={method} placement="left">
           <Box
