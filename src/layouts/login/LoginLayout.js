@@ -6,6 +6,7 @@ import Logo from '../../components/logo';
 import Image from '../../components/image';
 //
 import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
+import { Analytics } from '../../sections/@dashboard/event/list';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,6 @@ export default function LoginLayout({ children, illustration, title }) {
         <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
           {title || 'Hi, Welcome back'}
         </Typography>
-
         <Image
           disabledEffect
           visibleByDefault
@@ -39,8 +39,8 @@ export default function LoginLayout({ children, illustration, title }) {
           src={illustration || '/assets/illustrations/illustration_dashboard.png'}
           sx={{ maxWidth: 720 }}
         />
-
         <StyledSectionBg />
+        {/* <Analytics /> */}
       </StyledSection>
 
       <StyledContent>
