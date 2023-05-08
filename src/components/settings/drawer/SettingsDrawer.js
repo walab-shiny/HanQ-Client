@@ -17,26 +17,15 @@ import BadgeDot from './BadgeDot';
 import ToggleButton from './ToggleButton';
 import ModeOptions from './ModeOptions';
 import LayoutOptions from './LayoutOptions';
-import StretchOptions from './StretchOptions';
-import ContrastOptions from './ContrastOptions';
-import DirectionOptions from './DirectionOptions';
 import FullScreenOptions from './FullScreenOptions';
-import ColorPresetsOptions from './ColorPresetsOptions';
 
 // ----------------------------------------------------------------------
 
 const SPACING = 2.5;
 
 export default function SettingsDrawer() {
-  const {
-    themeMode,
-    themeLayout,
-    themeStretch,
-    themeContrast,
-    themeDirection,
-    themeColorPresets,
-    onResetSetting,
-  } = useSettingsContext();
+  const { themeMode, themeLayout, themeStretch, themeContrast, themeDirection, themeColorPresets, onResetSetting } =
+    useSettingsContext();
 
   const theme = useTheme();
 
@@ -73,25 +62,18 @@ export default function SettingsDrawer() {
             width: NAV.W_BASE,
             boxShadow: (theme) =>
               `-24px 12px 40px 0 ${alpha(
-                theme.palette.mode === 'light'
-                  ? theme.palette.grey[500]
-                  : theme.palette.common.black,
+                theme.palette.mode === 'light' ? theme.palette.grey[500] : theme.palette.common.black,
                 0.16
               )}`,
           },
         }}
       >
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ py: 2, pr: 1, pl: SPACING }}
-        >
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ py: 2, pr: 1, pl: SPACING }}>
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-            Settings
+            테마 설정
           </Typography>
 
-          <Tooltip title="Reset">
+          <Tooltip title="설정 초기화">
             <Box sx={{ position: 'relative' }}>
               {notDefault && <BadgeDot />}
               <IconButton onClick={onResetSetting}>
@@ -108,28 +90,12 @@ export default function SettingsDrawer() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Scrollbar sx={{ p: SPACING, pb: 0 }}>
-          <Block title="Mode">
+          <Block title="다크 모드">
             <ModeOptions />
           </Block>
 
-          <Block title="Contrast">
-            <ContrastOptions />
-          </Block>
-
-          <Block title="Direction">
-            <DirectionOptions />
-          </Block>
-
-          <Block title="Layout">
+          <Block title="레이아웃">
             <LayoutOptions />
-          </Block>
-
-          <Block title="Stretch" tooltip="Only available at large resolutions > 1600px (xl)">
-            <StretchOptions />
-          </Block>
-
-          <Block title="Presets">
-            <ColorPresetsOptions />
           </Block>
         </Scrollbar>
 

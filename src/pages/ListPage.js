@@ -1,12 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 // @mui
-import { Card, CardContent, Container, Typography } from '@mui/material';
+import { Card, CardContent, Container } from '@mui/material';
 // components
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
 // apis
-import { getEventList } from '../apis/event.ts';
+import { getUserParticipateList } from '../apis/participant.ts';
 // sections
 import { CarouselCenterMode } from '../sections/@dashboard/event/list';
 
@@ -17,7 +17,7 @@ export default function ListPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const eventList = await getEventList();
+      const eventList = await getUserParticipateList();
       setEventData(eventList);
     };
     fetchData();
@@ -37,27 +37,6 @@ export default function ListPage() {
 
         <Card sx={{ mb: 5 }}>
           <CardContent>
-            <Typography variant="h4" mb={4}>
-              소감문 제출 진행 중 이벤트
-            </Typography>
-            <CarouselCenterMode data={eventData} />
-          </CardContent>
-        </Card>
-
-        <Card sx={{ mb: 5 }}>
-          <CardContent>
-            <Typography variant="h4" mb={4}>
-              소감문 제출 완료 이벤트
-            </Typography>
-            <CarouselCenterMode data={eventData} />
-          </CardContent>
-        </Card>
-
-        <Card sx={{ mb: 5 }}>
-          <CardContent>
-            <Typography variant="h4" mb={4}>
-              소감문 미제출 이벤트
-            </Typography>
             <CarouselCenterMode data={eventData} />
           </CardContent>
         </Card>

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, styled, alpha, Alert, Button, IconButton } from '@mui/material';
+import { Box, Card, Grid, Stack, styled, alpha, Alert, Button, IconButton, Tooltip } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -55,7 +55,7 @@ export default function HostRequestForm({ currentUser, reloadUser }) {
     () => ({
       name: currentUser?.name || '',
       email: currentUser?.email || '',
-      affiliation: currentUser?.affiliation && currentUser.affiliation === 'none' ? '' : currentUser.affiliation,
+      affiliation: currentUser?.affiliation === 'none' ? '' : currentUser?.affiliation || '',
       hostUntil: 30,
       content: currentUser?.content || '',
     }),
@@ -100,7 +100,12 @@ export default function HostRequestForm({ currentUser, reloadUser }) {
 
   const onSubmit = async (data) => {
     try {
-      await requestHost(currentUser.id, data.content);
+      await requestHost({
+        userId: currentUser.id,
+        content: data.content,
+        affiliation: data.affiliation,
+        hostUntil: data.hostUntil,
+      });
       await reloadUser(currentUser.id);
       enqueueSnackbar('권한을 신청했습니다!');
     } catch (error) {
@@ -126,12 +131,14 @@ export default function HostRequestForm({ currentUser, reloadUser }) {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            <IconButton
-              onClick={onRefresh}
-              sx={{ textTransform: 'uppercase', position: 'absolute', top: 18, left: 18 }}
-            >
-              <Iconify icon="eva:refresh-outline" />
-            </IconButton>
+            <Tooltip title="상태 업데이트">
+              <IconButton
+                onClick={onRefresh}
+                sx={{ textTransform: 'uppercase', position: 'absolute', top: 18, left: 18 }}
+              >
+                <Iconify icon="eva:refresh-outline" />
+              </IconButton>
+            </Tooltip>
             <Label color={status.color} sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}>
               {status.label}
             </Label>
@@ -187,18 +194,18 @@ export default function HostRequestForm({ currentUser, reloadUser }) {
               <RHFTextField name="email" label="이메일" disabled />
               <RHFTextField
                 name="affiliation"
-                label="소속기관"
-                placeholder="소속기관을 작성해 주세요."
+                label="주관기관"
+                placeholder="주관기관을 작성해 주세요."
                 disabled={!isEdit}
+                helperText="이벤트 주최 시, 이벤트 정보에 표시됩니다."
               />
 
               <RHFSelect name="hostUntil" label="희망 권한 보유기간" disabled={!isEdit}>
-                {[7, 30, 365].map((option) => (
+                {[7, 30, 60, 90, 365].map((option) => (
                   <option key={option} value={option}>
                     {option}일
                   </option>
                 ))}
-                <option value={0}>무제한</option>
               </RHFSelect>
             </Box>
 

@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { IParticipant } from '../types/participant';
-import { IEvent } from '../types/event';
+import axios from '../utils/axios';
+import { IParticipant } from '../types/participant.ts';
+import { IEvent } from '../types/event.ts';
 
 export const getParticipantList = async (id: string) => {
   const response = await axios.get(`/api/user/attend/${id}`);

@@ -8,7 +8,7 @@ import { useSettingsContext } from '../components/settings';
 import { Analytics } from '../sections/@dashboard/event/list';
 import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenterMode';
 // apis
-import { getEventList } from '../apis/event.ts';
+import { getEventListAll } from '../apis/event.ts';
 import EmptyContent from '../components/empty-content/EmptyContent';
 
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ export default function EventList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const eventList = await getEventList();
+      const eventList = await getEventListAll();
       setEventData(eventList);
     };
     fetchData();
@@ -54,9 +54,9 @@ export default function EventList() {
               INTEREST 🤔
             </Typography>
             {eventData ? (
-              <EmptyContent title={'오늘 열리는 이벤트가 없습니다'} />
-            ) : (
               <CarouselCenterMode data={eventData} />
+            ) : (
+              <EmptyContent title={'오늘 열리는 이벤트가 없습니다'} />
             )}
           </CardContent>
         </Card>
