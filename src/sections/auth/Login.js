@@ -1,5 +1,5 @@
 // @mui
-import { Alert, Tooltip, Stack, Typography, Link, Box } from '@mui/material';
+import { Alert, Tooltip, Stack, Typography, Box } from '@mui/material';
 // hooks
 import { useAuthContext } from '../../auth/useAuthContext';
 // layouts
@@ -7,6 +7,7 @@ import LoginLayout from '../../layouts/login';
 //
 import AuthWithGoogle from './AuthWithGoogle';
 import Analytics from './Analytics';
+import EventQRLink from './EventQRLink';
 
 // ----------------------------------------------------------------------
 
@@ -25,17 +26,15 @@ export default function Login() {
       title="HanQ - 원타임 큐알코드를 활용하는 출입관리 서비스 플랫폼"
       illustration="/assets/images/about/screenshot.png"
     >
-      <Stack spacing={3} sx={{ mb: 5, position: 'relative' }}>
+      <Stack direction="row" sx={{ mb: 5, position: 'relative', justifyContent: 'space-between' }}>
         <Typography variant="h4">Sign in to HanQ</Typography>
-
-        <Link variant="subtitle2">HanQ 사용법 알아보기</Link>
 
         <Tooltip title={method} placement="left">
           <Box
             component="img"
             alt={method}
             src={`/assets/icons/auth/ic_${method}.png`}
-            sx={{ width: 32, height: 32, position: 'absolute', right: 0 }}
+            sx={{ width: 32, height: 32 }}
           />
         </Tooltip>
       </Stack>
@@ -47,9 +46,13 @@ export default function Login() {
 
       <AuthWithGoogle />
 
-      <Box sx={{ height: 40 }} />
+      <Box sx={{ height: 80 }} />
 
       <Analytics list={analytics} />
+
+      <Box sx={{ mt: 4 }}>
+        <EventQRLink />
+      </Box>
     </LoginLayout>
   );
 }
