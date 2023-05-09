@@ -6,7 +6,6 @@ import Logo from '../../components/logo';
 import Image from '../../components/image';
 //
 import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
-import { Analytics } from '../../sections/@dashboard/event/list';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +38,6 @@ export default function LoginLayout({ children, illustration, title }) {
           src={illustration || '/assets/illustrations/illustration_dashboard.png'}
         />
         <StyledSectionBg />
-        {/* <Analytics /> */}
       </StyledSection>
 
       <StyledContent>

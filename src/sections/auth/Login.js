@@ -40,9 +40,9 @@ export default function Login() {
       <Stack spacing={3} sx={{ mb: 5, position: 'relative' }}>
         <Typography variant="h4">Sign in to HanQ</Typography>
 
-        <Button variant="subtitle2" onClick={handleOpen}>
+        <Link variant="subtitle2" onClick={handleOpen}>
           이벤트 출석 QR 스캔 페이지 이동
-        </Button>
+        </Link>
 
         <EventTextField open={open} handleClose={handleClose} />
 
