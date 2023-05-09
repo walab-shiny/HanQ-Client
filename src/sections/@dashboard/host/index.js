@@ -1,6 +1,5 @@
 export { default as NewEventForm } from './NewEventForm';
 
-export { default as EventView } from './EventView';
 export { default as HostEventViewTableRow } from './HostEventViewTableRow';
 export { default as CloseEventModal } from './CloseEventModal';
 
