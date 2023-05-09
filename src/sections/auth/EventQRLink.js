@@ -15,14 +15,16 @@ export default function EventQRLink() {
   return (
     <>
       <Button variant="outlined" onClick={handleOpen} endIcon={<Iconify icon="eva:external-link-outline" />}>
-        이벤트 출석 QR 스캔 페이지 이동
+        로그인 없이 출석 QR 스캔 페이지 열기 (주최자 전용)
       </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>QR 스캔 페이지로 이동하기</DialogTitle>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+        <DialogTitle>로그인 없이 출석 QR 스캔 페이지 열기</DialogTitle>
         <DialogContent>
-          <DialogContentText mb={3}>주최 이벤트 상세 페이지에서 이벤트 코드를 확인하세요.</DialogContentText>
-          <TextField sx={{ mb: 1 }} fullWidth placeholder="이벤트 코드" size="small" />
-          <TextField fullWidth placeholder="이벤트 비밀번호" size="small" />
+          <DialogContentText sx={{ mb: 3 }}>
+            주최 이벤트 목록 페이지에서 이벤트 코드를 확인할 수 있습니다.
+          </DialogContentText>
+          <TextField fullWidth placeholder="이벤트 코드 6글자를 입력하세요." size="small" sx={{ mb: 2 }} />
+          <TextField fullWidth placeholder="비밀번호를 입력하세요." size="small" />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="inherit">

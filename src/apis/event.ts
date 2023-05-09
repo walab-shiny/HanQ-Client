@@ -27,6 +27,11 @@ export const getEventList = async () => {
   return response.data.map((event) => ({ ...event, status: getStatus(event) }));
 };
 
+export const getAttendEventList = async () => {
+  const response = await axios.get(`/api/event/attended`);
+  return response.data.map((event) => ({ ...event, status: getStatus(event) }));
+};
+
 export const getEvent = async (id: number) => {
   const response = await axios({
     url: `/api/event/${id}`,

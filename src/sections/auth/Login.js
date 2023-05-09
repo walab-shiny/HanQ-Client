@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 // @mui
 import { Alert, Tooltip, Stack, Typography, Box } from '@mui/material';
 // hooks
@@ -8,18 +9,22 @@ import LoginLayout from '../../layouts/login';
 import AuthWithGoogle from './AuthWithGoogle';
 import Analytics from './Analytics';
 import EventQRLink from './EventQRLink';
+import { getAnalytics } from '../../apis/analytics';
 
 // ----------------------------------------------------------------------
 
-const analytics = [
-  { value: 'total user', label: '총 접속자 수', total: 322 },
-  { value: 'today user', label: '오늘 접속자 수', total: 23 },
-  { value: 'total event', label: '총 이벤트 생성 수', total: 19 },
-  { value: 'total scan', label: '총 QR 스캔 수', total: 249 },
-];
-
 export default function Login() {
   const { method } = useAuthContext();
+  const [analytics, setAnalytics] = useState(null);
+
+  const fetchData = async () => {
+    const analytics = await getAnalytics();
+    setAnalytics(analytics);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <LoginLayout
@@ -48,7 +53,7 @@ export default function Login() {
 
       <Box sx={{ height: 80 }} />
 
-      <Analytics list={analytics} />
+      {analytics && <Analytics list={analytics} />}
 
       <Box sx={{ mt: 4 }}>
         <EventQRLink />

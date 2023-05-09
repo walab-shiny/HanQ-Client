@@ -47,7 +47,7 @@ export default function ShareModal({ event }) {
             </Stack>
             <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="body2" color="text.secondary">
-                이벤트 비밀번호
+                비밀번호
               </Typography>
               <TextField size="small" placeholder="비밀번호를 설정해주세요." />
             </Stack>
