@@ -4,8 +4,9 @@ import { TableRow, TableCell, Typography, Chip, ListItem } from '@mui/material';
 // components
 import Label from '../../../components/label';
 import { fDateString } from '../../../utils/formatTime';
-import { CloseEventModal, EventView, QRScan } from '.';
+import { CloseEventModal, QRScan } from '.';
 import ParticipantViewModal from './ParticipantViewModal';
+import { EventView } from '../event/view';
 
 // ----------------------------------------------------------------------
 

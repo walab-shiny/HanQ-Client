@@ -4,7 +4,7 @@ import { TableRow, TableCell, Typography } from '@mui/material';
 // components
 import Label from '../../../../components/label';
 import { fDateString } from '../../../../utils/formatTime';
-import { EventView } from '../../host';
+import { EventView } from '../view';
 
 // ----------------------------------------------------------------------
 

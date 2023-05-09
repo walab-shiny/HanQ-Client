@@ -2,22 +2,34 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Button, Container, Typography, DialogActions, Dialog, Divider, Tooltip, IconButton } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  DialogActions,
+  Dialog,
+  Divider,
+  Tooltip,
+  IconButton,
+  Link,
+} from '@mui/material';
 // components
-import Image from '../../../components/image';
-import Markdown from '../../../components/markdown';
-import Scrollbar from '../../../components/scrollbar';
-import EmptyContent from '../../../components/empty-content';
-import Iconify from '../../../components/iconify/Iconify';
-import { fDateString } from '../../../utils/formatTime';
+import Image from '../../../../components/image';
+import Markdown from '../../../../components/markdown';
+import Scrollbar from '../../../../components/scrollbar';
+import EmptyContent from '../../../../components/empty-content';
+import Iconify from '../../../../components/iconify/Iconify';
+import { fDateString } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
 NewEventView.propTypes = {
   values: PropTypes.object,
+  isLink: PropTypes.bool,
 };
 
-export default function NewEventView({ values }) {
+export default function NewEventView({ values, isLink = false }) {
   const [open, setOpen] = useState(false);
   const {
     name = '',
@@ -47,13 +59,31 @@ export default function NewEventView({ values }) {
 
   return (
     <>
-      <Tooltip title="이벤트 상세보기">
-        <span>
-          <IconButton onClick={handleOpen}>
-            <Iconify icon="eva:expand-outline" />
-          </IconButton>
-        </span>
-      </Tooltip>
+      {isLink ? (
+        <Link
+          color="inherit"
+          variant="overline"
+          sx={{
+            opacity: 0.72,
+            alignItems: 'center',
+            display: 'inline-flex',
+            transition: (theme) => theme.transitions.create('opacity'),
+            '&:hover': { opacity: 1 },
+          }}
+          onClick={handleOpen}
+        >
+          자세히 보기
+          <Iconify icon="eva:arrow-forward-fill" width={16} sx={{ ml: 1 }} />
+        </Link>
+      ) : (
+        <Tooltip title="이벤트 상세보기">
+          <span>
+            <IconButton onClick={handleOpen}>
+              <Iconify icon="eva:expand-outline" />
+            </IconButton>
+          </span>
+        </Tooltip>
+      )}
 
       <Dialog fullScreen open={open} onClose={handleClose} sx={{ p: 3 }}>
         <DialogActions sx={{ py: 2, px: 3 }}>
@@ -85,7 +115,7 @@ export default function NewEventView({ values }) {
               <Box sx={{ mb: 5 }}>
                 <Typography variant="h6" gutterBottom>
                   {availableTime
-                    ? `*이벤트 시작 전 15분 부터 QR 태깅이 가능하며 이벤트 시작 ${availableTime}분 후 QR 태깅 마감됩니다.*`
+                    ? `*이벤트 시작 전 15분 부터 QR 태깅이 가능하며 이벤트 시작 ${availableTime}분 후 QR 태깅이 마감됩니다.*`
                     : '*이벤트 시작 전 15분 부터 QR 태깅이 가능합니다.*'}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
@@ -95,6 +125,7 @@ export default function NewEventView({ values }) {
                   공개여부: {isPublic ? '공개' : '비공개'} / 장소: {location}
                 </Typography>
               </Box>
+              <Divider sx={{ mb: 5 }} />
               <Markdown children={content} />
               {tags.length > 0 && (
                 <Typography sx={{ mt: 5 }}>

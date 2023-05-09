@@ -1,16 +1,15 @@
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
-import { Box, Paper, Link, CardContent } from '@mui/material';
+import { Box, Paper, CardContent } from '@mui/material';
 // utils
 import { bgGradient } from '../../../../utils/cssStyles';
 // components
 import Image from '../../../../components/image';
-import Iconify from '../../../../components/iconify';
 import TextMaxLine from '../../../../components/text-max-line';
 import Carousel, { CarouselArrows } from '../../../../components/carousel';
-import EventInfoDialog from './EventInfoDialog';
+import { EventView } from '../view';
 
 // ----------------------------------------------------------------------
 
@@ -71,7 +70,7 @@ export default function CarouselCenterMode({ data }) {
             position: 'relative',
           }}
         >
-          <CarouselArrows filled icon="noto:rightwards-hand" onNext={handleNext} onPrevious={handlePrev}>
+          <CarouselArrows filled onNext={handleNext} onPrevious={handlePrev}>
             <Carousel ref={carouselRef} {...carouselSettings}>
               {data.map((item) => (
                 <Box key={item.id} sx={{ px: 1 }}>
@@ -93,19 +92,9 @@ CarouselItem.propTypes = {
 };
 
 function CarouselItem({ item }) {
-  const [open, setOpen] = useState(false);
-
   const theme = useTheme();
 
   const { image, name } = item;
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <>
@@ -136,24 +125,9 @@ function CarouselItem({ item }) {
             {name}
           </TextMaxLine>
 
-          <Link
-            color="inherit"
-            variant="overline"
-            sx={{
-              opacity: 0.72,
-              alignItems: 'center',
-              display: 'inline-flex',
-              transition: (theme) => theme.transitions.create('opacity'),
-              '&:hover': { opacity: 1 },
-            }}
-            onClick={handleOpen}
-          >
-            자세히 보기
-            <Iconify icon="eva:arrow-forward-fill" width={16} sx={{ ml: 1 }} />
-          </Link>
+          <EventView values={item} isLink />
         </CardContent>
       </Paper>
-      <EventInfoDialog open={open} handleClose={handleClose} item={item} />
     </>
   );
 }

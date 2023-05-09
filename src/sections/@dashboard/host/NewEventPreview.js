@@ -78,7 +78,7 @@ export default function NewEventPreview({ affiliation, values, isValid, isSubmit
             <Box sx={{ mb: 5 }}>
               <Typography variant="h6" gutterBottom>
                 {availableTime
-                  ? `*이벤트 시작 전 15분 부터 QR 태깅이 가능하며 이벤트 시작 ${availableTime}분 후 QR 태깅 마감됩니다.*`
+                  ? `*이벤트 시작 전 15분 부터 QR 태깅이 가능하며 이벤트 시작 ${availableTime}분 후 QR 태깅이 마감됩니다.*`
                   : '*이벤트 시작 전 15분 부터 QR 태깅이 가능합니다.*'}
               </Typography>
               <Typography variant="h6" gutterBottom>
@@ -88,6 +88,7 @@ export default function NewEventPreview({ affiliation, values, isValid, isSubmit
                 공개여부: {isPublic ? '공개' : '비공개'} / 장소: {location}
               </Typography>
             </Box>
+            <Divider sx={{ mb: 5 }} />
             <Markdown children={content} />
             {tags.length > 0 && (
               <Typography sx={{ mt: 5 }}>

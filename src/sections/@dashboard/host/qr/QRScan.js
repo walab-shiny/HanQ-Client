@@ -174,7 +174,7 @@ export default function QRScan({ event, disabled }) {
                     ))
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={2}>
+                    <TableCell align="center" colSpan={3}>
                       출석자가 없습니다.
                     </TableCell>
                   </TableRow>
