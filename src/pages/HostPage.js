@@ -34,10 +34,7 @@ const TABLE_HEAD = [
   { id: '제목', label: '제목', align: 'center' },
   { id: '일시', label: '일시', align: 'center' },
   { id: '상태', label: '상태', align: 'center' },
-  { id: '상세보기' },
-  { id: '참여자 명단 조회' },
-  { id: '공유' },
-  { id: '삭제' },
+  { id: '기능' },
   { id: 'QR' },
 ];
 

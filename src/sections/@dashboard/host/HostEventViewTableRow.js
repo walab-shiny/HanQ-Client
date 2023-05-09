@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 // @mui
-import { TableRow, TableCell, Typography, Chip, ListItem } from '@mui/material';
+import { TableRow, TableCell, Typography, Chip, ListItem, Stack } from '@mui/material';
 // components
 import Label from '../../../components/label';
 import { fDateString } from '../../../utils/formatTime';
-import { CloseEventModal, QRScan } from '.';
-import ParticipantViewModal from './ParticipantViewModal';
-import ShareModal from './ShareModal';
+import { CloseEventModal, ParticipantViewModal, QRScan, ShareModal } from '.';
 import { EventView } from '../event/view';
 
 // ----------------------------------------------------------------------
@@ -68,23 +66,18 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
         </TableCell>
 
         <TableCell>
-          <EventView values={row} />
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <EventView values={row} />
+            <ParticipantViewModal event={row} />
+            <CloseEventModal event={row} fetchData={fetchData} />
+          </Stack>
         </TableCell>
 
         <TableCell>
-          <ParticipantViewModal event={row} />
-        </TableCell>
-
-        <TableCell>
-          <ShareModal event={row} />
-        </TableCell>
-
-        <TableCell>
-          <CloseEventModal event={row} fetchData={fetchData} />
-        </TableCell>
-
-        <TableCell>
-          <QRScan event={row} disabled={!active} />
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <QRScan event={row} disabled={!active} />
+            <ShareModal event={row} />
+          </Stack>
         </TableCell>
       </TableRow>
     </>
