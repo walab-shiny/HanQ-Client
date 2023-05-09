@@ -29,13 +29,13 @@ import RoleBasedGuard from '../auth/RoleBasedGuard';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: '순번', label: '순번', align: 'left' },
-  { id: '태그', label: '태그', align: 'left' },
-  { id: '제목', label: '제목', align: 'left' },
-  { id: '일시', label: '일시', align: 'left' },
-  { id: '장소', label: '장소', align: 'left' },
+  { id: '순번', label: '순번', align: 'center' },
+  { id: '태그', label: '태그', align: 'center' },
+  { id: '제목', label: '제목', align: 'center' },
+  { id: '일시', label: '일시', align: 'center' },
   { id: '상태', label: '상태', align: 'center' },
   { id: '상세보기' },
+  { id: '참여자 명단 조회' },
   { id: '삭제' },
   { id: 'QR' },
 ];

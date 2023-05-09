@@ -28,8 +28,8 @@ export default function LoginLayout({ children, illustration, title }) {
         }}
       />
 
-      <StyledSection>
-        <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
+      <StyledSection sx={{ p: 4 }}>
+        <Typography variant="h3" sx={{ mb: 5, maxWidth: 480, textAlign: 'center' }}>
           {title || 'Hi, Welcome back'}
         </Typography>
         <Image
@@ -37,7 +37,6 @@ export default function LoginLayout({ children, illustration, title }) {
           visibleByDefault
           alt="auth"
           src={illustration || '/assets/illustrations/illustration_dashboard.png'}
-          sx={{ maxWidth: 720 }}
         />
         <StyledSectionBg />
         {/* <Analytics /> */}

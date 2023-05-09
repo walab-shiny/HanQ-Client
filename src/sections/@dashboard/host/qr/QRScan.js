@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   Dialog,
+  Divider,
   IconButton,
   Table,
   TableBody,
@@ -24,6 +25,9 @@ import Logo from '../../../../components/logo';
 import ScanOverlay from './QRScanOverlay';
 import { getParticipantList } from '../../../../apis/participant.ts';
 import { maskingName } from '../../../../utils/formatName';
+import { fTimeString } from '../../../../utils/formatTime';
+import successSound from '../../../../assets/audios/success.mp3';
+import failsSound from '../../../../assets/audios/fail.mp3';
 
 QRScan.propTypes = {
   event: PropTypes.object,
@@ -37,14 +41,21 @@ export default function QRScan({ event, disabled }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const playSound = (sound) => {
+    const audio = new Audio(sound);
+    audio.play();
+  };
+
   const handleOnResult = async (resultString) => {
     const response = await sendQrRequest({ eventId: +event.id, qrString: resultString });
     if (response.status === 200) {
       if (!response.data.isDuplicate) {
+        playSound(successSound);
         enqueueSnackbar(`${response.data.name}님 출석처리 되었습니다.`, {
           variant: 'success',
         });
       } else {
+        playSound(failsSound);
         enqueueSnackbar(`${response.data.name}님 이미 태깅 되었습니다.`, {
           variant: 'warning',
         });
@@ -86,58 +97,92 @@ export default function QRScan({ event, disabled }) {
         </span>
       </Tooltip>
       <Dialog open={open} onClose={handleClose} fullScreen>
-        <Logo
+        <Box
           sx={{
-            zIndex: 9,
-            position: 'absolute',
-            mt: { xs: 1.5, md: 5 },
-            ml: { xs: 2, md: 5 },
-          }}
-        />
-        <IconButton
-          onClick={() => window.location.reload()}
-          sx={{
-            position: 'absolute',
-            right: 16,
-            top: 16,
+            position: 'fixed',
+            width: '100%',
+            height: '100%',
           }}
         >
-          <Iconify icon="eva:close-outline" />
-        </IconButton>
-        <Card
-          component={TableContainer}
-          sx={{
-            position: 'absolute',
-            right: 40,
-            top: '70%',
-            width: 240,
-          }}
-        >
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">학번</TableCell>
-                <TableCell align="center">이름</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {userList.length > 0 ? (
-                userList.reverse().map((user, index) => (
-                  <TableRow key={index}>
-                    <TableCell align="center">{user.studentNum}</TableCell>
-                    <TableCell align="center">{maskingName(user.name)}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
+          <Logo
+            sx={{
+              zIndex: 9,
+              position: 'absolute',
+              mt: { xs: 1.5, md: 5 },
+              ml: { xs: 2, md: 5 },
+            }}
+          />
+          <IconButton
+            onClick={() => window.location.reload()}
+            sx={{
+              position: 'absolute',
+              right: 16,
+              top: 16,
+            }}
+          >
+            <Iconify icon="eva:close-outline" />
+          </IconButton>
+          <Card
+            variant="outlined"
+            sx={{
+              position: 'absolute',
+              left: 32,
+              bottom: 32,
+              display: { xs: 'none', sm: 'flex' },
+              flexDirection: 'column',
+            }}
+          >
+            <Typography variant="caption" textAlign="center">
+              나의 출석 목록 보러가기 ⬇️
+            </Typography>
+            <Divider />
+            <Box component="img" src="/assets/images/qr/qrLink.png" sx={{ width: 150 }} />
+          </Card>
+          <Card
+            component={TableContainer}
+            variant="outlined"
+            sx={{
+              position: 'absolute',
+              right: 32,
+              bottom: 32,
+              display: { xs: 'none', sm: 'block' },
+              width: 300,
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ textAlign: 'center', my: 1 }}>
+              출석자 목록 (최근 5명)
+            </Typography>
+            <Table size="small">
+              <TableHead>
                 <TableRow>
-                  <TableCell align="center" colSpan={2}>
-                    출석자가 없습니다.
-                  </TableCell>
+                  <TableCell align="center">학번</TableCell>
+                  <TableCell align="center">이름</TableCell>
+                  <TableCell align="center">스캔 시간</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Card>
+              </TableHead>
+              <TableBody>
+                {userList.length > 0 ? (
+                  userList
+                    .reverse()
+                    .slice(0, 5)
+                    .map((user, index) => (
+                      <TableRow key={index}>
+                        <TableCell align="center">{user.studentNum}</TableCell>
+                        <TableCell align="center">{maskingName(user.name)}</TableCell>
+                        <TableCell align="center">{fTimeString(user.taggedAt)}</TableCell>
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell align="center" colSpan={2}>
+                      출석자가 없습니다.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Card>
+        </Box>
         <Box
           sx={{
             height: 1,
@@ -145,9 +190,13 @@ export default function QRScan({ event, disabled }) {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            textAlign: 'center',
           }}
         >
-          <Typography variant="h3">{event.name} 출석 태깅하기</Typography>
+          <Typography variant="h3" sx={{ mb: 4 }}>
+            {event.name}
+          </Typography>
+          <Typography variant="h4">스마트캠퍼스 앱에서 QR 스크린을 열어서 태깅해 주세요!</Typography>
           <QrReader
             scanDelay={500}
             onResult={(result) => {
@@ -155,10 +204,10 @@ export default function QRScan({ event, disabled }) {
               setResultText(result.text);
             }}
             videoContainerStyle={{
-              width: 500,
-              height: 500,
+              width: 400,
+              height: 400,
             }}
-            videoStyle={{ width: 500, height: 500 }}
+            videoStyle={{ width: 400, height: 400 }}
             ViewFinder={ScanOverlay}
           />
         </Box>

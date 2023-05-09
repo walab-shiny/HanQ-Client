@@ -2,10 +2,9 @@ import { Helmet } from 'react-helmet-async';
 import { HashLink } from 'react-router-hash-link';
 import { useEffect, useState } from 'react';
 // @mui
-import { Card, Container, CardContent, Typography, Breadcrumbs, Box } from '@mui/material';
+import { Card, Container, CardContent, Typography, Breadcrumbs, Box, Link } from '@mui/material';
 import { useSettingsContext } from '../components/settings';
 // sections
-import { Analytics } from '../sections/@dashboard/event/list';
 import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenterMode';
 // apis
 import { getEventListAll } from '../apis/event.ts';
@@ -38,22 +37,21 @@ export default function EventList() {
             공개 이벤트 목록 조회
           </Typography>
           <Breadcrumbs separator={<Separator />}>
-            <HashLink smooth to={'#interest'} style={{ textDecoration: 'none', color: 'black' }}>
-              INTEREST
-            </HashLink>
-            <HashLink smooth to={'#hot'} style={{ textDecoration: 'none', color: 'black' }}>
+            <Link component={HashLink} smooth to="#interest" color="inherit">
+              TAGGED
+            </Link>
+            <Link component={HashLink} smooth to="#hot" color="inherit">
               HOT
-            </HashLink>
+            </Link>
           </Breadcrumbs>
         </Box>
-        <Analytics />
 
         <Card sx={{ mb: 5 }} id="interest">
           <CardContent>
             <Typography variant="h4" mb={4}>
-              INTEREST 🤔
+              TAGGED 🏷
             </Typography>
-            {eventData ? (
+            {eventData.length ? (
               <CarouselCenterMode data={eventData} />
             ) : (
               <EmptyContent title={'오늘 열리는 이벤트가 없습니다'} />

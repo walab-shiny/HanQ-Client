@@ -1,10 +1,12 @@
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 export default function QRScanOverlay() {
+  const { palette } = useTheme();
+
   return (
     <Box
-      border="100px solid rgba(0, 0, 0, 0)"
-      boxShadow="rgba(255, 0, 0, 0.5) 0px 0px 0px 5px inset"
+      border={`56px solid ${palette.background.paper}`}
+      boxShadow={`${palette.primary.light} 0px 0px 0px 5px inset`}
       sx={{
         top: 0,
         left: 0,
