@@ -6,6 +6,7 @@ import Label from '../../../components/label';
 import { fDateString } from '../../../utils/formatTime';
 import { CloseEventModal, EventView, QRScan } from '.';
 import ParticipantViewModal from './ParticipantViewModal';
+import ShareModal from './ShareModal';
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,10 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
 
         <TableCell>
           <ParticipantViewModal event={row} />
+        </TableCell>
+
+        <TableCell>
+          <ShareModal event={row} />
         </TableCell>
 
         <TableCell>

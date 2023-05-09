@@ -36,6 +36,7 @@ const TABLE_HEAD = [
   { id: '상태', label: '상태', align: 'center' },
   { id: '상세보기' },
   { id: '참여자 명단 조회' },
+  { id: '공유' },
   { id: '삭제' },
   { id: 'QR' },
 ];
