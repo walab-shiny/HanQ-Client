@@ -6,15 +6,26 @@ import { useAuthContext } from '../../auth/useAuthContext';
 import LoginLayout from '../../layouts/login';
 //
 import AuthWithGoogle from './AuthWithGoogle';
+import Analytics from './Analytics';
 
 // ----------------------------------------------------------------------
+
+const analytics = [
+  { value: 'total user', label: '총 접속자 수', total: 322 },
+  { value: 'today user', label: '오늘 접속자 수', total: 23 },
+  { value: 'total event', label: '총 이벤트 생성 수', total: 19 },
+  { value: 'total scan', label: '총 QR 스캔 수', total: 249 },
+];
 
 export default function Login() {
   const { method } = useAuthContext();
 
   return (
-    <LoginLayout title="HanQ - 원타임 큐알코드를 활용하는 출입관리 서비스 플랫폼">
-      <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
+    <LoginLayout
+      title="HanQ - 원타임 큐알코드를 활용하는 출입관리 서비스 플랫폼"
+      illustration="/assets/images/about/screenshot.png"
+    >
+      <Stack spacing={3} sx={{ mb: 5, position: 'relative' }}>
         <Typography variant="h4">Sign in to HanQ</Typography>
 
         <Link variant="subtitle2">HanQ 사용법 알아보기</Link>
@@ -35,6 +46,10 @@ export default function Login() {
       </Alert>
 
       <AuthWithGoogle />
+
+      <Box sx={{ height: 40 }} />
+
+      <Analytics list={analytics} />
     </LoginLayout>
   );
 }

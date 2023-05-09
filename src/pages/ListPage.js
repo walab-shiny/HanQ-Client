@@ -9,6 +9,7 @@ import { useSettingsContext } from '../components/settings';
 import { getUserParticipateList } from '../apis/participant.ts';
 // sections
 import { CarouselCenterMode } from '../sections/@dashboard/event/list';
+import EmptyContent from '../components/empty-content';
 
 export default function ListPage() {
   const { themeStretch } = useSettingsContext();
@@ -37,7 +38,11 @@ export default function ListPage() {
 
         <Card sx={{ mb: 5 }}>
           <CardContent>
-            <CarouselCenterMode data={eventData} />
+            {eventData.length ? (
+              <CarouselCenterMode data={eventData} />
+            ) : (
+              <EmptyContent title={'출석한 이벤트가 없습니다.'} />
+            )}
           </CardContent>
         </Card>
       </Container>

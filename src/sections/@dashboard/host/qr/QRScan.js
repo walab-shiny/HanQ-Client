@@ -28,7 +28,6 @@ import { maskingName } from '../../../../utils/formatName';
 import { fTimeString } from '../../../../utils/formatTime';
 import successSound from '../../../../assets/audios/success.mp3';
 import failsSound from '../../../../assets/audios/fail.mp3';
-import qrLinkImage from '../../../../assets/images/qrLink.png';
 
 QRScan.propTypes = {
   event: PropTypes.object,
@@ -124,6 +123,7 @@ export default function QRScan({ event, disabled }) {
             <Iconify icon="eva:close-outline" />
           </IconButton>
           <Card
+            variant="outlined"
             sx={{
               position: 'absolute',
               left: 32,
@@ -136,10 +136,11 @@ export default function QRScan({ event, disabled }) {
               나의 출석 목록 보러가기 ⬇️
             </Typography>
             <Divider />
-            <Box component="img" src={qrLinkImage} sx={{ width: 150, borderRadius: 1 }} />
+            <Box component="img" src="/assets/images/qr/qrLink.png" sx={{ width: 150 }} />
           </Card>
           <Card
             component={TableContainer}
+            variant="outlined"
             sx={{
               position: 'absolute',
               right: 32,
