@@ -11,7 +11,6 @@ import {
   DialogActions,
   Button,
 } from '@mui/material';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 export default function EventTextField({ open, handleClose }) {
   const { palette } = useTheme();
