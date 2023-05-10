@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Typography, Tabs, Tab, Button } from '@mui/material';
+import { Box, Card, Grid, Stack, Typography, Tabs, Tab, Button, TextField } from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
 // routes
@@ -241,21 +241,26 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
                     <RHFTextField name="studentNum" label="학번" disabled />
                     {currentUser.isHost ? (
-                      <>
-                        <RHFTextField name="hostUntil" label="권한 마감 기한" disabled />
-                      </>
+                      currentUser.hostUntil ? (
+                        <>
+                          <RHFTextField name="hostUntil" label="권한 마감 기한" disabled />
+                        </>
+                      ) : (
+                        <>
+                          <TextField value="주최 권한이 있습니다" disabled />
+                        </>
+                      )
                     ) : (
                       <>
                         <RHFTextField name="hostUntil" disabled />
                       </>
                     )}
-
                     <Dropdown filterTag={filterTag} tagList={tagList} onFilterTag={handleFilterTag} />
                   </Box>
 
                   <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                     <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                      {!isEdit ? 'Create User' : 'Save Changes'}
+                      {!isEdit ? 'Create User' : '프로필 수정'}
                     </LoadingButton>
                   </Stack>
                 </Box>
@@ -263,13 +268,15 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
             ) : (
               <>
                 <Box p={3}>
+                  {}
                   {currentUser.isPending ? (
                     <>
                       <Steps steps={STEPS} activeStep={currentUser?.isHost ? 4 : currentUser?.isPending ? 2 : 1} />
                     </>
+                  ) : currentUser.isHost ? (
+                    <Steps steps={STEPS} activeStep={4} />
                   ) : (
                     <>
-                      <Steps steps={STEPS} activeStep={0} />
                       <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                         <Link to={'/hanq/host/request'}>
                           <Button variant="contained">권한 신청</Button>
