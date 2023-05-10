@@ -37,7 +37,7 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
   return (
     <>
       <TableRow>
-        <TableCell>
+        <TableCell align="center">
           <Typography variant="subtitle2" noWrap>
             {index + 1}
           </Typography>
