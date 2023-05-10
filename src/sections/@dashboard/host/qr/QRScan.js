@@ -7,6 +7,7 @@ import {
   Dialog,
   Divider,
   IconButton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -185,11 +186,9 @@ export default function QRScan({ event, disabled }) {
             </Table>
           </Card>
         </Box>
-        <Box
+        <Stack
           sx={{
             height: 1,
-            display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -212,7 +211,7 @@ export default function QRScan({ event, disabled }) {
             videoStyle={{ width: 400, height: 400 }}
             ViewFinder={ScanOverlay}
           />
-        </Box>
+        </Stack>
         <Footer />
       </Dialog>
     </>
