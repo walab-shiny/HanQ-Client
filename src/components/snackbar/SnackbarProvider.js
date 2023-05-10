@@ -34,12 +34,12 @@ export default function SnackbarProvider({ children }) {
       <NotistackProvider
         ref={notistackRef}
         dense
-        maxSnack={5}
+        maxSnack={4}
         preventDuplicate
         autoHideDuration={3000}
         TransitionComponent={isRTL ? Collapse : undefined}
         variant="success" // Set default variant
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         iconVariant={{
           info: <SnackbarIcon icon="eva:info-fill" color="info" />,
           success: <SnackbarIcon icon="eva:checkmark-circle-2-fill" color="success" />,

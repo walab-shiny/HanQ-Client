@@ -12,9 +12,11 @@ import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
-import navConfig from './config';
+import { navConfigHost, navConfigUser } from './config';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
+import { useAuthContext } from '../../../auth/useAuthContext';
+import NavToggleButton from './NavToggleButton';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,8 @@ NavVertical.propTypes = {
 };
 
 export default function NavVertical({ openNav, onCloseNav }) {
+  const { user } = useAuthContext();
+  const navConfig = user.isHost ? navConfigHost : navConfigUser;
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive('up', 'lg');
@@ -76,12 +80,15 @@ export default function NavVertical({ openNav, onCloseNav }) {
         width: { lg: NAV.W_DASHBOARD },
       }}
     >
+      <NavToggleButton />
+
       {isDesktop ? (
         <Drawer
           open
           variant="permanent"
           PaperProps={{
             sx: {
+              zIndex: 0,
               width: NAV.W_DASHBOARD,
               bgcolor: 'transparent',
               borderRightStyle: 'dashed',

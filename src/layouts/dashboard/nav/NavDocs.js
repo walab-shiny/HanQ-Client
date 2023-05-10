@@ -1,6 +1,6 @@
 // @mui
 import { Stack, Button, Typography, Box } from '@mui/material';
-// hooks
+// auth
 import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------

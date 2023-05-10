@@ -42,7 +42,10 @@ export default function Register() {
   };
 
   return (
-    <LoginLayout title="간편한 출석관리를 경험해보세요.">
+    <LoginLayout
+      title="HanQ - 원타임 큐알코드를 활용하는 출입관리 서비스 플랫폼"
+      illustration="/assets/images/about/screenshot.png"
+    >
       <Stack spacing={5} sx={{ position: 'relative' }}>
         <Typography variant="h4">기본 정보를 입력해주세요.</Typography>
 

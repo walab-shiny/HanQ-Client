@@ -17,5 +17,10 @@ export const PATH_DASHBOARD = {
   all: path(ROOTS_DASHBOARD, '/all'),
   list: path(ROOTS_DASHBOARD, '/list'),
   user: path(ROOTS_DASHBOARD, '/user'),
-  host: path(ROOTS_DASHBOARD, '/host'),
+  host: {
+    root: path(ROOTS_DASHBOARD, '/host'),
+    list: path(ROOTS_DASHBOARD, '/host/list'),
+    new: path(ROOTS_DASHBOARD, '/host/new'),
+    request: path(ROOTS_DASHBOARD, '/host/request'),
+  },
 };

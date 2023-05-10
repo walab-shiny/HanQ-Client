@@ -14,20 +14,19 @@ export default function Page404() {
   return (
     <>
       <Helmet>
-        <title> 404 Page Not Found | Minimal UI</title>
+        <title> 404 Page Not Found | HanQ</title>
       </Helmet>
 
       <MotionContainer>
         <m.div variants={varBounce().in}>
           <Typography variant="h3" paragraph>
-            Sorry, page not found!
+            페이지를 찾을 수 없습니다.
           </Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>
-          <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
-            sure to check your spelling.
+          <Typography sx={{ color: 'text.secondary', whiteSpace: 'pre-wrap' }}>
+            죄송합니다. 페이지를 찾을 수 없습니다.{'\n'}URL을 확인하고 다시 시도하십시오.
           </Typography>
         </m.div>
 
@@ -41,7 +40,7 @@ export default function Page404() {
         </m.div>
 
         <Button to="/" component={RouterLink} size="large" variant="contained">
-          Go to Home
+          메인 페이지로 돌아가기
         </Button>
       </MotionContainer>
     </>

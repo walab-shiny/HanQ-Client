@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Box, Tooltip, Link, ListItemText } from '@mui/material';
-// locales
-import { useLocales } from '../../../locales';
 // auth
 import RoleBasedGuard from '../../../auth/RoleBasedGuard';
 //
@@ -22,8 +20,6 @@ NavItem.propTypes = {
 };
 
 export default function NavItem({ item, depth, open, active, isExternalLink, ...other }) {
-  const { translate } = useLocales();
-
   const { title, path, icon, info, children, disabled, caption, roles } = item;
 
   const subItem = depth !== 1;
@@ -39,11 +35,11 @@ export default function NavItem({ item, depth, open, active, isExternalLink, ...
       )}
 
       <ListItemText
-        primary={translate(title)}
+        primary={title}
         secondary={
           caption && (
-            <Tooltip title={translate(caption)} placement="top-start">
-              <span>{translate(caption)}</span>
+            <Tooltip title={caption} placement="top-start">
+              <span>{caption}</span>
             </Tooltip>
           )
         }

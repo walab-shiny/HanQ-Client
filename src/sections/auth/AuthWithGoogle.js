@@ -22,7 +22,7 @@ export default function AuthWithGoogle() {
     <GoogleLogin
       onSuccess={(credentialResponse) => handleGoogleLogin(credentialResponse.credential)}
       onError={() => {
-        console.log('Login Failed');
+        console.error('Login Failed');
       }}
       useOneTap
     />

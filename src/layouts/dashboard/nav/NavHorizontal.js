@@ -10,11 +10,14 @@ import { bgBlur } from '../../../utils/cssStyles';
 // components
 import { NavSectionHorizontal } from '../../../components/nav-section';
 //
-import navConfig from './config';
+import { navConfigHost, navConfigUser } from './config';
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 function NavHorizontal() {
+  const { user } = useAuthContext();
+  const navConfig = user.isHost ? navConfigHost : navConfigUser;
   const theme = useTheme();
 
   return (

@@ -1,6 +1,20 @@
 // scroll bar
 import 'simplebar/src/simplebar.css';
 
+// // lightbox
+// import 'react-image-lightbox/style.css';
+
+// map
+// import './utils/mapboxgl';
+// import 'mapbox-gl/dist/mapbox-gl.css';
+
+// editor
+import 'react-quill/dist/quill.snow.css';
+
+// slick-carousel
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 // lazy image
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
@@ -10,6 +24,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // components
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { SettingsProvider } from './components/settings';
 import ScrollToTop from './components/scroll-to-top';
 
@@ -31,10 +47,12 @@ root.render(
   <AuthProvider>
     <HelmetProvider>
       <SettingsProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <App />
-        </BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <App />
+          </BrowserRouter>
+        </LocalizationProvider>
       </SettingsProvider>
     </HelmetProvider>
   </AuthProvider>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
+import { Box, Divider, Typography, MenuItem } from '@mui/material';
 // routes
 import { PATH_AUTH } from '../../../routes/paths';
 // auth
@@ -12,23 +12,6 @@ import { CustomAvatar } from '../../../components/custom-avatar';
 import { useSnackbar } from '../../../components/snackbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
-
-// ----------------------------------------------------------------------
-
-const OPTIONS = [
-  {
-    label: 'Home',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    linkTo: '/',
-  },
-  {
-    label: 'Settings',
-    linkTo: '/',
-  },
-];
 
 // ----------------------------------------------------------------------
 
@@ -56,13 +39,8 @@ export default function AccountPopover() {
       handleClosePopover();
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+      enqueueSnackbar('로그아웃 도중 오류가 발생했습니다.', { variant: 'error' });
     }
-  };
-
-  const handleClickItem = (path) => {
-    handleClosePopover();
-    navigate(path);
   };
 
   return (
@@ -87,7 +65,7 @@ export default function AccountPopover() {
         <CustomAvatar src={user?.picture} alt={user?.name} name={user?.name} />
       </IconButtonAnimate>
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
+      <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ minWidth: 200, p: 0 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
             {user?.name}
@@ -97,16 +75,6 @@ export default function AccountPopover() {
             {user?.email}
           </Typography>
         </Box>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Stack sx={{ p: 1 }}>
-          {OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

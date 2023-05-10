@@ -43,6 +43,13 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
+  if (action.type === 'RELOAD') {
+    return {
+      ...state,
+      isAuthenticated: true,
+      user: action.payload.user,
+    };
+  }
   if (action.type === 'LOGOUT') {
     return {
       ...state,
@@ -173,6 +180,18 @@ export function AuthProvider({ children }) {
     });
   };
 
+  // RELOAD
+  const reloadUser = async (userId) => {
+    const user = await getUser(userId);
+
+    dispatch({
+      type: 'RELOAD',
+      payload: {
+        user,
+      },
+    });
+  };
+
   // LOGOUT
   const logout = async () => {
     setSession(null);
@@ -188,9 +207,10 @@ export function AuthProvider({ children }) {
           ...state,
           method: 'jwt',
           loginWithCredential,
-          logout,
           studentRegister,
           otherRegister,
+          reloadUser,
+          logout,
         }}
       >
         {children}

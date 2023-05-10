@@ -32,11 +32,9 @@ export default function FullScreenOptions() {
         },
       }}
     >
-      {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+      {fullscreen ? '전체 화면 나가기' : '전체 화면'}
 
-      <SvgColor
-        src={`/assets/icons/setting/${fullscreen ? 'ic_exit_full_screen' : 'ic_full_screen'}.svg`}
-      />
+      <SvgColor src={`/assets/icons/setting/${fullscreen ? 'ic_exit_full_screen' : 'ic_full_screen'}.svg`} />
     </StyledCard>
   );
 }
