@@ -28,6 +28,7 @@ import { maskingName } from '../../../../utils/formatName';
 import { fTimeString } from '../../../../utils/formatTime';
 import successSound from '../../../../assets/audios/success.mp3';
 import failsSound from '../../../../assets/audios/fail.mp3';
+import Footer from '../../../../layouts/dashboard/footer';
 
 QRScan.propTypes = {
   event: PropTypes.object,
@@ -102,6 +103,7 @@ export default function QRScan({ event, disabled }) {
             position: 'fixed',
             width: '100%',
             height: '100%',
+            zIndex: 2,
           }}
         >
           <Logo
@@ -211,6 +213,7 @@ export default function QRScan({ event, disabled }) {
             ViewFinder={ScanOverlay}
           />
         </Box>
+        <Footer />
       </Dialog>
     </>
   );

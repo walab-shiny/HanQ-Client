@@ -5,8 +5,6 @@ export default function QRScanOverlay() {
 
   return (
     <Box
-      border={`56px solid ${palette.background.paper}`}
-      boxShadow={`${palette.primary.light} 0px 0px 0px 5px inset`}
       sx={{
         top: 0,
         left: 0,
@@ -14,6 +12,8 @@ export default function QRScanOverlay() {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        border: `56px solid ${palette.background.paper}`,
+        boxShadow: `${palette.primary.light} 0px 0px 0px 5px inset`,
       }}
     />
   );

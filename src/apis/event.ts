@@ -8,7 +8,7 @@ const getStatus = (event) => {
   if (event.closed) {
     return '종료됨';
   }
-  if (moment(new Date(event.openAt)) > moment()) {
+  if (moment(new Date(event.openAt)).subtract(15, 'minute') > moment()) {
     return '진행 전';
   }
   if (moment(new Date(event.closeAt)) < moment()) {

@@ -61,7 +61,7 @@ export default function ParticipantViewModal({ event }) {
               borderColor: 'divider',
             }}
           >
-            <Table size="small">
+            <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell align="center">학번</TableCell>
