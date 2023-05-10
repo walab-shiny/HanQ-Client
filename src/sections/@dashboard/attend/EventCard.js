@@ -6,6 +6,7 @@ import Label from '../../../components/label';
 import Image from '../../../components/image';
 import { EventView } from '../event/view';
 import { PostReport } from '.';
+import { fDateString } from '../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +16,7 @@ EventCard.propTypes = {
 
 export default function EventCard({ event }) {
   const { name, image, status } = event;
-
+  console.log(event);
   return (
     <Card
       sx={{
@@ -47,7 +48,7 @@ export default function EventCard({ event }) {
       <Stack spacing={2.5} sx={{ p: 3 }}>
         <Typography variant="subtitle2">{name}</Typography>
 
-        <Typography variant="body2">출석일: [출석일]</Typography>
+        <Typography variant="body2">출석일: {fDateString(event.taggedTime)}</Typography>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <EventView values={event} isLink />
