@@ -134,26 +134,10 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
   // ---- autocomplete
   const [tagList, setTagList] = useState([]);
 
-  const [filterName, setFilterName] = useState('');
-
   const [filterTag, setFilterTag] = useState([]);
-
-  const [filterStatus, setFilterStatus] = useState('전체');
-
-  const isFiltered = filterName !== '' || filterTag.length > 0 || filterStatus !== '전체';
-
-  const handleFilterName = (event) => {
-    setFilterName(event.target.value);
-  };
 
   const handleFilterTag = (value) => {
     setFilterTag(value);
-  };
-
-  const handleResetFilter = () => {
-    setFilterName('');
-    setFilterTag([]);
-    setFilterStatus('전체');
   };
 
   const fetchData = async () => {
