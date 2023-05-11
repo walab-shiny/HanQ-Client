@@ -7,7 +7,7 @@ import { useSettingsContext } from '../components/settings';
 // sections
 import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenterMode';
 // apis
-import { getEventListAll } from '../apis/event.ts';
+import { getEventListAll, getTaggedEventList } from '../apis/event.ts';
 import EmptyContent from '../components/empty-content/EmptyContent';
 
 // ----------------------------------------------------------------------
@@ -16,11 +16,14 @@ export default function EventList() {
   const { themeStretch } = useSettingsContext();
 
   const [eventData, setEventData] = useState([]);
+  const [taggedEvent, setTaggedEvent] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const eventList = await getEventListAll();
+      const taggedEvent = await getTaggedEventList();
       setEventData(eventList);
+      setTaggedEvent(taggedEvent);
     };
     fetchData();
   }, []);
@@ -52,7 +55,7 @@ export default function EventList() {
               TAGGED 🏷
             </Typography>
             {eventData.length ? (
-              <CarouselCenterMode data={eventData} />
+              <CarouselCenterMode data={taggedEvent} />
             ) : (
               <EmptyContent title={'오늘 열리는 이벤트가 없습니다'} />
             )}
