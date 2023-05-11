@@ -153,7 +153,7 @@ export default function QRScan({ event, disabled }) {
             }}
           >
             <Typography variant="subtitle1" sx={{ textAlign: 'center', my: 1 }}>
-              출석자 목록 (최근 5명)
+              최근 5명 출석자 목록 (총 {userList.length}명)
             </Typography>
             <Table size="small">
               <TableHead>
