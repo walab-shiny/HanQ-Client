@@ -33,10 +33,7 @@ export const getAttendEventList = async () => {
 };
 
 export const getEvent = async (id: number) => {
-  const response = await axios({
-    url: `/api/event/${id}`,
-    method: 'get',
-  });
+  const response = await axios.get(`/api/event/${id}`);
   return response.data as IEvent;
 };
 
@@ -84,4 +81,14 @@ export const uploadImage = async (file: File) => {
 export const closeEvent = async (id: number) => {
   const response = await axios.post('/api/event/close', { id });
   return response;
+};
+
+export const setEventPassword = async (id: string, password: string) => {
+  const response = await axios.post('/api/event/password', { id, password });
+  return response;
+};
+
+export const checkEventPassword = async (code: string, password: string) => {
+  const response = await axios.post('/api/event/check', { code, password });
+  return response.data;
 };

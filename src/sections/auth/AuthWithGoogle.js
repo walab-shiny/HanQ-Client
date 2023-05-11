@@ -12,7 +12,6 @@ export default function AuthWithGoogle() {
       if (loginWithCredential) {
         loginWithCredential(credential);
       }
-      console.log('GOOGLE LOGIN');
     } catch (error) {
       console.error(error);
     }

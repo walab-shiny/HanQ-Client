@@ -5,6 +5,7 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
+        zIndex: 9,
         position: 'fixed',
         bottom: 32,
         display: { xs: 'none', md: 'flex' },

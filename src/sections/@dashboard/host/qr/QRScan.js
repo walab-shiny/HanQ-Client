@@ -7,6 +7,7 @@ import {
   Dialog,
   Divider,
   IconButton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -152,7 +153,7 @@ export default function QRScan({ event, disabled }) {
             }}
           >
             <Typography variant="subtitle1" sx={{ textAlign: 'center', my: 1 }}>
-              출석자 목록 (최근 5명)
+              최근 5명 출석자 목록 (총 {userList.length}명)
             </Typography>
             <Table size="small">
               <TableHead>
@@ -185,11 +186,9 @@ export default function QRScan({ event, disabled }) {
             </Table>
           </Card>
         </Box>
-        <Box
+        <Stack
           sx={{
             height: 1,
-            display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -212,7 +211,7 @@ export default function QRScan({ event, disabled }) {
             videoStyle={{ width: 400, height: 400 }}
             ViewFinder={ScanOverlay}
           />
-        </Box>
+        </Stack>
         <Footer />
       </Dialog>
     </>
