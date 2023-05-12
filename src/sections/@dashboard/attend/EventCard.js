@@ -16,7 +16,7 @@ EventCard.propTypes = {
 
 export default function EventCard({ event }) {
   const { name, image, status } = event;
-  console.log(event);
+
   return (
     <Card
       sx={{

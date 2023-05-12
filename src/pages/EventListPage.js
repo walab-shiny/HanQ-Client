@@ -15,15 +15,15 @@ import EmptyContent from '../components/empty-content/EmptyContent';
 export default function EventList() {
   const { themeStretch } = useSettingsContext();
 
-  const [eventData, setEventData] = useState([]);
-  const [taggedEvent, setTaggedEvent] = useState([]);
+  const [taggedEventList, setTaggedEventList] = useState([]);
+  const [eventList, setEventList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const taggedEventList = await getTaggedEventList();
       const eventList = await getEventListAll();
-      const taggedEvent = await getTaggedEventList();
-      setEventData(eventList);
-      setTaggedEvent(taggedEvent);
+      setTaggedEventList(taggedEventList);
+      setEventList(eventList);
     };
     fetchData();
   }, []);
@@ -54,10 +54,13 @@ export default function EventList() {
             <Typography variant="h4" mb={4}>
               TAGGED 🏷
             </Typography>
-            {eventData.length ? (
-              <CarouselCenterMode data={taggedEvent} />
+            {taggedEventList.length ? (
+              <CarouselCenterMode data={taggedEventList} />
             ) : (
-              <EmptyContent title={'오늘 열리는 이벤트가 없습니다'} />
+              <EmptyContent
+                title="관심 태그와 관련된 이벤트가 없습니다."
+                description="프로필 설정에서 관심 태그를 등록해보세요."
+              />
             )}
           </CardContent>
         </Card>
@@ -67,7 +70,11 @@ export default function EventList() {
             <Typography variant="h4" mb={4}>
               HOT 🔥
             </Typography>
-            <CarouselCenterMode data={eventData} />
+            {eventList.length ? (
+              <CarouselCenterMode data={eventList} />
+            ) : (
+              <EmptyContent title="인기 이벤트가 없습니다." />
+            )}
           </CardContent>
         </Card>
       </Container>

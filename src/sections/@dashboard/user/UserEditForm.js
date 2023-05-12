@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
@@ -8,8 +7,6 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack, Typography, Tabs, Tab, TextField, Autocomplete } from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
@@ -17,18 +14,15 @@ import FormProvider, { RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../..
 // apis
 import { getTagList } from '../../../apis/tag';
 import { updateUser } from '../../../apis/user';
-import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
-UserNewEditForm.propTypes = {
-  isEdit: PropTypes.bool,
+UserEditForm.propTypes = {
+  user: PropTypes.object,
+  reloadUser: PropTypes.func,
 };
 
-export default function UserNewEditForm({ isEdit = false }) {
-  const { user, reloadUser } = useAuthContext();
-  const navigate = useNavigate();
-
+export default function UserEditForm({ user, reloadUser }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const defaultValues = useMemo(
@@ -39,7 +33,7 @@ export default function UserNewEditForm({ isEdit = false }) {
       affiliation: user?.affiliation || '',
       studentNum: user?.studentNum || '',
       hostUntil: user?.hostUntil || '주최자 권한이 없습니다',
-      picture: user?.picture,
+      picture: user?.picture || '',
       status: (user?.isHost && '주최자') || '사용자',
       tags: user?.tags || [],
     }),
@@ -67,22 +61,15 @@ export default function UserNewEditForm({ isEdit = false }) {
     setTagStatus(newValue);
   };
 
-  const TABS = [
-    { value: '내 정보', label: '내 정보', color: 'info' },
-    // { value: '권한 기록', label: '권한 기록', color: 'error' },
-  ];
-
-  // const STEPS = ['권한 없음', '권한 신청 완료', '권한 승인 대기 중', '권한 승인 완료'];
+  const TABS = [{ value: '내 정보', label: '내 정보', color: 'info' }];
 
   useEffect(() => {
-    if (isEdit && user) {
+    if (user) {
       reset(defaultValues);
     }
-    if (!isEdit) {
-      reset(defaultValues);
-    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, user]);
+  }, [user]);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -104,14 +91,13 @@ export default function UserNewEditForm({ isEdit = false }) {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
       await updateUser({
         likes: data.tags.map((tag) => tag.id),
+        picture: data.picture,
       });
-      await reloadUser();
+      await reloadUser(user.id);
       reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      navigate(PATH_DASHBOARD.user.list);
+      enqueueSnackbar('사용자 정보가 변경되었습니다.', 'success');
     } catch (error) {
       console.error(error);
     }
@@ -132,14 +118,12 @@ export default function UserNewEditForm({ isEdit = false }) {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status === '사용자' ? 'success' : 'error'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
+            <Label
+              color={values.status === '사용자' ? 'success' : 'error'}
+              sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+            >
+              {values.status}
+            </Label>
 
             <Box sx={{ mb: 5 }}>
               <RHFUploadAvatar
@@ -223,7 +207,7 @@ export default function UserNewEditForm({ isEdit = false }) {
                     </>
                   ) : (
                     <>
-                      <TextField value="주최 권한이 있습니다" disabled />
+                      <TextField value="주최 권한이 있습니다." disabled />
                     </>
                   )
                 ) : (
@@ -237,7 +221,7 @@ export default function UserNewEditForm({ isEdit = false }) {
                     setValue('tags', newValue);
                   }}
                   multiple
-                  options={tagList.filter((tag) => !values.tags.includes(tag))}
+                  options={tagList}
                   getOptionLabel={(option) => option.name}
                   renderInput={(params) => <TextField {...params} label="관심 태그" />}
                 />
@@ -245,7 +229,7 @@ export default function UserNewEditForm({ isEdit = false }) {
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!isEdit ? 'Create User' : '프로필 수정'}
+                  프로필 수정
                 </LoadingButton>
               </Stack>
             </Box>
