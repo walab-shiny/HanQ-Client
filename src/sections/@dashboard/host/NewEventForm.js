@@ -182,7 +182,7 @@ export default function NewEventForm() {
                   render={({ field, fieldState: { error } }) => (
                     <DateTimePicker
                       format="YYYY/MM/DD hh:mm A"
-                      label="시작일시"
+                      label="QR 태깅 시작일시"
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue);
@@ -201,7 +201,7 @@ export default function NewEventForm() {
                   render={({ field, fieldState: { error } }) => (
                     <DateTimePicker
                       format="YYYY/MM/DD hh:mm A"
-                      label="종료일시"
+                      label="QR 태깅 종료일시"
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue);
@@ -211,22 +211,6 @@ export default function NewEventForm() {
                       )}
                     />
                   )}
-                />
-
-                <RHFTextField
-                  type="number"
-                  name="availableTime"
-                  label="QR 태깅 가능 시간(분)"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="end">분</InputAdornment>,
-                  }}
-                  helperText={
-                    <>
-                      이벤트 시작 전 15분부터, 이벤트 시작 후
-                      <br />
-                      입력한 시간(분)까지 QR 태깅이 가능합니다.
-                    </>
-                  }
                 />
 
                 <RHFTextField

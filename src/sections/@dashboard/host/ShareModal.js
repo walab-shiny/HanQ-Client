@@ -62,7 +62,7 @@ export default function ShareModal({ event }) {
               <Typography variant="body2" color="text.secondary">
                 이벤트 코드
               </Typography>
-              <Typography variant="subtitle2">{event.code}</Typography>
+              <Typography variant="subtitle1">{event.code}</Typography>
             </Stack>
             <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="body2" color="text.secondary">
@@ -73,6 +73,7 @@ export default function ShareModal({ event }) {
                 placeholder="비밀번호를 설정해주세요."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                helperText="비밀번호가 이미 있는 경우 재설정 됩니다."
               />
             </Stack>
           </Stack>
