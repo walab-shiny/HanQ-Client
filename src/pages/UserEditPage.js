@@ -3,15 +3,15 @@ import { Helmet } from 'react-helmet-async';
 import { Container } from '@mui/material';
 // components
 import { useSettingsContext } from '../components/settings';
+import { useAuthContext } from '../auth/useAuthContext';
 import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 // sections
-import UserNewEditForm from '../sections/@dashboard/user/UserEditForm';
-import { useAuthContext } from '../auth/useAuthContext';
+import UserEditForm from '../sections/@dashboard/user/UserEditForm';
 
 // ----------------------------------------------------------------------
 
 export default function UserEditPage() {
-  const { user } = useAuthContext();
+  const { user, reloadUser } = useAuthContext();
   const { themeStretch } = useSettingsContext();
 
   return (
@@ -23,7 +23,7 @@ export default function UserEditPage() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs heading="프로필 설정" links={[]} />
 
-        <UserNewEditForm isEdit currentUser={user} />
+        <UserEditForm user={user} reloadUser={reloadUser} />
       </Container>
     </>
   );

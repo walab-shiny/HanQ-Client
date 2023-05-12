@@ -29,7 +29,7 @@ import RoleBasedGuard from '../auth/RoleBasedGuard';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: '순번', label: '순번', align: 'center' },
+  { id: '순번', label: '순번', align: 'center', width: 64 },
   { id: '태그', label: '태그', align: 'center' },
   { id: '제목', label: '제목', align: 'center' },
   { id: '일시', label: '일시', align: 'center' },
