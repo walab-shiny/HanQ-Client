@@ -119,7 +119,7 @@ export default function UserEditForm({ user, reloadUser }) {
         <Grid item xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             <Label
-              color={values.status === '사용자' ? 'success' : 'error'}
+              color={values.status === '주최자' ? 'success' : 'warning'}
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
               {values.status}
@@ -220,6 +220,7 @@ export default function UserEditForm({ user, reloadUser }) {
                   onChange={(event, newValue) => {
                     setValue('tags', newValue);
                   }}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
                   multiple
                   options={tagList}
                   getOptionLabel={(option) => option.name}
