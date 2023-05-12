@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -20,7 +21,6 @@ import Markdown from '../../../../components/markdown';
 import Scrollbar from '../../../../components/scrollbar';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify/Iconify';
-import { fDateString } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,9 @@ export default function NewEventView({ values, isLink = false }) {
     isPublic = false,
     availableTime = 0,
   } = values;
-  const date = `${fDateString(openAt)} ~ ${fDateString(closeAt)}`;
+  const date = `${moment(new Date(openAt)).format('YYYY-MM-DD HH:mm:ss')} ~ ${moment(new Date(closeAt)).format(
+    'HH:mm:ss'
+  )}`;
 
   const image = typeof values.image === 'string' ? values.image : values.image?.preview;
 
@@ -114,12 +116,7 @@ export default function NewEventView({ values, isLink = false }) {
             <Container maxWidth="md" sx={{ mt: 5, mb: 10 }}>
               <Box sx={{ mb: 5 }}>
                 <Typography variant="h6" gutterBottom>
-                  {availableTime
-                    ? `*이벤트 시작 전 15분 부터 QR 태깅이 가능하며 이벤트 시작 ${availableTime}분 후 QR 태깅이 마감됩니다.*`
-                    : '*이벤트 시작 전 15분 부터 QR 태깅이 가능합니다.*'}
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  일시: {date}
+                  QR 태깅 가능 시간: {date}
                 </Typography>
                 <Typography variant="h6">
                   공개여부: {isPublic ? '공개' : '비공개'} / 장소: {location}

@@ -16,7 +16,7 @@ HostEventViewTableRow.propTypes = {
 };
 
 export default function HostEventViewTableRow({ row, index, fetchData }) {
-  const { tags, name, openAt, closeAt, status } = row;
+  const { tags, name, openAt, status } = row;
 
   const getLabelColor = (statue) => {
     switch (statue) {
@@ -37,7 +37,7 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
   return (
     <>
       <TableRow>
-        <TableCell>
+        <TableCell align="center">
           <Typography variant="subtitle2" noWrap>
             {index + 1}
           </Typography>
@@ -53,11 +53,7 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
 
         <TableCell>{name}</TableCell>
 
-        <TableCell>
-          {fDateString(openAt)} ~
-          <br />
-          {fDateString(closeAt)}
-        </TableCell>
+        <TableCell>{fDateString(openAt)}</TableCell>
 
         <TableCell align="center">
           <Label variant="soft" color={labelColor} sx={{ textTransform: 'capitalize' }}>

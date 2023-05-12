@@ -127,7 +127,7 @@ export default function QRScan({ event, open, onClose }) {
             나의 출석 목록 보러가기 ⬇️
           </Typography>
           <Divider />
-          <Box component="img" src="/assets/images/qr/qrLink.png" sx={{ width: 150 }} />
+          <Box component="img" src="/assets/images/qr/qrLink.png" sx={{ width: 150, p: '2px' }} />
         </Card>
         <Card
           component={TableContainer}
