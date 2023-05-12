@@ -1,41 +1,36 @@
+import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { noCase } from 'change-case';
-import { useState } from 'react';
 // @mui
 import {
   Box,
   Stack,
   List,
   Badge,
-  Button,
   Avatar,
-  Tooltip,
   Divider,
-  IconButton,
   Typography,
   ListItemText,
   ListSubheader,
   ListItemAvatar,
   ListItemButton,
 } from '@mui/material';
+// apis
+import { getTaggedEventList } from '../../../apis/event.ts';
 // utils
 import { fToNow } from '../../../utils/formatTime';
-// _mock_
-import { _notifications } from '../../../_mock/arrays';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
 export default function NotificationsPopover() {
   const [openPopover, setOpenPopover] = useState(null);
-
-  const [notifications, setNotifications] = useState(_notifications);
-
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const [taggedEventList, setTaggedEventList] = useState([]);
 
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
@@ -45,14 +40,18 @@ export default function NotificationsPopover() {
     setOpenPopover(null);
   };
 
-  const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
+  const fetchData = async () => {
+    try {
+      const response = await getTaggedEventList();
+      setTaggedEventList(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -61,7 +60,7 @@ export default function NotificationsPopover() {
         onClick={handleOpenPopover}
         sx={{ width: 40, height: 40 }}
       >
-        <Badge badgeContent={totalUnRead} color="error">
+        <Badge badgeContent={0} color="error">
           <Iconify icon="eva:bell-fill" />
         </Badge>
       </IconButtonAnimate>
@@ -69,20 +68,12 @@ export default function NotificationsPopover() {
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 360, p: 0 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1">Notifications</Typography>
+            <Typography variant="subtitle1">알림</Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              You have {totalUnRead} unread messages
+              최근에 등록된 당신이 관심 있을 만한 이벤트입니다.
             </Typography>
           </Box>
-
-          {totalUnRead > 0 && (
-            <Tooltip title=" Mark all as read">
-              <IconButton color="primary" onClick={handleMarkAllAsRead}>
-                <Iconify icon="eva:done-all-fill" />
-              </IconButton>
-            </Tooltip>
-          )}
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -92,36 +83,15 @@ export default function NotificationsPopover() {
             disablePadding
             subheader={
               <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                New
+                TAGGED EVENTS
               </ListSubheader>
             }
           >
-            {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
-            ))}
-          </List>
-
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                Before that
-              </ListSubheader>
-            }
-          >
-            {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+            {taggedEventList.slice(0, 5).map((event) => (
+              <EventItem key={event.id} event={event} />
             ))}
           </List>
         </Scrollbar>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
-            View All
-          </Button>
-        </Box>
       </MenuPopover>
     </>
   );
@@ -129,88 +99,35 @@ export default function NotificationsPopover() {
 
 // ----------------------------------------------------------------------
 
-NotificationItem.propTypes = {
-  notification: PropTypes.shape({
-    id: PropTypes.string,
-    avatar: PropTypes.node,
-    type: PropTypes.string,
-    title: PropTypes.string,
-    isUnRead: PropTypes.bool,
-    description: PropTypes.string,
-    createdAt: PropTypes.instanceOf(Date),
-  }),
+EventItem.propTypes = {
+  event: PropTypes.object,
 };
 
-function NotificationItem({ notification }) {
-  const { avatar, title } = renderContent(notification);
-
+function EventItem({ event }) {
   return (
     <ListItemButton
+      to={PATH_DASHBOARD.all}
+      component={RouterLink}
       sx={{
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.isUnRead && {
-          bgcolor: 'action.selected',
-        }),
       }}
     >
       <ListItemAvatar>
-        <Avatar sx={{ bgcolor: 'background.neutral' }}>{avatar}</Avatar>
+        <Avatar variant="rounded" src={event.image} sx={{ bgcolor: 'background.neutral' }} />
       </ListItemAvatar>
 
       <ListItemText
         disableTypography
-        primary={title}
+        primary={<Typography variant="subtitle2">{event.name}</Typography>}
         secondary={
           <Stack direction="row" sx={{ mt: 0.5, typography: 'caption', color: 'text.disabled' }}>
             <Iconify icon="eva:clock-fill" width={16} sx={{ mr: 0.5 }} />
-            <Typography variant="caption">{fToNow(notification.createdAt)}</Typography>
+            <Typography variant="caption">{fToNow(event.openAt)}</Typography>
           </Stack>
         }
       />
     </ListItemButton>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function renderContent(notification) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification.title}
-      <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
-      </Typography>
-    </Typography>
-  );
-
-  if (notification.type === 'order_placed') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_package.svg" />,
-      title,
-    };
-  }
-  if (notification.type === 'order_shipped') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_shipping.svg" />,
-      title,
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_mail.svg" />,
-      title,
-    };
-  }
-  if (notification.type === 'chat_message') {
-    return {
-      avatar: <img alt={notification.title} src="/assets/icons/notification/ic_chat.svg" />,
-      title,
-    };
-  }
-  return {
-    avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
-    title,
-  };
 }

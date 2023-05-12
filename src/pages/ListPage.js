@@ -7,8 +7,8 @@ import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
 // apis
 import { getAttendEventList } from '../apis/event.ts';
-import { AttendEventList } from '../sections/@dashboard/attend';
 // sections
+import { AttendEventList } from '../sections/@dashboard/attend';
 
 export default function ListPage() {
   const { themeStretch } = useSettingsContext();
