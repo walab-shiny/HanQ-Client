@@ -220,6 +220,7 @@ export default function UserEditForm({ user, reloadUser }) {
                   onChange={(event, newValue) => {
                     setValue('tags', newValue);
                   }}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
                   multiple
                   options={tagList}
                   getOptionLabel={(option) => option.name}
