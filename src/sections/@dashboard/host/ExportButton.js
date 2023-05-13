@@ -2,13 +2,23 @@ import * as xlsx from 'xlsx';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
 import Iconify from '../../../components/iconify';
+import { fDateString } from '../../../utils/formatTime';
 
-function excel(data, filename) {
-  const jsonData = data;
-  const workbook = xlsx.utils.book_new();
-  const worksheet = xlsx.utils.json_to_sheet(jsonData);
-  xlsx.utils.book_append_sheet(workbook, worksheet, 'sheet1');
-  xlsx.writeFile(workbook, filename);
+function excel(data, eventName) {
+  const filename = `${eventName} 참여자 명단.xlsx`;
+  const jsonData = data.map((item) => ({
+    studentNum: item.studentNum,
+    name: item.name,
+    taggedAt: fDateString(item.taggedAt),
+  }));
+  const Heading = [['학번', '이름', '태깅 시간']];
+
+  const wb = xlsx.utils.book_new();
+  const ws = xlsx.utils.json_to_sheet([]);
+  xlsx.utils.sheet_add_aoa(ws, Heading);
+  xlsx.utils.sheet_add_json(ws, jsonData, { origin: 'A2', skipHeader: true });
+  xlsx.utils.book_append_sheet(wb, ws, '참여자 명단');
+  xlsx.writeFile(wb, filename);
 }
 
 ExportButton.propTypes = {
@@ -17,11 +27,10 @@ ExportButton.propTypes = {
 };
 
 export default function ExportButton({ data, eventName }) {
-  const filename = `${eventName} 참여자 명단.xlsx`;
   return (
     <>
       <Button
-        onClick={() => excel(data, filename)}
+        onClick={() => excel(data, eventName)}
         variant="contained"
         color="secondary"
         startIcon={<Iconify icon="eva:download-outline" />}
