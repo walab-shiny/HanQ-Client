@@ -105,7 +105,16 @@ function CarouselItem({ item }) {
           position: 'relative',
         }}
       >
-        <Image alt={name} src={image} ratio="3/4" />
+        {image ? (
+          <>
+            <Image alt={name} src={image} ratio="3/4" />
+          </>
+        ) : (
+          <>
+            <Image src="/logo/logo.png" ratio="3/4" sx={{ borderRadius: 1.5 }} />
+          </>
+        )}
+
         <CardContent
           sx={{
             bottom: 0,

@@ -7,6 +7,7 @@ import Image from '../../../components/image';
 import { EventView } from '../event/view';
 import { PostReport } from '.';
 import { fDateString } from '../../../utils/formatTime';
+import TextMaxLine from '../../../components/text-max-line/TextMaxLine';
 
 // ----------------------------------------------------------------------
 
@@ -41,13 +42,23 @@ export default function EventCard({ event }) {
             {status}
           </Label>
         )}
-
-        <Image alt={name} src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+        {image ? (
+          <>
+            <Image alt={name} src={image} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+          </>
+        ) : (
+          <>
+            <Image src="/logo/logo.png" ratio="1/1" sx={{ borderRadius: 1.5 }} />
+          </>
+        )}
       </Box>
 
       <Stack spacing={2.5} sx={{ p: 3 }}>
-        <Typography variant="subtitle2">{name}</Typography>
-
+        <Box height={55}>
+          <TextMaxLine variant="subtitle2" paragraph>
+            {name}
+          </TextMaxLine>
+        </Box>
         <Typography variant="body2">출석일: {fDateString(event.taggedTime)}</Typography>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
