@@ -97,3 +97,20 @@ export const checkEventPassword = async (code: string, password: string) => {
   const response = await axios.post('/api/event/check', { code, password });
   return response.data;
 };
+
+export const editEvent = async (id: number, data: IEvent) => {
+  const image = data.image ? await uploadImage(data.image) : '';
+  const response = await axios.post('/api/event/update', {
+    id,
+    name: data.name,
+    openAt: moment(new Date(data.openAt)).format('YYYY-MM-DDTHH:mm:ss'),
+    closeAt: moment(new Date(data.closeAt)).format('YYYY-MM-DDTHH:mm:ss'),
+    location: data.location,
+    maxUsers: data.maxUsers,
+    content: data.content,
+    availableTime: data.availableTime,
+    image,
+    tags: data.tags.map((tag) => tag.id),
+  });
+  return response;
+};

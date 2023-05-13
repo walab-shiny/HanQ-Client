@@ -119,7 +119,7 @@ export default function HostPage() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [tableData]);
 
   return (
     <>
