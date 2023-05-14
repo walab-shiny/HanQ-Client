@@ -43,7 +43,7 @@ export const getEvent = async (id: number) => {
 };
 
 export const addEvent = async (data: IEvent) => {
-  const image = data.image ? await uploadImage(data.image) : '';
+  const image = data.image ? await uploadImage(data.image) : null;
   const response = await axios.post('/api/event', {
     name: data.name,
     openAt: moment(new Date(data.openAt)).format('YYYY-MM-DDTHH:mm:ss'),
@@ -99,7 +99,8 @@ export const checkEventPassword = async (code: string, password: string) => {
 };
 
 export const editEvent = async (id: number, data: IEvent) => {
-  const image = data.image ? await uploadImage(data.image) : '';
+  const isImageChanged = data.image && data.image instanceof File;
+  const image = isImageChanged ? await uploadImage(data.image) : data.image;
   const response = await axios.post('/api/event/update', {
     id,
     name: data.name,
@@ -111,6 +112,7 @@ export const editEvent = async (id: number, data: IEvent) => {
     availableTime: data.availableTime,
     image,
     tags: data.tags.map((tag) => tag.id),
+    isPublic: data.isPublic,
   });
   return response;
 };

@@ -8,11 +8,13 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
+  Box,
   Button,
   Card,
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   Grid,
   IconButton,
   InputAdornment,
@@ -44,7 +46,6 @@ export default function EditEventModal({ event }) {
   const handleEditEvent = async (data) => {
     try {
       await editEvent(event.id, data);
-      //   reset();
       enqueueSnackbar('수정되었습니다.', {
         variant: 'success',
       });
@@ -86,7 +87,6 @@ export default function EditEventModal({ event }) {
 
   const {
     control,
-    // reset,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
@@ -129,126 +129,126 @@ export default function EditEventModal({ event }) {
           </IconButton>
         </span>
       </Tooltip>
-      <Dialog open={open} onClose={handleClose} fullScreen sx={{ p: 3, pl: 20, pr: 20 }}>
+      <Dialog open={open} onClose={handleClose} sx={{ p: 3 }} maxWidth="lg" fullWidth>
         <DialogTitle>이벤트 수정하기</DialogTitle>
+        <Divider />
         <DialogContent>
-          <FormProvider methods={methods} onSubmit={handleSubmit(handleEditEvent)}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
-                <Card sx={{ p: 3 }}>
-                  <Stack spacing={3}>
-                    <RHFTextField name="name" label="이벤트명" />
+          <Box sx={{ p: 2, py: 5 }}>
+            <FormProvider methods={methods} onSubmit={handleSubmit(handleEditEvent)}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
+                  <Card sx={{ p: 3 }}>
+                    <Stack spacing={3}>
+                      <RHFTextField name="name" label="이벤트명" />
 
-                    <RHFTextField name="location" label="장소" />
+                      <RHFTextField name="location" label="장소" />
 
-                    <Stack spacing={1}>
-                      <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                        내용
-                      </Typography>
+                      <Stack spacing={1}>
+                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                          내용
+                        </Typography>
 
-                      <RHFEditor simple name="content" maxSize={2048} />
+                        <RHFEditor simple name="content" maxSize={2048} />
+                      </Stack>
+
+                      <Stack spacing={1}>
+                        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                          포스터 이미지
+                        </Typography>
+
+                        <RHFUpload name="image" maxSize={3145728} onDrop={handleDrop} onDelete={handleRemoveFile} />
+                      </Stack>
                     </Stack>
+                  </Card>
+                </Grid>
 
-                    <Stack spacing={1}>
-                      <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                        포스터 이미지
-                      </Typography>
+                <Grid item xs={12} md={4}>
+                  <Card sx={{ p: 3 }}>
+                    <Stack spacing={3}>
+                      <RHFSwitch
+                        name="isPublic"
+                        label="공개 여부"
+                        labelPlacement="start"
+                        sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                      />
 
-                      <RHFUpload name="image" maxSize={3145728} onDrop={handleDrop} onDelete={handleRemoveFile} />
-                    </Stack>
-                  </Stack>
-                </Card>
-              </Grid>
+                      <Autocomplete
+                        defaultValue={event.tags}
+                        onChange={(event, newValue) => {
+                          setValue('tags', newValue);
+                        }}
+                        multiple
+                        options={tags}
+                        getOptionLabel={(option) => option.name}
+                        renderInput={(params) => <TextField {...params} label="태그" />}
+                      />
 
-              <Grid item xs={12} md={4}>
-                <Card sx={{ p: 3 }}>
-                  <Stack spacing={3}>
-                    <RHFSwitch
-                      disabled
-                      name="isPublic"
-                      label="공개 여부"
-                      labelPlacement="start"
-                      sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-                    />
+                      <Controller
+                        name="openAt"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <DateTimePicker
+                            format="YYYY/MM/DD hh:mm A"
+                            label="QR 태깅 시작일시"
+                            value={field.value}
+                            onChange={(newValue) => {
+                              if (newValue.isBefore(moment())) {
+                                enqueueSnackbar('종료일시가 현재보다 빠릅니다.', { variant: 'error' });
+                              } else {
+                                field.onChange(newValue);
+                              }
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                            )}
+                          />
+                        )}
+                      />
 
-                    <Autocomplete
-                      defaultValue={event.tags}
-                      //   defaultvalue={event.tags}
-                      onChange={(event, newValue) => {
-                        setValue('tags', newValue);
-                      }}
-                      multiple
-                      options={tags}
-                      getOptionLabel={(option) => option.name}
-                      renderInput={(params) => <TextField {...params} label="태그" />}
-                    />
-
-                    <Controller
-                      name="openAt"
-                      control={control}
-                      render={({ field, fieldState: { error } }) => (
-                        <DateTimePicker
-                          format="YYYY/MM/DD hh:mm A"
-                          label="QR 태깅 시작일시"
-                          value={field.value}
-                          onChange={(newValue) => {
-                            if (newValue.isBefore(moment())) {
-                              enqueueSnackbar('종료일시가 현재보다 빠릅니다.', { variant: 'error' });
-                            } else {
+                      <Controller
+                        name="closeAt"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <DateTimePicker
+                            format="YYYY/MM/DD hh:mm A"
+                            label="QR 태깅 종료일시"
+                            value={field.value}
+                            onChange={(newValue) => {
                               field.onChange(newValue);
-                              setValue('closeAt', newValue.clone().add(1, 'hours'));
-                            }
-                          }}
-                          renderInput={(params) => (
-                            <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
-                          )}
-                        />
-                      )}
-                    />
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                            )}
+                          />
+                        )}
+                      />
 
-                    <Controller
-                      name="closeAt"
-                      control={control}
-                      render={({ field, fieldState: { error } }) => (
-                        <DateTimePicker
-                          format="YYYY/MM/DD hh:mm A"
-                          label="QR 태깅 종료일시"
-                          value={field.value}
-                          onChange={(newValue) => {
-                            field.onChange(newValue);
-                          }}
-                          renderInput={(params) => (
-                            <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
-                          )}
-                        />
-                      )}
-                    />
+                      <RHFTextField
+                        type="number"
+                        name="maxUsers"
+                        label="최대 인원수"
+                        InputProps={{
+                          endAdornment: <InputAdornment position="end">명</InputAdornment>,
+                        }}
+                      />
 
-                    <RHFTextField
-                      type="number"
-                      name="maxUsers"
-                      label="최대 인원수"
-                      InputProps={{
-                        endAdornment: <InputAdornment position="end">명</InputAdornment>,
-                      }}
-                    />
+                      <TextField value={event.affiliation} label="주관기관" disabled />
+                    </Stack>
+                  </Card>
 
-                    <TextField value={event.affiliation} label="주관기관" disabled />
+                  <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                    <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleClose}>
+                      취소
+                    </Button>
+
+                    <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
+                      수정하기
+                    </LoadingButton>
                   </Stack>
-                </Card>
-
-                <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-                  <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleClose}>
-                    취소
-                  </Button>
-
-                  <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
-                    수정하기
-                  </LoadingButton>
-                </Stack>
+                </Grid>
               </Grid>
-            </Grid>
-          </FormProvider>
+            </FormProvider>
+          </Box>
         </DialogContent>
       </Dialog>
     </>
