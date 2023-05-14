@@ -58,7 +58,11 @@ export default function EventCard({ event, fetchData }) {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <EventView values={event} isLink />
-          {report.id ? <ViewReport event={event} /> : <PostReport event={event} fetchData={fetchData} />}
+          {report.id ? (
+            <ViewReport event={event} fetchData={fetchData} />
+          ) : (
+            <PostReport event={event} fetchData={fetchData} />
+          )}
         </Stack>
       </Stack>
     </Card>
