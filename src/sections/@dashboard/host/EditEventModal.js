@@ -126,7 +126,7 @@ export default function EditEventModal({ event, fetchData }) {
           </IconButton>
         </span>
       </Tooltip>
-      <Dialog open={open} onClose={handleClose} sx={{ p: 3 }} maxWidth="lg" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
         <DialogTitle>이벤트 수정하기</DialogTitle>
         <Divider />
         <DialogContent>
