@@ -14,9 +14,10 @@ import { CustomTextField } from '../../../components/custom-input';
 AttendEventList.propTypes = {
   loading: PropTypes.bool,
   events: PropTypes.array,
+  fetchData: PropTypes.func,
 };
 
-export default function AttendEventList({ events, loading }) {
+export default function AttendEventList({ events, loading, fetchData }) {
   const [search, setSearch] = useState('');
   const handleSearch = (event) => {
     setSearch(event.target.value);
@@ -51,7 +52,7 @@ export default function AttendEventList({ events, loading }) {
         sx={{ mt: 5 }}
       >
         {(loading ? [...Array(12)] : filteredEvents).map((event, index) =>
-          event ? <EventCard key={event.id} event={event} /> : <SkeletonProductItem key={index} />
+          event ? <EventCard key={event.id} event={event} fetchData={fetchData} /> : <SkeletonProductItem key={index} />
         )}
         {filteredEvents.length === 0 && !loading && <Box>결과가 없습니다.</Box>}
       </Box>

@@ -5,7 +5,7 @@ import { Box, Card, Stack, Typography } from '@mui/material';
 import Label from '../../../components/label';
 import Image from '../../../components/image';
 import { EventView } from '../event/view';
-import { PostReport } from '.';
+import { PostReport, ViewReport } from '.';
 import { fDateString } from '../../../utils/formatTime';
 import TextMaxLine from '../../../components/text-max-line';
 
@@ -13,10 +13,11 @@ import TextMaxLine from '../../../components/text-max-line';
 
 EventCard.propTypes = {
   event: PropTypes.object,
+  fetchData: PropTypes.func,
 };
 
-export default function EventCard({ event }) {
-  const { name, image, status } = event;
+export default function EventCard({ event, fetchData }) {
+  const { name, image, status, report } = event;
 
   return (
     <Card
@@ -57,7 +58,7 @@ export default function EventCard({ event }) {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <EventView values={event} isLink />
-          <PostReport event={event} />
+          {report.id ? <ViewReport event={event} /> : <PostReport event={event} fetchData={fetchData} />}
         </Stack>
       </Stack>
     </Card>

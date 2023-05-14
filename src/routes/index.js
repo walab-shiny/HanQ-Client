@@ -11,8 +11,8 @@ import { PATH_AFTER_LOGIN } from '../config';
 import {
   Page404,
   LoginPage,
-  ListPage,
   EventListPage,
+  AttendListPage,
   HostPage,
   UserEditPage,
   NewEventPage,
@@ -47,7 +47,7 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'all', element: <EventListPage /> },
-        { path: 'list', element: <ListPage /> },
+        { path: 'list', element: <AttendListPage /> },
         { path: 'user', element: <UserEditPage /> },
         {
           path: 'host',
