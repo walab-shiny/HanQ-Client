@@ -65,7 +65,7 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <EventView values={row} />
             <ParticipantViewModal event={row} />
-            <EditEventModal event={row} />
+            <EditEventModal event={row} fetchData={fetchData} />
             <CloseEventModal event={row} fetchData={fetchData} />
           </Stack>
         </TableCell>

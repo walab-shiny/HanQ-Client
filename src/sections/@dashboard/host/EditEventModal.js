@@ -2,7 +2,6 @@ import * as Yup from 'yup';
 import { useCallback, useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { LoadingButton } from '@mui/lab';
@@ -25,8 +24,6 @@ import {
 } from '@mui/material';
 import moment from 'moment';
 import { getTagList } from '../../../apis/tag';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 import { useSnackbar } from '../../../components/snackbar';
 import Iconify from '../../../components/iconify';
 import { editEvent } from '../../../apis/event.ts';
@@ -35,10 +32,10 @@ import { RHFEditor, RHFSwitch, RHFTextField, RHFUpload } from '../../../componen
 
 EditEventModal.propTypes = {
   event: PropTypes.object,
+  fetchData: PropTypes.func,
 };
 
-export default function EditEventModal({ event }) {
-  const navigate = useNavigate();
+export default function EditEventModal({ event, fetchData }) {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -46,11 +43,11 @@ export default function EditEventModal({ event }) {
   const handleEditEvent = async (data) => {
     try {
       await editEvent(event.id, data);
+      fetchData();
       enqueueSnackbar('수정되었습니다.', {
         variant: 'success',
       });
       handleClose();
-      navigate(PATH_DASHBOARD.host.list);
     } catch (error) {
       console.error(error);
     }
