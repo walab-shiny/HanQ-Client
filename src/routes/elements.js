@@ -16,7 +16,7 @@ const Loadable = (Component) => (props) =>
 export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
 
 export const EventListPage = Loadable(lazy(() => import('../pages/EventListPage')));
-export const ListPage = Loadable(lazy(() => import('../pages/ListPage')));
+export const AttendListPage = Loadable(lazy(() => import('../pages/AttendListPage')));
 export const UserEditPage = Loadable(lazy(() => import('../pages/UserEditPage')));
 
 export const HostPage = Loadable(lazy(() => import('../pages/HostPage')));
