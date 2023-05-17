@@ -1,7 +1,8 @@
 // @mui
-import { Stack, Button, Typography, Box } from '@mui/material';
+import { Stack, Button, Typography, Box, Link } from '@mui/material';
 // auth
 import { useAuthContext } from '../../../auth/useAuthContext';
+import { HOST_EMAIL } from '../../../config';
 
 // ----------------------------------------------------------------------
 
@@ -28,11 +29,13 @@ export default function NavDocs() {
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
-          도움이 필요하십니까?{'\n'}아래 설명서를 읽어보세요.
+          도움이 필요하십니까?{'\n'}메일로 문의를 남겨주세요.
         </Typography>
       </div>
 
-      <Button variant="contained">설명 문서</Button>
+      <Button component={Link} variant="contained" href={`mailto:${HOST_EMAIL}`}>
+        문의하기
+      </Button>
     </Stack>
   );
 }
