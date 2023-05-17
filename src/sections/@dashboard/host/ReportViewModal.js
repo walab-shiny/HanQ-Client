@@ -15,25 +15,25 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material';
-import ExportButton from './AttendListExportButton';
-import { getParticipantList } from '../../../apis/participant.ts';
+import ExportButton from './ReportListExportButton';
 import Iconify from '../../../components/iconify';
 import { fDateString } from '../../../utils/formatTime';
+import { getReportList } from '../../../apis/report';
 
-ParticipantViewModal.propTypes = {
+ReportViewModal.propTypes = {
   event: PropTypes.object,
 };
 
-export default function ParticipantViewModal({ event }) {
+export default function ReportViewModal({ event }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [participants, setParticipants] = useState();
+  const [reports, setReports] = useState();
 
   const fetchData = async () => {
-    const response = await getParticipantList(event.id);
-    setParticipants(response);
+    const response = await getReportList(event.id);
+    setReports(response);
   };
 
   useEffect(() => {
@@ -43,15 +43,15 @@ export default function ParticipantViewModal({ event }) {
 
   return (
     <>
-      <Tooltip title="참여자 명단 조회">
+      <Tooltip title="소감문 목록 조회">
         <span>
           <IconButton onClick={handleOpen}>
-            <Iconify icon="eva:people-outline" />
+            <Iconify icon="eva:file-text-outline" />
           </IconButton>
         </span>
       </Tooltip>
-      <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>이벤트 참여자 명단</DialogTitle>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle>소감문 목록</DialogTitle>
         <DialogContent>
           <TableContainer
             sx={{
@@ -66,26 +66,26 @@ export default function ParticipantViewModal({ event }) {
                 <TableRow>
                   <TableCell align="center">학번</TableCell>
                   <TableCell align="center">이름</TableCell>
-                  <TableCell align="center">학부</TableCell>
-                  <TableCell align="center">태깅시간</TableCell>
+                  <TableCell align="center">제출 시간</TableCell>
+                  <TableCell align="center">내용</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {participants?.length ? (
-                  participants.map((participant) => (
-                    <TableRow key={participant.studentNum} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                {reports?.length ? (
+                  reports.map((reports) => (
+                    <TableRow key={reports.studentNum} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell align="center" component="th" scope="row">
-                        {participant.studentNum}
+                        {reports.studentNum}
                       </TableCell>
-                      <TableCell align="center">{participant.name}</TableCell>
-                      <TableCell align="center">{participant.department}</TableCell>
-                      <TableCell align="center">{fDateString(participant.taggedAt)}</TableCell>
+                      <TableCell align="center">{reports.name}</TableCell>
+                      <TableCell align="center">{fDateString(reports.modifiedAt)}</TableCell>
+                      <TableCell align="center">{reports.content.replace(/<[^>]+>/g, '')}</TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell align="center" colSpan={4}>
-                      참여자가 없습니다.
+                      제출된 소감문이 없습니다.
                     </TableCell>
                   </TableRow>
                 )}
@@ -94,7 +94,7 @@ export default function ParticipantViewModal({ event }) {
           </TableContainer>
         </DialogContent>
         <DialogActions>
-          <ExportButton data={participants} eventName={event.name} />
+          <ExportButton data={reports} eventName={event.name} />
           <Button onClick={handleClose} variant="outlined">
             닫기
           </Button>
