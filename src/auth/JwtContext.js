@@ -149,26 +149,12 @@ export function AuthProvider({ children }) {
   };
 
   // REGISTER
-  const studentRegister = async (userId, studentNum, departmentId) => {
-    const response = await axios.post(`/api/user/student`, {
+  const register = async (userId, affiliation, studentNum, departmentId) => {
+    const response = await axios.post(`/api/user/register`, {
       userId,
-      studentNum,
-      departmentId,
-    });
-    const user = response.data;
-
-    dispatch({
-      type: 'REGISTER',
-      payload: {
-        user,
-      },
-    });
-  };
-
-  const otherRegister = async (userId, affiliation) => {
-    const response = await axios.post(`/api/user/other`, {
-      userId,
-      affiliation,
+      affiliation: affiliation || '',
+      studentNum: studentNum || 0,
+      departmentId: departmentId || 0,
     });
     const user = response.data;
 
@@ -207,8 +193,7 @@ export function AuthProvider({ children }) {
           ...state,
           method: 'jwt',
           loginWithCredential,
-          studentRegister,
-          otherRegister,
+          register,
           reloadUser,
           logout,
         }}

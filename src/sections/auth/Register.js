@@ -1,45 +1,68 @@
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Box,
   Button,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  Switch,
   TextField,
   Typography,
 } from '@mui/material';
 // layouts
 import { Controller, useForm } from 'react-hook-form';
+import { QrReader } from 'react-qr-reader';
 import LoginLayout from '../../layouts/login';
 import { DEPARTMENT_LIST } from '../../config';
 import { useAuthContext } from '../../auth/useAuthContext';
+import { getQRInfo } from '../../apis/qr';
 
 // ----------------------------------------------------------------------
 
 export default function Register() {
-  const { user, studentRegister, otherRegister, logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
+  const userRegister = useAuthContext().register;
+  const [resultText, setResultText] = useState('');
+  const [isQRChecked, setIsQRChecked] = useState(false);
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
     reset,
   } = useForm({ defaultValues: { departmentId: 1 } });
   const onValid = async (data) => {
     if (user) {
-      if (user.isStudent) {
-        await studentRegister(user.id, +data.studentId, data.departmentId);
-      } else {
-        await otherRegister(user.id, data.affiliation);
-      }
+      await userRegister(user.id, data.affiliation, data.studentNum, data.departmentId);
       reset();
     } else {
       console.error('no user info');
     }
   };
+
+  const handleChange = (event) => {
+    setIsQRChecked(event.target.checked);
+  };
+
+  const handleQRScan = async (qrString) => {
+    if (qrString) {
+      const reponse = await getQRInfo(qrString);
+      setValue('studentNum', reponse.user_number);
+    }
+  };
+
+  useEffect(() => {
+    if (resultText && resultText !== '') {
+      handleQRScan(resultText);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resultText]);
 
   return (
     <LoginLayout
@@ -55,15 +78,15 @@ export default function Register() {
               <Box>
                 <InputLabel sx={{ color: 'text.primary' }}>학번</InputLabel>
                 <TextField
-                  {...register('studentId', {
-                    required: '필수 입력 항목입니다',
+                  {...register('studentNum', {
+                    required: '필수 입력 항목입니다.',
                     minLength: { value: 8, message: '학번 8글자를 입력해주세요.' },
                     maxLength: { value: 8, message: '학번 8글자를 입력해주세요.' },
                   })}
                   size="small"
                   placeholder="학번을 입력하세요."
-                  helperText={errors.studentId?.message}
-                  error={Boolean(errors.studentId?.message)}
+                  helperText={errors.studentNum?.message}
+                  error={Boolean(errors.studentNum?.message)}
                   fullWidth
                   type="number"
                 />
@@ -95,6 +118,27 @@ export default function Register() {
               </Box>
             ) : (
               <Box>
+                <FormControlLabel
+                  control={<Switch checked={isQRChecked} onChange={handleChange} name="gilad" />}
+                  label="교수님 또는 교직원이신가요?"
+                />
+                {isQRChecked && (
+                  <>
+                    <Box sx={{ height: 16 }} />
+                    <InputLabel sx={{ color: 'text.primary' }}>직번</InputLabel>
+                    <TextField
+                      {...register('studentNum')}
+                      size="small"
+                      placeholder="QR코드를 태깅해주세요."
+                      helperText={errors.studentNum?.message}
+                      error={Boolean(errors.studentNum?.message)}
+                      fullWidth
+                      type="number"
+                      inputProps={{ readOnly: true }}
+                    />
+                  </>
+                )}
+                <Box sx={{ height: 16 }} />
                 <InputLabel sx={{ color: 'text.primary' }}>소속</InputLabel>
                 <TextField
                   {...register('affiliation', {
@@ -117,6 +161,21 @@ export default function Register() {
                 가입하기
               </Button>
             </Box>
+            {isQRChecked && (
+              <>
+                <Box sx={{ height: 48 }} />
+                <Box>
+                  <InputLabel sx={{ color: 'text.primary' }}>QR로 정보입력하기</InputLabel>
+                  <QrReader
+                    scanDelay={300}
+                    onResult={(result) => {
+                      if (!result) return;
+                      setResultText(result.text);
+                    }}
+                  />
+                </Box>
+              </>
+            )}
           </Box>
         </Box>
       </Stack>
