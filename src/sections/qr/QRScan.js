@@ -124,6 +124,8 @@ export default function QRScan({ event, open, onClose }) {
             position: 'absolute',
             mt: { xs: 1.5, md: 5 },
             ml: { xs: 2, md: 5 },
+            width: { xs: 48, md: 96 },
+            height: { xs: 48, md: 96 },
           }}
         />
         <Stack sx={{ position: 'absolute', right: 16, top: 16, flexDirection: 'row', gap: 0.5 }}>
@@ -197,30 +199,34 @@ export default function QRScan({ event, open, onClose }) {
       </Box>
       <Stack
         sx={{
+          zIndex: 1,
           height: 1,
-          justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
         }}
       >
-        <Typography variant="h3" sx={{ mb: 4 }}>
+        <Typography variant="h1" sx={{ mt: 10, mb: 3 }}>
           {event.name}
         </Typography>
-        <Typography variant="h4">스마트캠퍼스 앱에서 QR 스크린을 열어서 태깅해 주세요!</Typography>
+        <Typography variant="h3" fontWeight={500}>
+          스마트캠퍼스 앱에서 QR 스크린을 열어서 태깅해 주세요!
+        </Typography>
+      </Stack>
+      <Box sx={{ position: 'fixed' }}>
         <QrReader
-          scanDelay={500}
+          scanDelay={300}
           onResult={(result) => {
             if (!result) return;
             setResultText(result.text);
           }}
           videoContainerStyle={{
-            width: 400,
-            height: 400,
+            width: '100vw',
+            height: '100vh',
           }}
-          videoStyle={{ width: 400, height: 400 }}
+          videoStyle={{ width: '100vw', height: '100vh' }}
           ViewFinder={ScanOverlay}
         />
-      </Stack>
+      </Box>
       <Footer />
     </Dialog>
   );
