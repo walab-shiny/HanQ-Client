@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, MenuItem } from '@mui/material';
+import { Box, Divider, Typography, MenuItem, Stack } from '@mui/material';
 // routes
-import { PATH_AUTH } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // auth
 import { useAuthContext } from '../../../auth/useAuthContext';
 // components
@@ -12,6 +12,19 @@ import { CustomAvatar } from '../../../components/custom-avatar';
 import { useSnackbar } from '../../../components/snackbar';
 import MenuPopover from '../../../components/menu-popover';
 import { IconButtonAnimate } from '../../../components/animate';
+
+// ----------------------------------------------------------------------
+
+const OPTIONS = [
+  {
+    label: '메인 페이지',
+    linkTo: '/',
+  },
+  {
+    label: '프로필 수정',
+    linkTo: PATH_DASHBOARD.user,
+  },
+];
 
 // ----------------------------------------------------------------------
 
@@ -35,12 +48,16 @@ export default function AccountPopover() {
   const handleLogout = async () => {
     try {
       logout();
-      navigate(PATH_AUTH.login, { replace: true });
       handleClosePopover();
     } catch (error) {
       console.error(error);
       enqueueSnackbar('로그아웃 도중 오류가 발생했습니다.', { variant: 'error' });
     }
+  };
+
+  const handleClickItem = (path) => {
+    handleClosePopover();
+    navigate(path);
   };
 
   return (
@@ -75,6 +92,16 @@ export default function AccountPopover() {
             {user?.email}
           </Typography>
         </Box>
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <Stack sx={{ p: 1 }}>
+          {OPTIONS.map((option) => (
+            <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
