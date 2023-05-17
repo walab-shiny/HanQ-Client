@@ -19,12 +19,14 @@ import ExportButton from './AttendListExportButton';
 import { getParticipantList } from '../../../apis/participant.ts';
 import Iconify from '../../../components/iconify';
 import { fDateString } from '../../../utils/formatTime';
+import { useSnackbar } from '../../../components/snackbar';
 
 ParticipantViewModal.propTypes = {
   event: PropTypes.object,
 };
 
 export default function ParticipantViewModal({ event }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -34,6 +36,15 @@ export default function ParticipantViewModal({ event }) {
   const fetchData = async () => {
     const response = await getParticipantList(event.id);
     setParticipants(response);
+  };
+
+  const handleRefresh = async () => {
+    try {
+      await fetchData();
+      enqueueSnackbar('참여자 명단을 새로고침했습니다.', { variant: 'success' });
+    } catch (error) {
+      enqueueSnackbar('참여자 명단을 새로고침하는 도중 오류가 발생했습니다.', { variant: 'error' });
+    }
   };
 
   useEffect(() => {
@@ -56,6 +67,7 @@ export default function ParticipantViewModal({ event }) {
           <TableContainer
             sx={{
               maxHeight: 'calc(70vh)',
+              height: 320,
               borderRadius: 1,
               border: 1,
               borderColor: 'divider',
@@ -94,6 +106,9 @@ export default function ParticipantViewModal({ event }) {
           </TableContainer>
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleRefresh} startIcon={<Iconify icon="eva:refresh-outline" />} color="secondary">
+            새로고침
+          </Button>
           <ExportButton data={participants} eventName={event.name} />
           <Button onClick={handleClose} variant="outlined">
             닫기
