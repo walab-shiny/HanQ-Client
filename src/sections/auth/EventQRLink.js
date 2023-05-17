@@ -22,15 +22,19 @@ export default function EventQRLink() {
   const handleCloseQr = () => setQr(false);
 
   const checkPassword = async () => {
-    const response = await checkEventPassword(eventCode, password);
+    try {
+      const response = await checkEventPassword(eventCode, password);
 
-    if (response.result === true) {
-      const eventData = response.event;
-      setEvent(eventData);
-      handleOpenQr();
-      handleClose();
-    } else {
-      alert('비밀번호가 일치하지 않습니다.');
+      if (response.result === true) {
+        const eventData = response.event;
+        setEvent(eventData);
+        handleOpenQr();
+        handleClose();
+      } else {
+        alert('비밀번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      alert('이벤트 정보가 틀립니다.');
     }
   };
 

@@ -38,23 +38,36 @@ QRScan.propTypes = {
 export default function QRScan({ event, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const [resultText, setResultText] = useState('');
+  const [deviceList, setDeviceList] = useState([]);
+  const [fullList, setFullList] = useState([]);
 
   const playSound = (sound) => {
     const audio = new Audio(sound);
     audio.play();
   };
 
+  const addUserData = (user) => {
+    setDeviceList((prev) => [...prev, user]);
+  };
+
+  const fetchData = async () => {
+    const userList = await getParticipantList(event.id);
+    setFullList(userList);
+  };
+
   const handleOnResult = async (resultString) => {
     const response = await sendQrRequest({ eventId: +event.id, qrString: resultString });
     if (response.status === 200) {
-      if (!response.data.isDuplicate) {
+      const userData = response.data;
+      if (!userData.isDuplicate) {
         playSound(successSound);
-        enqueueSnackbar(`${response.data.name}님 출석처리 되었습니다.`, {
+        enqueueSnackbar(`${userData.name}님 출석처리 되었습니다.`, {
           variant: 'success',
         });
+        addUserData(userData);
       } else {
         playSound(failsSound);
-        enqueueSnackbar(`${response.data.name}님 이미 태깅 되었습니다.`, {
+        enqueueSnackbar(`${userData.name}님 이미 태깅 되었습니다.`, {
           variant: 'warning',
         });
       }
@@ -66,15 +79,13 @@ export default function QRScan({ event, open, onClose }) {
     }
   };
 
-  const [userList, setUserList] = useState([]);
-
-  const fetchData = async () => {
-    const userList = await getParticipantList(event.id);
-    setUserList(userList);
-  };
-
   useEffect(() => {
-    fetchData();
+    const initData = async () => {
+      const userList = await getParticipantList(event.id);
+      setDeviceList(userList);
+      setFullList(userList);
+    };
+    initData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -84,6 +95,18 @@ export default function QRScan({ event, open, onClose }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultText]);
+
+  const [fullscreen, setFullscreen] = useState(false);
+
+  const onToggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      setFullscreen(true);
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+      setFullscreen(false);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={onClose} fullScreen>
@@ -101,18 +124,18 @@ export default function QRScan({ event, open, onClose }) {
             position: 'absolute',
             mt: { xs: 1.5, md: 5 },
             ml: { xs: 2, md: 5 },
+            width: { xs: 48, md: 96 },
+            height: { xs: 48, md: 96 },
           }}
         />
-        <IconButton
-          onClick={() => window.location.reload()}
-          sx={{
-            position: 'absolute',
-            right: 16,
-            top: 16,
-          }}
-        >
-          <Iconify icon="eva:close-outline" />
-        </IconButton>
+        <Stack sx={{ position: 'absolute', right: 16, top: 16, flexDirection: 'row', gap: 0.5 }}>
+          <IconButton onClick={onToggleFullScreen}>
+            <Iconify icon={fullscreen ? 'icon-park-outline:off-screen' : 'icon-park-outline:full-screen'} />
+          </IconButton>
+          <IconButton onClick={() => window.location.reload()}>
+            <Iconify icon="eva:close-outline" />
+          </IconButton>
+        </Stack>
         <Card
           variant="outlined"
           sx={{
@@ -141,7 +164,7 @@ export default function QRScan({ event, open, onClose }) {
           }}
         >
           <Typography variant="subtitle1" sx={{ textAlign: 'center', my: 1 }}>
-            최근 5명 출석자 목록 (총 {userList.length}명)
+            최근 5명 출석자 목록 (총 {fullList.length}명)
           </Typography>
           <Table size="small">
             <TableHead>
@@ -152,8 +175,8 @@ export default function QRScan({ event, open, onClose }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {userList.length > 0 ? (
-                userList
+              {deviceList.length ? (
+                deviceList
                   .reverse()
                   .slice(0, 5)
                   .map((user, index) => (
@@ -176,30 +199,34 @@ export default function QRScan({ event, open, onClose }) {
       </Box>
       <Stack
         sx={{
+          zIndex: 1,
           height: 1,
-          justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
         }}
       >
-        <Typography variant="h3" sx={{ mb: 4 }}>
+        <Typography variant="h1" sx={{ mt: 10, mb: 3 }}>
           {event.name}
         </Typography>
-        <Typography variant="h4">스마트캠퍼스 앱에서 QR 스크린을 열어서 태깅해 주세요!</Typography>
+        <Typography variant="h3" fontWeight={500}>
+          스마트캠퍼스 앱에서 QR 스크린을 열어서 태깅해 주세요!
+        </Typography>
+      </Stack>
+      <Box sx={{ position: 'fixed' }}>
         <QrReader
-          scanDelay={500}
+          scanDelay={300}
           onResult={(result) => {
             if (!result) return;
             setResultText(result.text);
           }}
           videoContainerStyle={{
-            width: 400,
-            height: 400,
+            width: '100vw',
+            height: '100vh',
           }}
-          videoStyle={{ width: 400, height: 400 }}
+          videoStyle={{ width: '100vw', height: '100vh' }}
           ViewFinder={ScanOverlay}
         />
-      </Stack>
+      </Box>
       <Footer />
     </Dialog>
   );
