@@ -9,7 +9,7 @@ export function fDateString(dateString) {
 }
 
 export function fTimeString(dateString) {
-  const time = dateString?.split('T')[1];
+  const time = dateString?.split('T')[1].split('.')[0];
   return time;
 }
 
