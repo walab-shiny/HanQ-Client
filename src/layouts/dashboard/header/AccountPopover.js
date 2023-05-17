@@ -21,7 +21,7 @@ const OPTIONS = [
     linkTo: '/',
   },
   {
-    label: '프로필 수정',
+    label: '프로필 설정',
     linkTo: PATH_DASHBOARD.user,
   },
 ];
