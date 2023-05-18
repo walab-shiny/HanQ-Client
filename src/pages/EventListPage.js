@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
-import { HashLink } from 'react-router-hash-link';
 import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 // @mui
 import { Card, Container, CardContent, Typography, Breadcrumbs, Box, Link } from '@mui/material';
 import { useSettingsContext } from '../components/settings';
@@ -9,6 +10,7 @@ import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenter
 // apis
 import { getEventListAll, getTaggedEventList } from '../apis/event.ts';
 import EmptyContent from '../components/empty-content/EmptyContent';
+import { PATH_DASHBOARD } from '../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -58,8 +60,11 @@ export default function EventList() {
               <CarouselCenterMode data={taggedEventList} />
             ) : (
               <EmptyContent
-                title="관심 태그와 관련된 이벤트가 없습니다."
-                description="프로필 설정에서 관심 태그를 등록해보세요."
+                to={PATH_DASHBOARD.user}
+                component={RouterLink}
+                sx={{ textDecoration: 'none' }}
+                title="프로필 설정에서 관심 태그를 등록하세요."
+                description="클릭하면 프로필 설정 페이지로 이동합니다."
               />
             )}
           </CardContent>

@@ -87,9 +87,23 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {taggedEventList.slice(0, 5).map((event) => (
-              <EventItem key={event.id} event={event} />
-            ))}
+            {taggedEventList.length ? (
+              taggedEventList.slice(0, 5).map((event) => <EventItem key={event.id} event={event} />)
+            ) : (
+              <ListItemButton
+                to={PATH_DASHBOARD.user}
+                component={RouterLink}
+                sx={{
+                  py: 1.5,
+                  px: 2.5,
+                }}
+              >
+                <ListItemText
+                  primary="프로필 설정에서 관심 태그를 등록하세요."
+                  secondary="클릭하면 프로필 설정 페이지로 이동합니다."
+                />
+              </ListItemButton>
+            )}
           </List>
         </Scrollbar>
       </MenuPopover>
