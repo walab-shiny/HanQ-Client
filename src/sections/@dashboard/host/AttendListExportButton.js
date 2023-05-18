@@ -1,36 +1,98 @@
-import * as xlsx from 'xlsx';
+import ExcelJS from 'exceljs';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
+import { saveAs } from 'file-saver';
 import Iconify from '../../../components/iconify';
-import { fDateString } from '../../../utils/formatTime';
+import { fDateString, fTimeString } from '../../../utils/formatTime';
 
-function excel(data, eventName) {
-  const filename = `${eventName} 참여자 명단.xlsx`;
-  const jsonData = data.map((item) => ({
-    studentNum: item.studentNum,
-    name: item.name,
-    taggedAt: fDateString(item.taggedAt),
-  }));
-  const Heading = [['학번', '이름', '태깅 시간']];
+function excel(data, event) {
+  const filename = `${event.name} 참여자 명단.xlsx`;
+  const duration = `${fDateString(event.openAt)} ~ ${fTimeString(event.closeAt)}`;
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('참여자 명단');
 
-  const wb = xlsx.utils.book_new();
-  const ws = xlsx.utils.json_to_sheet([]);
-  xlsx.utils.sheet_add_aoa(ws, Heading);
-  xlsx.utils.sheet_add_json(ws, jsonData, { origin: 'A2', skipHeader: true });
-  xlsx.utils.book_append_sheet(wb, ws, '참여자 명단');
-  xlsx.writeFile(wb, filename);
+  worksheet.addRow([]);
+
+  // Set title
+  const titleRow = worksheet.addRow(['']);
+  titleRow.height = 30; // Set height of the first row to 30
+  const titleCell = titleRow.getCell(2); // Add an empty cell on the left side
+  titleCell.value = event.name;
+  titleCell.font = { bold: true, size: 16, underline: true };
+  titleCell.alignment = { vertical: 'middle' };
+
+  const durationRow = worksheet.addRow(['', '', '일시:', duration]);
+  durationRow.getCell(3).alignment = { vertical: 'middle', horizontal: 'right' };
+  const durationCell = durationRow.getCell(4);
+  durationCell.alignment = { vertical: 'middle', horizontal: 'right' };
+
+  // Set column headers
+  const columnHeaderRow = worksheet.addRow(['', '학번', '이름', '태깅시간']);
+  columnHeaderRow.font = { bold: true, underline: true };
+  columnHeaderRow.alignment = { vertical: 'middle' };
+
+  // Set data rows
+  const dataStartRow = 5; // Start the data rows two rows below the title
+  data.forEach((item) => {
+    const rowData = ['', item.studentNum, item.name, fDateString(item.taggedAt)]; // Add an empty cell on the left side
+    worksheet.addRow(rowData);
+  });
+
+  // Apply cell formatting to column headers
+  columnHeaderRow.eachCell((cell, colNumber) => {
+    if (colNumber === 1) return;
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF2065D1' }, // Primary color
+    };
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.alignment = { vertical: 'middle' };
+  });
+
+  // Apply cell formatting to data rows
+  const dataRows = worksheet.getRows(dataStartRow, worksheet.rowCount - dataStartRow + 1);
+  dataRows.forEach((row, index) => {
+    row.getCell(2).alignment = { horizontal: 'left' };
+
+    if (index % 2 === 0) {
+      // Apply zebra striping to data rows
+      row.eachCell((cell, colNumber) => {
+        if (colNumber === 1) return;
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFEFEFEF' }, // Light gray color
+        };
+      });
+    }
+  });
+
+  // Set column widths
+  worksheet.getColumn(1).width = 12; // Empty column
+  worksheet.getColumn(2).width = 12; // 학번
+  worksheet.getColumn(3).width = 12; // 이름
+  worksheet.getColumn(4).width = 28; // 태깅시간
+
+  // Save the workbook as a file
+  workbook.xlsx.writeBuffer().then((buffer) => {
+    const dataBlob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    saveAs(dataBlob, filename);
+  });
 }
 
 AttendListExportButton.propTypes = {
   data: PropTypes.array,
-  eventName: PropTypes.string,
+  event: PropTypes.object,
 };
 
-export default function AttendListExportButton({ data, eventName }) {
+export default function AttendListExportButton({ data, event }) {
   return (
     <>
       <Button
-        onClick={() => excel(data, eventName)}
+        onClick={() => excel(data, event)}
         variant="contained"
         color="secondary"
         startIcon={<Iconify icon="eva:download-outline" />}

@@ -109,7 +109,7 @@ export default function ParticipantViewModal({ event }) {
           <Button onClick={handleRefresh} startIcon={<Iconify icon="eva:refresh-outline" />} color="secondary">
             새로고침
           </Button>
-          <ExportButton data={participants} eventName={event.name} />
+          <ExportButton data={participants} event={event} />
           <Button onClick={handleClose} variant="outlined">
             닫기
           </Button>
