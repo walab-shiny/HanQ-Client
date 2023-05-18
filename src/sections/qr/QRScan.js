@@ -176,7 +176,7 @@ export default function QRScan({ event, open, onClose }) {
             </TableHead>
             <TableBody>
               {deviceList.length ? (
-                deviceList
+                [...deviceList]
                   .reverse()
                   .slice(0, 5)
                   .map((user, index) => (
