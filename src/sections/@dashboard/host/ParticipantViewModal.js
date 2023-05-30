@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
+  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
@@ -47,6 +48,15 @@ export default function ParticipantViewModal({ event }) {
     }
   };
 
+  const handleSort = (key) => {
+    const sorted = [...participants].sort((a, b) => {
+      if (a[key] < b[key]) return -1;
+      if (a[key] > b[key]) return 1;
+      return 0;
+    });
+    setParticipants(sorted);
+  };
+
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +72,17 @@ export default function ParticipantViewModal({ event }) {
         </span>
       </Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>이벤트 참여자 명단</DialogTitle>
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          이벤트 참여자 명단
+          <ButtonGroup color="secondary">
+            <Button startIcon={<Iconify icon="eva:hash-outline" />} onClick={() => handleSort('studentNum')}>
+              학번순
+            </Button>
+            <Button startIcon={<Iconify icon="eva:clock-outline" />} onClick={() => handleSort('taggedAt')}>
+              태깅시간순
+            </Button>
+          </ButtonGroup>
+        </DialogTitle>
         <DialogContent>
           <TableContainer
             sx={{
@@ -76,22 +96,20 @@ export default function ParticipantViewModal({ event }) {
             <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">학번</TableCell>
-                  <TableCell align="center">이름</TableCell>
-                  <TableCell align="center">학부</TableCell>
-                  <TableCell align="center">태깅시간</TableCell>
+                  <TableCell>학부</TableCell>
+                  <TableCell>학번</TableCell>
+                  <TableCell>이름</TableCell>
+                  <TableCell>태깅시간</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {participants?.length ? (
                   participants.map((participant) => (
                     <TableRow key={participant.studentNum} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell align="center" component="th" scope="row">
-                        {participant.studentNum}
-                      </TableCell>
-                      <TableCell align="center">{participant.name}</TableCell>
-                      <TableCell align="center">{participant.department}</TableCell>
-                      <TableCell align="center">{fDateString(participant.taggedAt)}</TableCell>
+                      <TableCell>{participant.department}</TableCell>
+                      <TableCell>{participant.studentNum}</TableCell>
+                      <TableCell>{participant.name}</TableCell>
+                      <TableCell>{fDateString(participant.taggedAt)}</TableCell>
                     </TableRow>
                   ))
                 ) : (
