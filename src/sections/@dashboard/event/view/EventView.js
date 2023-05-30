@@ -21,6 +21,7 @@ import Markdown from '../../../../components/markdown';
 import Scrollbar from '../../../../components/scrollbar';
 import EmptyContent from '../../../../components/empty-content';
 import Iconify from '../../../../components/iconify/Iconify';
+import { updateViews } from '../../../../apis/views';
 
 // ----------------------------------------------------------------------
 
@@ -53,6 +54,7 @@ export default function NewEventView({ values, isLink = false }) {
   const hasHero = name || image;
 
   const handleOpen = () => {
+    updateViews(values.id);
     setOpen(true);
   };
   const handleClose = () => {

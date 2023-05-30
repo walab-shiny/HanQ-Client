@@ -10,7 +10,7 @@ import { getAttendEventList } from '../apis/event.ts';
 // sections
 import { AttendEventList } from '../sections/@dashboard/attend';
 
-export default function AttendList() {
+export default function AttendListPage() {
   const { themeStretch } = useSettingsContext();
   const [loading, setLoading] = useState(true);
   const [eventData, setEventData] = useState([]);

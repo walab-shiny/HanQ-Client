@@ -8,24 +8,31 @@ import { useSettingsContext } from '../components/settings';
 // sections
 import CarouselCenterMode from '../sections/@dashboard/event/list/CarouselCenterMode';
 // apis
-import { getEventListAll, getTaggedEventList } from '../apis/event.ts';
+import { getEventListAll, getHotEventList, getTaggedEventList } from '../apis/event.ts';
 import EmptyContent from '../components/empty-content/EmptyContent';
 import { PATH_DASHBOARD } from '../routes/paths';
+import { EventList } from '../sections/@dashboard/event/list';
 
 // ----------------------------------------------------------------------
 
-export default function EventList() {
+export default function EventListPage() {
   const { themeStretch } = useSettingsContext();
 
+  const [loading, setLoading] = useState(true);
   const [taggedEventList, setTaggedEventList] = useState([]);
-  const [eventList, setEventList] = useState([]);
+  const [hotEventList, setHotEventList] = useState([]);
+  const [allEventList, setAllEventList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const taggedEventList = await getTaggedEventList();
-      const eventList = await getEventListAll();
+      const hotEventList = await getHotEventList();
+      const allEventList = await getEventListAll();
       setTaggedEventList(taggedEventList);
-      setEventList(eventList);
+      setHotEventList(hotEventList);
+      setAllEventList(allEventList);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -47,6 +54,9 @@ export default function EventList() {
             </Link>
             <Link component={HashLink} smooth to="#hot" color="inherit">
               HOT
+            </Link>
+            <Link component={HashLink} smooth to="#all" color="inherit">
+              ALL
             </Link>
           </Breadcrumbs>
         </Box>
@@ -70,18 +80,26 @@ export default function EventList() {
           </CardContent>
         </Card>
 
-        <Card id="hot">
+        <Card sx={{ mb: 7 }} id="hot">
           <CardContent>
             <Typography variant="h4" mb={4}>
               HOT 🔥
             </Typography>
-            {eventList.length ? (
-              <CarouselCenterMode data={eventList} />
+            {hotEventList.length ? (
+              <CarouselCenterMode data={hotEventList} />
             ) : (
               <EmptyContent title="인기 이벤트가 없습니다." />
             )}
           </CardContent>
         </Card>
+
+        <Box id="all">
+          <Typography variant="h4" mb={4}>
+            ALL 📜
+          </Typography>
+
+          <EventList events={allEventList} loading={loading} />
+        </Box>
       </Container>
     </>
   );
