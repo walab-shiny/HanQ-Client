@@ -25,7 +25,7 @@ export default function Analytics({ list }) {
             )) || <Iconify icon="eva:twitter-fill" color="#1C9CEA" width={32} />}
 
           <Typography variant="h6" sx={{ mt: 0.5 }}>
-            {fShortenNumber(site.total)}
+            {fShortenNumber(site.count)}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>

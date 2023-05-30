@@ -11,12 +11,12 @@ import TextMaxLine from '../../../components/text-max-line';
 
 // ----------------------------------------------------------------------
 
-EventCard.propTypes = {
+AttendEventCard.propTypes = {
   event: PropTypes.object,
   fetchData: PropTypes.func,
 };
 
-export default function EventCard({ event, fetchData }) {
+export default function AttendEventCard({ event, fetchData }) {
   const { name, image, status, report } = event;
 
   return (
