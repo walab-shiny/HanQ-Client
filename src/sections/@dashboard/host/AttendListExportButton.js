@@ -21,20 +21,20 @@ function excel(data, event) {
   titleCell.font = { bold: true, size: 16, underline: true };
   titleCell.alignment = { vertical: 'middle' };
 
-  const durationRow = worksheet.addRow(['', '', '일시:', duration]);
-  durationRow.getCell(3).alignment = { vertical: 'middle', horizontal: 'right' };
-  const durationCell = durationRow.getCell(4);
+  const durationRow = worksheet.addRow(['', '', '', '일시:', duration]);
+  durationRow.getCell(4).alignment = { vertical: 'middle', horizontal: 'right' };
+  const durationCell = durationRow.getCell(5);
   durationCell.alignment = { vertical: 'middle', horizontal: 'right' };
 
   // Set column headers
-  const columnHeaderRow = worksheet.addRow(['', '학번', '이름', '태깅시간']);
+  const columnHeaderRow = worksheet.addRow(['', '학부', '학번', '이름', '태깅시간']);
   columnHeaderRow.font = { bold: true, underline: true };
   columnHeaderRow.alignment = { vertical: 'middle' };
 
   // Set data rows
   const dataStartRow = 5; // Start the data rows two rows below the title
   data.forEach((item) => {
-    const rowData = ['', item.studentNum, item.name, fDateString(item.taggedAt)]; // Add an empty cell on the left side
+    const rowData = ['', item.department, item.studentNum, item.name, fDateString(item.taggedAt)]; // Add an empty cell on the left side
     worksheet.addRow(rowData);
   });
 
@@ -53,7 +53,7 @@ function excel(data, event) {
   // Apply cell formatting to data rows
   const dataRows = worksheet.getRows(dataStartRow, worksheet.rowCount - dataStartRow + 1);
   dataRows.forEach((row, index) => {
-    row.getCell(2).alignment = { horizontal: 'left' };
+    row.getCell(3).alignment = { horizontal: 'left' };
 
     if (index % 2 === 0) {
       // Apply zebra striping to data rows
@@ -70,9 +70,10 @@ function excel(data, event) {
 
   // Set column widths
   worksheet.getColumn(1).width = 12; // Empty column
-  worksheet.getColumn(2).width = 12; // 학번
-  worksheet.getColumn(3).width = 12; // 이름
-  worksheet.getColumn(4).width = 28; // 태깅시간
+  worksheet.getColumn(2).width = 20; // 학부
+  worksheet.getColumn(3).width = 12; // 학번
+  worksheet.getColumn(4).width = 12; // 이름
+  worksheet.getColumn(5).width = 28; // 태깅시간
 
   // Save the workbook as a file
   workbook.xlsx.writeBuffer().then((buffer) => {

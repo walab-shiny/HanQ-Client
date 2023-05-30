@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 // @mui
 import { Box, InputAdornment } from '@mui/material';
 // components
-import { SkeletonProductItem } from '../../../components/skeleton';
-import AttendEventCard from './AttendEventCard';
-import Iconify from '../../../components/iconify';
-import { CustomTextField } from '../../../components/custom-input';
+import { SkeletonProductItem } from '../../../../components/skeleton';
+import EventCard from './EventCard';
+import Iconify from '../../../../components/iconify';
+import { CustomTextField } from '../../../../components/custom-input';
 //
 
 // ----------------------------------------------------------------------
 
-AttendEventList.propTypes = {
+EventList.propTypes = {
   loading: PropTypes.bool,
   events: PropTypes.array,
-  fetchData: PropTypes.func,
 };
 
-export default function AttendEventList({ events, loading, fetchData }) {
+export default function EventList({ events, loading }) {
   const [search, setSearch] = useState('');
   const handleSearch = (event) => {
     setSearch(event.target.value);
@@ -52,11 +51,7 @@ export default function AttendEventList({ events, loading, fetchData }) {
         sx={{ mt: 5 }}
       >
         {(loading ? [...Array(12)] : filteredEvents).map((event, index) =>
-          event ? (
-            <AttendEventCard key={event.id} event={event} fetchData={fetchData} />
-          ) : (
-            <SkeletonProductItem key={index} />
-          )
+          event ? <EventCard key={event.id} event={event} /> : <SkeletonProductItem key={index} />
         )}
         {filteredEvents.length === 0 && !loading && <Box>결과가 없습니다.</Box>}
       </Box>
