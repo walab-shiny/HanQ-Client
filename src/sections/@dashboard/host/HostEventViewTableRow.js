@@ -4,7 +4,15 @@ import { TableRow, TableCell, Typography, Chip, ListItem, Stack } from '@mui/mat
 // components
 import Label from '../../../components/label';
 import { fDateString } from '../../../utils/formatTime';
-import { CloseEventModal, EditEventModal, ParticipantViewModal, QRScanModal, ReportViewModal, ShareModal } from '.';
+import {
+  CloseEventModal,
+  DeleteEventModal,
+  EditEventModal,
+  ParticipantViewModal,
+  QRScanModal,
+  ReportViewModal,
+  ShareModal,
+} from '.';
 import { EventView } from '../event/view';
 
 // ----------------------------------------------------------------------
@@ -68,6 +76,7 @@ export default function HostEventViewTableRow({ row, index, fetchData }) {
             <ReportViewModal event={row} />
             <EditEventModal event={row} fetchData={fetchData} />
             <CloseEventModal event={row} fetchData={fetchData} />
+            <DeleteEventModal event={row} fetchData={fetchData} />
           </Stack>
         </TableCell>
 
