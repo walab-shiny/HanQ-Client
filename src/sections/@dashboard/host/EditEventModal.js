@@ -43,7 +43,7 @@ export default function EditEventModal({ event, fetchData }) {
   const handleEditEvent = async (data) => {
     try {
       await editEvent(event.id, data);
-      fetchData();
+      await fetchData();
       enqueueSnackbar('수정되었습니다.', {
         variant: 'success',
       });

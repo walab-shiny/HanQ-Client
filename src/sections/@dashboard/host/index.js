@@ -5,5 +5,6 @@ export { default as ParticipantViewModal } from './ParticipantViewModal';
 export { default as ReportViewModal } from './ReportViewModal';
 export { default as EditEventModal } from './EditEventModal';
 export { default as CloseEventModal } from './CloseEventModal';
+export { default as DeleteEventModal } from './DeleteEventModal';
 export { default as QRScanModal } from './QRScanModal';
 export { default as ShareModal } from './ShareModal';

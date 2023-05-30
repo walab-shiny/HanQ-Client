@@ -48,7 +48,7 @@ export const getEvent = async (id: number) => {
 };
 
 export const addEvent = async (data: IEvent) => {
-  const image = data.image ? await uploadImage(data.image) : null;
+  const image = data.image ? await uploadImage(data.image) : '';
   const response = await axios.post('/api/event', {
     name: data.name,
     openAt: moment(new Date(data.openAt)).format('YYYY-MM-DDTHH:mm:ss'),
@@ -90,6 +90,11 @@ export const uploadImage = async (file: File) => {
 
 export const closeEvent = async (id: number) => {
   const response = await axios.post('/api/event/close', { id });
+  return response;
+};
+
+export const deleteEvent = async (id: number) => {
+  const response = await axios.post('/api/event/delete', { id });
   return response;
 };
 

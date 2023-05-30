@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Iconify from '../../components/iconify';
-import { sendQrRequest } from '../../apis/qr';
+import { QRAttend } from '../../apis/qr';
 // components
 import { useSnackbar } from '../../components/snackbar';
 import Logo from '../../components/logo';
@@ -38,40 +38,36 @@ QRScan.propTypes = {
 export default function QRScan({ event, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const [resultText, setResultText] = useState('');
-  const [deviceList, setDeviceList] = useState([]);
-  const [fullList, setFullList] = useState([]);
+  const [attendList, setAttendList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
 
   const playSound = (sound) => {
     const audio = new Audio(sound);
     audio.play();
   };
 
-  const addUserData = (user) => {
-    setDeviceList((prev) => [...prev, user]);
-  };
-
-  const fetchData = async () => {
-    const userList = await getParticipantList(event.id);
-    setFullList(userList);
+  const addAttendData = (user) => {
+    setAttendList((prev) => [...prev, user]);
   };
 
   const handleOnResult = async (resultString) => {
-    const response = await sendQrRequest({ eventId: +event.id, qrString: resultString });
+    const response = await QRAttend({ eventId: +event.id, qrString: resultString });
+
     if (response.status === 200) {
-      const userData = response.data;
-      if (!userData.isDuplicate) {
+      const attendData = response.data;
+      if (!attendData.isDuplicate) {
         playSound(successSound);
-        enqueueSnackbar(`${userData.name}님 출석처리 되었습니다.`, {
+        enqueueSnackbar(`${attendData.name}님 출석처리 되었습니다.`, {
           variant: 'success',
         });
-        addUserData(userData);
+        addAttendData(attendData);
       } else {
         playSound(failsSound);
-        enqueueSnackbar(`${userData.name}님 이미 태깅 되었습니다.`, {
+        enqueueSnackbar(`${attendData.name}님 이미 태깅 되었습니다.`, {
           variant: 'warning',
         });
       }
-      fetchData();
+      setTotalCount(attendData.total);
     } else {
       enqueueSnackbar(`오류가 발생했습니다.`, {
         variant: 'error',
@@ -80,12 +76,12 @@ export default function QRScan({ event, open, onClose }) {
   };
 
   useEffect(() => {
-    const initData = async () => {
-      const userList = await getParticipantList(event.id);
-      setDeviceList(userList);
-      setFullList(userList);
+    const fetchData = async () => {
+      const attendList = await getParticipantList(event.id);
+      setAttendList(attendList);
+      setTotalCount(attendList.length);
     };
-    initData();
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -164,7 +160,7 @@ export default function QRScan({ event, open, onClose }) {
           }}
         >
           <Typography variant="subtitle1" sx={{ textAlign: 'center', my: 1 }}>
-            최근 5명 출석자 목록 (총 {fullList.length}명)
+            최근 5명 출석자 목록 (총 {totalCount}명)
           </Typography>
           <Table size="small">
             <TableHead>
@@ -175,8 +171,8 @@ export default function QRScan({ event, open, onClose }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {deviceList.length ? (
-                [...deviceList]
+              {attendList.length ? (
+                [...attendList]
                   .reverse()
                   .slice(0, 5)
                   .map((user, index) => (
