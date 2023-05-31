@@ -73,7 +73,7 @@ export default function ParticipantViewModal({ event }) {
       </Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          이벤트 참여자 명단
+          이벤트 참여자 명단 (총 {participants?.length}명)
           <ButtonGroup color="secondary">
             <Button startIcon={<Iconify icon="eva:hash-outline" />} onClick={() => handleSort('studentNum')}>
               학번순
@@ -96,6 +96,7 @@ export default function ParticipantViewModal({ event }) {
             <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
+                  <TableCell>순번</TableCell>
                   <TableCell>학부</TableCell>
                   <TableCell>학번</TableCell>
                   <TableCell>이름</TableCell>
@@ -104,8 +105,9 @@ export default function ParticipantViewModal({ event }) {
               </TableHead>
               <TableBody>
                 {participants?.length ? (
-                  participants.map((participant) => (
+                  participants.map((participant, index) => (
                     <TableRow key={participant.studentNum} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell>{index + 1}</TableCell>
                       <TableCell>{participant.department}</TableCell>
                       <TableCell>{participant.studentNum}</TableCell>
                       <TableCell>{participant.name}</TableCell>
