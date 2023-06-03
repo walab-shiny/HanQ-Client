@@ -91,10 +91,7 @@ export default function UserEditForm({ user, reloadUser }) {
 
   const onSubmit = async (data) => {
     try {
-      await updateUser({
-        likes: data.tags.map((tag) => tag.id),
-        picture: data.picture,
-      });
+      await updateUser(data);
       await reloadUser(user.id);
       reset();
       enqueueSnackbar('사용자 정보가 변경되었습니다.', 'success');
