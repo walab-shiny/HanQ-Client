@@ -1,8 +1,11 @@
 import axios from '../utils/axios';
+import { uploadImage } from './event.ts';
 
-export const updateUser = async ({ likes }) => {
+export const updateUser = async (data) => {
+  const picture = data.picture ? await uploadImage(data.picture) : '';
   const response = await axios.post('/api/user/update', {
-    likes,
+    likes: data.tags.map((tag) => tag.id),
+    picture,
   });
-  return response.data;
+  return response;
 };
