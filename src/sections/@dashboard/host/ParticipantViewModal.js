@@ -116,7 +116,7 @@ export default function ParticipantViewModal({ event }) {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell align="center" colSpan={4}>
+                    <TableCell align="center" colSpan={5}>
                       참여자가 없습니다.
                     </TableCell>
                   </TableRow>
