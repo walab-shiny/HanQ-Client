@@ -2,8 +2,6 @@
 
 1. [https://hanq.netlify.app/](https://hanq.netlify.app/) 에 접속하면 서비스에 접속할 수 있습니다.
 
-   (현재는 방학 기간이어서 서버가 쉬고 있습니다.)
-
    ![img](https://lh5.googleusercontent.com/GiPdUxXcln0XNukhrTk5-WpuQHUa0bjOzEKFzNSWbkBgXuqcnm_c7eInO9iKxL19M6nluJNJC6Ovf-7Aw42S3pDKR5jtfi0N7N34MJYiXD1drByKqi4INMj6EzmbpzM-38M4H-dzYOdN)
 
 2. 첫 로그인 시, 학번 또는 소속을 입력하여 회원 가입을 합니다.
