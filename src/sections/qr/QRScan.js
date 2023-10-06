@@ -156,18 +156,29 @@ export default function QRScan({ event, open, onClose }) {
             right: 32,
             bottom: 32,
             display: { xs: 'none', sm: 'block' },
-            width: 300,
+            width: 380,
+            borderColor: 'error.main',
+            borderWidth: 2,
           }}
         >
-          <Typography variant="subtitle1" sx={{ textAlign: 'center', my: 1 }}>
+          <Typography variant="h2" sx={{ textAlign: 'center', my: 1 }} color="error.main">
+            출석 확인하세요!
+          </Typography>
+          <Typography variant="h5" sx={{ textAlign: 'center', my: 1 }}>
             최근 5명 출석자 목록 (총 {totalCount}명)
           </Typography>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell align="center">학번</TableCell>
-                <TableCell align="center">이름</TableCell>
-                <TableCell align="center">스캔 시간</TableCell>
+                <TableCell align="center">
+                  <Typography variant="subtitle1">학번</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="subtitle1">이름</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="subtitle1">스캔 시간</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -177,15 +188,23 @@ export default function QRScan({ event, open, onClose }) {
                   .slice(0, 5)
                   .map((user, index) => (
                     <TableRow key={index}>
-                      <TableCell align="center">{user.studentNum}</TableCell>
-                      <TableCell align="center">{maskingName(user.name)}</TableCell>
-                      <TableCell align="center">{fTimeString(user.taggedAt)}</TableCell>
+                      <TableCell align="center">
+                        <Typography variant="h6">{user.studentNum}</Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="h6">{maskingName(user.name)}</Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="h6">{fTimeString(user.taggedAt)}</Typography>
+                      </TableCell>
                     </TableRow>
                   ))
               ) : (
                 <TableRow>
                   <TableCell align="center" colSpan={3}>
-                    출석자가 없습니다.
+                    <Typography variant="h6" sx={{ my: 1 }}>
+                      출석자가 없습니다.
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}
@@ -204,8 +223,8 @@ export default function QRScan({ event, open, onClose }) {
         <Typography variant="h1" sx={{ mt: 10, mb: 3 }}>
           {event.name}
         </Typography>
-        <Typography variant="h3" fontWeight={500}>
-          스마트캠퍼스 앱에서 QR 스크린을 열어서 태깅해 주세요!
+        <Typography variant="h2" fontWeight={600}>
+          스마트캠퍼스 앱에서 QR 스크린을 열고 태깅해 주세요!
         </Typography>
       </Stack>
       <Box sx={{ position: 'fixed' }}>
