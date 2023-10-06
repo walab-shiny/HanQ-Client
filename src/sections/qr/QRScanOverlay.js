@@ -17,7 +17,7 @@ export default function QRScanOverlay() {
         borderBottom: `calc(50vh - 150px) solid ${alphaColor}`,
         borderLeft: `calc(50vw - 150px) solid ${alphaColor}`,
         borderRight: `calc(50vw - 150px) solid ${alphaColor}`,
-        boxShadow: `${palette.primary.light} 0px 0px 0px 5px inset`,
+        boxShadow: `${palette.error.main} 0px 0px 0px 8px inset`,
       }}
     />
   );
