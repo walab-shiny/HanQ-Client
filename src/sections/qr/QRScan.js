@@ -2,8 +2,13 @@ import PropTypes from 'prop-types';
 import { QrReader } from 'react-qr-reader';
 import {
   Box,
+  Button,
   Card,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   IconButton,
   Stack,
@@ -27,6 +32,7 @@ import { maskingName } from '../../utils/formatName';
 import { fTimeString } from '../../utils/formatTime';
 import successSound from '../../assets/audios/success.mp3';
 import failsSound from '../../assets/audios/fail.mp3';
+import tadaSound from '../../assets/audios/tada.mp3';
 import Footer from '../../layouts/dashboard/footer';
 
 QRScan.propTypes = {
@@ -40,6 +46,12 @@ export default function QRScan({ event, open, onClose }) {
   const [resultText, setResultText] = useState('');
   const [attendList, setAttendList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [childOpen, setChildOpen] = useState(false);
+  const [childText, setChildText] = useState('');
+
+  const handleCloseChild = () => {
+    setChildOpen(false);
+  };
 
   const playSound = (sound) => {
     const audio = new Audio(sound);
@@ -52,9 +64,11 @@ export default function QRScan({ event, open, onClose }) {
 
   const handleOnResult = async (resultString) => {
     const response = await QRAttend({ eventId: +event.id, qrString: resultString });
+    const isGiftEvent = event.hostId === 840;
 
     if (response.status === 200) {
       const attendData = response.data;
+      const totalCount = attendData.total;
       if (!attendData.isDuplicate) {
         playSound(successSound);
         enqueueSnackbar(`${attendData.name}님 출석처리 되었습니다.`, {
@@ -67,7 +81,12 @@ export default function QRScan({ event, open, onClose }) {
           variant: 'warning',
         });
       }
-      setTotalCount(attendData.total);
+      if (isGiftEvent && totalCount % 20 === 0 && totalCount <= 1000 && totalCount !== 0) {
+        playSound(tadaSound);
+        setChildText(`축하합니다 ${attendData.name}님! 경품에 당첨되셨습니다!\n담당자에게 경품을 수령하세요.`);
+        setChildOpen(true);
+      }
+      setTotalCount(totalCount);
     } else {
       enqueueSnackbar(`오류가 발생했습니다.`, {
         variant: 'error',
@@ -243,6 +262,31 @@ export default function QRScan({ event, open, onClose }) {
         />
       </Box>
       <Footer />
+      <ChildModal open={childOpen} handleClose={handleCloseChild} text={childText} />
     </Dialog>
   );
 }
+
+function ChildModal({ open, handleClose, text }) {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle variant="h2">축하합니다!</DialogTitle>
+      <DialogContent sx={{ width: 480, height: 120 }}>
+        <DialogContentText variant="h5" sx={{ whiteSpace: 'pre-wrap', textAlign: 'center' }}>
+          {text}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} size="large" variant="contained">
+          닫기
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+ChildModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  text: PropTypes.string,
+};
