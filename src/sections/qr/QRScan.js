@@ -81,7 +81,7 @@ export default function QRScan({ event, open, onClose }) {
           variant: 'warning',
         });
       }
-      if (isGiftEvent && totalCount % 20 === 0 && totalCount <= 1000 && totalCount !== 0) {
+      if (isGiftEvent && totalCount % 10 === 0 && totalCount <= 1000 && totalCount !== 0) {
         playSound(tadaSound);
         setChildText(`축하합니다 ${attendData.name}님! 경품에 당첨되셨습니다!\n담당자에게 경품을 수령하세요.`);
         setChildOpen(true);
