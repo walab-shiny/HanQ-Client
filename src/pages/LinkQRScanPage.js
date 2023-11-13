@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Backdrop, CircularProgress, Stack, Typography } from '@mui/material';
 import { checkEventPassword } from '../apis/event.ts';
 import { QRScan } from '../sections/qr';
 
 export default function LinkQRScanPage() {
+  const [init, setInit] = useState(false);
   const [event, setEvent] = useState();
 
   const [qr, setQr] = useState(false);
@@ -21,8 +23,10 @@ export default function LinkQRScanPage() {
         } else {
           alert('비밀번호가 일치하지 않습니다.');
         }
+        setInit(true);
       } catch (error) {
         alert('이벤트 정보가 틀립니다.');
+        setInit(true);
       }
     };
 
@@ -38,7 +42,21 @@ export default function LinkQRScanPage() {
 
   return (
     <>
-      {event ? <QRScan event={event} open={qr} onClose={handleCloseQr} /> : <div>QR 스캔 페이지를 열 수 없습니다.</div>}
+      {init ? (
+        <>
+          {event ? (
+            <QRScan event={event} open={qr} onClose={handleCloseQr} />
+          ) : (
+            <Stack justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
+              <Typography variant="h6">이벤트를 찾을 수 없습니다.</Typography>
+            </Stack>
+          )}
+        </>
+      ) : (
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </>
   );
 }
