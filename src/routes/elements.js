@@ -14,6 +14,7 @@ const Loadable = (Component) => (props) =>
 // ----------------------------------------------------------------------
 
 export const LoginPage = Loadable(lazy(() => import('../pages/LoginPage')));
+export const LinkQRScanPage = Loadable(lazy(() => import('../pages/LinkQRScanPage')));
 
 export const EventListPage = Loadable(lazy(() => import('../pages/EventListPage')));
 export const AttendListPage = Loadable(lazy(() => import('../pages/AttendListPage')));

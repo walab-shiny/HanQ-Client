@@ -33,18 +33,16 @@ export default function ShareModal({ event }) {
       return;
     }
     await setEventPassword(event.id, password);
-    setPassword('');
-    alert(
-      `이벤트 코드와 비밀번호를 잊어버리지 않도록 메모한 후,\n다른 기기에서 입력해주세요.\n\n이벤트 코드: ${event.code}\n비밀번호: ${password}`
-    );
+    window.prompt('링크를 복사하세요.', `${window.location.origin}/qr?code=${event.code}&password=${password}`);
     enqueueSnackbar('비밀번호가 설정되었습니다.', { variant: 'success' });
+    setPassword('');
     handleClose();
   };
   const isClosed = event.status === '종료됨';
 
   return (
     <>
-      <Tooltip title={isClosed ? '이벤트가 종료되었습니다.' : '다른 기기에서 출석 QR 스캔 페이지 열기'}>
+      <Tooltip title={isClosed ? '이벤트가 종료되었습니다.' : 'QR 스캔 페이지 URL 링크 생성'}>
         <span>
           <IconButton onClick={handleOpen} disabled={isClosed}>
             <Iconify icon="eva:link-outline" />
@@ -52,11 +50,11 @@ export default function ShareModal({ event }) {
         </span>
       </Tooltip>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
-        <DialogTitle>다른 기기에서 출석 QR 스캔 페이지 열기</DialogTitle>
+        <DialogTitle>URL 링크로 출석 QR 스캔 페이지 열기</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
             <Typography variant="subtitle1" color="text.secondary" sx={{ whiteSpace: 'pre-wrap' }} gutterBottom>
-              다른 기기에서 해당 코드와 비밀번호를 입력하면{'\n'}로그인 없이 출석 QR 스캔 페이지를 열 수 있습니다.
+              URL 링크를 생성하면{'\n'}로그인 없이 출석 QR 스캔 페이지를 열 수 있습니다.
             </Typography>
             <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="body2" color="text.secondary">

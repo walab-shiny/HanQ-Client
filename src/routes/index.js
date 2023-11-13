@@ -17,6 +17,7 @@ import {
   UserEditPage,
   NewEventPage,
   RequestHostPage,
+  LinkQRScanPage,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -34,6 +35,10 @@ export default function Router() {
               <LoginPage />
             </GuestGuard>
           ),
+        },
+        {
+          path: 'qr',
+          element: <LinkQRScanPage />,
         },
       ],
     },

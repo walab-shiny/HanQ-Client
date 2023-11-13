@@ -10,6 +10,7 @@ const ROOTS_DASHBOARD = '/hanq';
 
 export const PATH_AUTH = {
   login: '/login',
+  qr: '/qr',
 };
 
 export const PATH_DASHBOARD = {
