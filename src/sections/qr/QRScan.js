@@ -64,7 +64,7 @@ export default function QRScan({ event, open, onClose }) {
 
   const handleOnResult = async (resultString) => {
     const response = await QRAttend({ eventId: +event.id, qrString: resultString });
-    const isGiftEvent = event.hostId === 840;
+    const isGiftEvent = event.hostId === 51;
 
     if (response.status === 200) {
       const attendData = response.data;
