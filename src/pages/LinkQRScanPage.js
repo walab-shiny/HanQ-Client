@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Backdrop, CircularProgress, Stack, Typography } from '@mui/material';
+import { Backdrop, Stack, Typography } from '@mui/material';
 import { checkEventPassword } from '../apis/event.ts';
 import { QRScan } from '../sections/qr';
 
@@ -24,6 +24,11 @@ export default function LinkQRScanPage() {
           alert('비밀번호가 일치하지 않습니다.');
         }
         setInit(true);
+
+        const url = new URL(window.location);
+        url.searchParams.delete('code');
+        url.searchParams.delete('password');
+        window.history.replaceState({}, '', url);
       } catch (error) {
         alert('이벤트 정보가 틀립니다.');
         setInit(true);
@@ -53,9 +58,7 @@ export default function LinkQRScanPage() {
           )}
         </>
       ) : (
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
-          <CircularProgress color="inherit" />
-        </Backdrop>
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open />
       )}
     </>
   );

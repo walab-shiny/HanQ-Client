@@ -35,6 +35,15 @@ import failsSound from '../../assets/audios/fail.mp3';
 import tadaSound from '../../assets/audios/tada.mp3';
 import Footer from '../../layouts/dashboard/footer';
 
+const EVENT_HOST_ID = 51;
+const EVENT_GIFT_INTERVAL = 10;
+const EVENT_GIFT_MAX = 1000;
+
+// For testing
+// const EVENT_HOST_ID = 7;
+// const EVENT_GIFT_INTERVAL = 1;
+// const EVENT_GIFT_MAX = 1000;
+
 QRScan.propTypes = {
   event: PropTypes.object,
   open: PropTypes.bool,
@@ -64,7 +73,7 @@ export default function QRScan({ event, open, onClose }) {
 
   const handleOnResult = async (resultString) => {
     const response = await QRAttend({ eventId: +event.id, qrString: resultString });
-    const isGiftEvent = event.hostId === 51;
+    const isGiftEvent = event.hostId === EVENT_HOST_ID;
 
     if (response.status === 200) {
       const attendData = response.data;
@@ -75,16 +84,17 @@ export default function QRScan({ event, open, onClose }) {
           variant: 'success',
         });
         addAttendData(attendData);
+
+        if (isGiftEvent && totalCount % EVENT_GIFT_INTERVAL === 0 && totalCount <= EVENT_GIFT_MAX && totalCount !== 0) {
+          playSound(tadaSound);
+          setChildText(`축하합니다 ${attendData.name}님! 경품에 당첨되셨습니다!\n담당자에게 경품을 수령하세요.`);
+          setChildOpen(true);
+        }
       } else {
         playSound(failsSound);
         enqueueSnackbar(`${attendData.name}님 이미 태깅 되었습니다.`, {
           variant: 'warning',
         });
-      }
-      if (isGiftEvent && totalCount % 10 === 0 && totalCount <= 1000 && totalCount !== 0) {
-        playSound(tadaSound);
-        setChildText(`축하합니다 ${attendData.name}님! 경품에 당첨되셨습니다!\n담당자에게 경품을 수령하세요.`);
-        setChildOpen(true);
       }
       setTotalCount(totalCount);
     } else {
@@ -268,12 +278,37 @@ export default function QRScan({ event, open, onClose }) {
 }
 
 function ChildModal({ open, handleClose, text }) {
+  const initialSeconds = 5;
+  const [seconds, setSeconds] = useState(initialSeconds);
+
+  useEffect(() => {
+    if (open) {
+      setSeconds(initialSeconds);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (seconds === 0) {
+      handleClose();
+      setSeconds(initialSeconds);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds]);
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle variant="h2">축하합니다!</DialogTitle>
       <DialogContent sx={{ width: 480, height: 120 }}>
         <DialogContentText variant="h5" sx={{ whiteSpace: 'pre-wrap', textAlign: 'center' }}>
           {text}
+          {'\n\n'}이 메세지는 {seconds}초 후에 자동으로 닫힙니다.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
