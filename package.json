@@ -1,9 +1,10 @@
 {
   "name": "hanq",
-  "author": "Minimals UI",
-  "version": "4.0.0",
-  "description": "Simple React Scripts & Javascript",
+  "author": "와랩 샤이니",
+  "version": "1.0.0",
+  "description": "HanQ - 원타임 큐알코드를 활용하는 출입관리 서비스 플랫폼",
   "private": true,
+  "homepage": "http://walab.handong.edu/HanQ/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
