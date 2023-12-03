@@ -4,7 +4,7 @@ function path(root, sublink) {
   return `${root}${sublink}`;
 }
 
-const ROOTS_DASHBOARD = '/hanq';
+const ROOTS_DASHBOARD = '/event';
 
 // ----------------------------------------------------------------------
 

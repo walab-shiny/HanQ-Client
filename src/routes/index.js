@@ -19,6 +19,7 @@ import {
   RequestHostPage,
   LinkQRScanPage,
 } from './elements';
+import { PATH_DASHBOARD } from './paths';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ export default function Router() {
       ],
     },
     {
-      path: '/hanq',
+      path: '/event',
       element: (
         <AuthGuard>
           <DashboardLayout />
@@ -57,7 +58,7 @@ export default function Router() {
         {
           path: 'host',
           children: [
-            { element: <Navigate to="/hanq/host/list" replace />, index: true },
+            { element: <Navigate to={PATH_DASHBOARD.host.list} replace />, index: true },
             { path: 'list', element: <HostPage /> },
             { path: 'new', element: <NewEventPage /> },
             { path: 'request', element: <RequestHostPage /> },
