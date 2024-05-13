@@ -35,7 +35,7 @@ import failsSound from '../../assets/audios/fail.mp3';
 import tadaSound from '../../assets/audios/tada.mp3';
 import Footer from '../../layouts/dashboard/footer';
 
-const EVENT_HOST_ID = 51;
+const EVENT_HOST_ID = null;
 const EVENT_GIFT_INTERVAL = 10;
 const EVENT_GIFT_MAX = 1000;
 
