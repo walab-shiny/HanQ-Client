@@ -59,7 +59,7 @@ export const ICON = {
   NAV_ITEM_MINI: 22,
 };
 
-export const HOST_EMAIL = 'abc@handong.ac.kr';
+export const HOST_EMAIL = 'joydonald5314@gmail.com';
 
 export const DEPARTMENT_LIST = [
   '전산전자공학부',
