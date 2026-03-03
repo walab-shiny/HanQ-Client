@@ -1,5 +1,3 @@
-import AWS from 'aws-sdk';
-import uuid from 'react-uuid';
 import moment from 'moment';
 import { IEvent } from '../types/event.ts';
 import axios from '../utils/axios';
@@ -64,28 +62,10 @@ export const addEvent = async (data: IEvent) => {
   return response;
 };
 
+// eslint-disable-next-line no-unused-vars
 export const uploadImage = async (file: File) => {
-  AWS.config.update({
-    accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY,
-    secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
-  });
-  const uploadBucket = new AWS.S3({
-    params: { Bucket: process.env.REACT_APP_S3_BUCKET },
-    region: process.env.REACT_APP_S3_REGION,
-  });
-
-  const imageRef = `upload/${uuid()}`;
-  const params = {
-    ACL: 'public-read',
-    Body: file,
-    Bucket: process.env.REACT_APP_S3_BUCKET,
-    Key: imageRef,
-    ContentType: 'image/jpeg',
-  };
-
-  const { Location } = await uploadBucket.upload(params).promise();
-
-  return Location;
+  alert('이미지 업로드 기능이 일시적으로 중단되었습니다. 이미지 없이 등록됩니다.');
+  return '';
 };
 
 export const closeEvent = async (id: number) => {
