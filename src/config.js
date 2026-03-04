@@ -71,4 +71,5 @@ export const DEPARTMENT_LIST = [
   '경영경제학부',
   'ICT창업학부',
   '커뮤니케이션학부',
+  '기타',
 ];
